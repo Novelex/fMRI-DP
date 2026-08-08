@@ -1,0 +1,39 @@
+07-Aug-26 23:15:44 - Using Device: cuda
+07-Aug-26 23:15:44 - Seed: 123, Fold: 1, ComBat: False
+07-Aug-26 23:15:44 - Namespace(fold=1, combat=False, num_dyn_windows=3, model_lr=0.0005, view_lr=0.0005, num_gc_layers=2, pooling_type='standard', emb_dim=256, vib_hidden_dim=400, batch_size=256, drop_ratio=0.3, epochs=300, kld_lambda=0.003, reg_lambda=0.2, gamma_mode='paper_literal', node_feature_mode='alff_pcc', mij_source='alff_pcc', template=90, eval_interval=5, downstream_classifier='linear', ce_lambda=2.0, seed=123)
+07-Aug-26 23:15:44 - Loading raw subject data...
+07-Aug-26 23:15:45 - Loaded 956 subjects (455 ASD, 501 NC)
+07-Aug-26 23:15:45 - alff_pcc scale stats (train_val_idx only): alff=[-3.5994,5.6307] pcc=[-0.7600,1.0000]
+07-Aug-26 23:15:45 - Train/Val/Test sizes: 612/153/191
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/users/3171356m/muhammad/GraSTIACL/nested_cv/run_nested_cv.py", line 238, in <module>
+    run(args)
+  File "/users/3171356m/muhammad/GraSTIACL/nested_cv/run_nested_cv.py", line 105, in run
+    model, view_learner, model_optimizer, view_optimizer, gamma_orig, beta = build_model_and_view_learner(
+                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/users/3171356m/muhammad/GraSTIACL/unsupervised/training.py", line 59, in build_model_and_view_learner
+    model = GInfoMinMax(model_encoder, model_net, emb_dim).to(device)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1340, in to
+    return self._apply(convert)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch/nn/modules/module.py", line 900, in _apply
+    module._apply(fn)
+  File "/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch/nn/modules/module.py", line 900, in _apply
+    module._apply(fn)
+  File "/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch/nn/modules/module.py", line 900, in _apply
+    module._apply(fn)
+  [Previous line repeated 2 more times]
+  File "/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch/nn/modules/module.py", line 927, in _apply
+    param_applied = fn(param)
+                    ^^^^^^^^^
+  File "/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1326, in convert
+    return t.to(
+           ^^^^^
+RuntimeError: CUDA error: uncorrectable ECC error encountered
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+

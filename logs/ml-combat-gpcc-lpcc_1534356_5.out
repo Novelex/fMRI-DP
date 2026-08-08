@@ -1,0 +1,30 @@
+Task 5: algorithm=knn feature-combo=gpcc_lpcc
+Loading feature sets for combo: gpcc_lpcc = ['global_pcc', 'local_pcc']
+X shape: (956, 12015), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_combinations/results/knn__gpcc_lpcc_combat.json
+{
+  "accuracy": {
+    "mean": 0.572158595113438,
+    "std": 0.018619851157557273
+  },
+  "f1": {
+    "mean": 0.4816627890623648,
+    "std": 0.03702083762519144
+  },
+  "sensitivity": {
+    "mean": 0.41978021516725034,
+    "std": 0.047342107674346115
+  },
+  "specificity": {
+    "mean": 0.7105940523139204,
+    "std": 0.02587528598082496
+  },
+  "precision": {
+    "mean": 0.5678376941204906,
+    "std": 0.023332595876649806
+  },
+  "auc": {
+    "mean": 0.5758330975954737,
+    "std": 0.030442180931071365
+  }
+}

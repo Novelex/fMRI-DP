@@ -1,0 +1,30 @@
+Task 4: algorithm=gradient_boosting feature-combo=gpcc_lpcc
+Loading feature sets for combo: gpcc_lpcc = ['global_pcc', 'local_pcc']
+X shape: (956, 12015), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_combinations/results/gradient_boosting__gpcc_lpcc_combat.json
+{
+  "accuracy": {
+    "mean": 0.6443117364746945,
+    "std": 0.03364897210671201
+  },
+  "f1": {
+    "mean": 0.6087405747175783,
+    "std": 0.03969274523286998
+  },
+  "sensitivity": {
+    "mean": 0.5824175760173892,
+    "std": 0.04764721571525871
+  },
+  "specificity": {
+    "mean": 0.7004950425149007,
+    "std": 0.03962934792150655
+  },
+  "precision": {
+    "mean": 0.6388516800406293,
+    "std": 0.03945447903489134
+  },
+  "auc": {
+    "mean": 0.6981327385485802,
+    "std": 0.037764393618369495
+  }
+}

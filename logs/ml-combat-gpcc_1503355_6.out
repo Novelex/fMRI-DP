@@ -1,0 +1,30 @@
+Task 6: algorithm=mlp feature-set=global_pcc_combat
+Loading feature set: global_pcc (+ SITE/AGE/SEX covariates)
+X shape: (956, 4005), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_gPCC/results/mlp__global_pcc_combat.json
+{
+  "accuracy": {
+    "mean": 0.6663067190226876,
+    "std": 0.025654014328905354
+  },
+  "f1": {
+    "mean": 0.649808978507696,
+    "std": 0.02608505699554891
+  },
+  "sensitivity": {
+    "mean": 0.6505494434005555,
+    "std": 0.030611842031043758
+  },
+  "specificity": {
+    "mean": 0.680673260533136,
+    "std": 0.03542431985164063
+  },
+  "precision": {
+    "mean": 0.6497580553163689,
+    "std": 0.029868303424980064
+  },
+  "auc": {
+    "mean": 0.7173208573604614,
+    "std": 0.022039669818631934
+  }
+}

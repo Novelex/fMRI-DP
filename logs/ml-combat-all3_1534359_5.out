@@ -1,0 +1,30 @@
+Task 5: algorithm=knn feature-combo=all3
+Loading feature sets for combo: all3 = ['global_pcc', 'local_pcc', 'alff']
+X shape: (956, 12285), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_combinations/results/knn__all3_combat.json
+{
+  "accuracy": {
+    "mean": 0.5491492146596859,
+    "std": 0.006976574854050478
+  },
+  "f1": {
+    "mean": 0.4433586074171373,
+    "std": 0.03470854568944943
+  },
+  "sensitivity": {
+    "mean": 0.380219776041541,
+    "std": 0.05040591127545027
+  },
+  "specificity": {
+    "mean": 0.7025742504141161,
+    "std": 0.045016743162256095
+  },
+  "precision": {
+    "mean": 0.537811735367826,
+    "std": 0.00939264412862523
+  },
+  "auc": {
+    "mean": 0.5636611902948536,
+    "std": 0.01649067212926068
+  }
+}

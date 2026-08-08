@@ -1,0 +1,30 @@
+Task 6: algorithm=rbf_svm feature-set=global_pcc
+Loading feature set: global_pcc
+X shape: (956, 4005), y counts: [501 455]
+Wrote /users/3171356m/muhammad/GraSTIACL/ml/results/rbf_svm__global_pcc.json
+{
+  "accuracy": {
+    "mean": 0.6506271815008725,
+    "std": 0.0038883531986223046
+  },
+  "f1": {
+    "mean": 0.6227452187778741,
+    "std": 0.011837686184582896
+  },
+  "sensitivity": {
+    "mean": 0.6065933999275451,
+    "std": 0.026373626083806327
+  },
+  "specificity": {
+    "mean": 0.6905940525139203,
+    "std": 0.021290674148759625
+  },
+  "precision": {
+    "mean": 0.640646456221801,
+    "std": 0.006645836845292438
+  },
+  "auc": {
+    "mean": 0.725040147970841,
+    "std": 0.0162053301035329
+  }
+}

@@ -1,0 +1,30 @@
+Task 6: algorithm=mlp feature-combo=lpcc_alff
+Loading feature sets for combo: lpcc_alff = ['local_pcc', 'alff']
+X shape: (956, 8280), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_combinations/results/mlp__lpcc_alff_combat.json
+{
+  "accuracy": {
+    "mean": 0.6454024869109947,
+    "std": 0.026077379389251722
+  },
+  "f1": {
+    "mean": 0.6211442956282436,
+    "std": 0.03469022696890855
+  },
+  "sensitivity": {
+    "mean": 0.6131868064484967,
+    "std": 0.054901080701292744
+  },
+  "specificity": {
+    "mean": 0.6745742506941164,
+    "std": 0.046761796141353014
+  },
+  "precision": {
+    "mean": 0.6320020089659968,
+    "std": 0.02887900394075299
+  },
+  "auc": {
+    "mean": 0.7034292242411054,
+    "std": 0.041790635515360275
+  }
+}

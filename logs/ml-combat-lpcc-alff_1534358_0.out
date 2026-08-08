@@ -1,0 +1,30 @@
+Task 0: algorithm=elasticnet feature-combo=lpcc_alff
+Loading feature sets for combo: lpcc_alff = ['local_pcc', 'alff']
+X shape: (956, 8280), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_combinations/results/elasticnet__lpcc_alff_combat.json
+{
+  "accuracy": {
+    "mean": 0.6380399214659687,
+    "std": 0.03966326303999523
+  },
+  "f1": {
+    "mean": 0.6085221437350758,
+    "std": 0.046248077341896156
+  },
+  "sensitivity": {
+    "mean": 0.593406586885642,
+    "std": 0.06666264053383077
+  },
+  "specificity": {
+    "mean": 0.6785148447147045,
+    "std": 0.06841711613793243
+  },
+  "precision": {
+    "mean": 0.6286883428487227,
+    "std": 0.05009895363799661
+  },
+  "auc": {
+    "mean": 0.7022952888695463,
+    "std": 0.03956479313761965
+  }
+}

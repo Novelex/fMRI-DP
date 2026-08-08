@@ -1,0 +1,30 @@
+Task 18: algorithm=mlp feature-set=global_pcc
+Loading feature set: global_pcc
+X shape: (956, 4005), y counts: [501 455]
+Wrote /users/3171356m/muhammad/GraSTIACL/ml/results/mlp__global_pcc.json
+{
+  "accuracy": {
+    "mean": 0.6485111256544502,
+    "std": 0.021156287801533016
+  },
+  "f1": {
+    "mean": 0.6253901158180167,
+    "std": 0.027356518672455313
+  },
+  "sensitivity": {
+    "mean": 0.6175824107957977,
+    "std": 0.03894515374053534
+  },
+  "specificity": {
+    "mean": 0.6765742506741163,
+    "std": 0.026539943071754377
+  },
+  "precision": {
+    "mean": 0.6342921903250809,
+    "std": 0.022089697398767198
+  },
+  "auc": {
+    "mean": 0.707014035469481,
+    "std": 0.02052556243335298
+  }
+}

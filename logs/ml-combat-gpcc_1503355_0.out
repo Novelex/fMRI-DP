@@ -1,0 +1,30 @@
+Task 0: algorithm=elasticnet feature-set=global_pcc_combat
+Loading feature set: global_pcc (+ SITE/AGE/SEX covariates)
+X shape: (956, 4005), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_gPCC/results/elasticnet__global_pcc_combat.json
+{
+  "accuracy": {
+    "mean": 0.6662849040139617,
+    "std": 0.025040979011532828
+  },
+  "f1": {
+    "mean": 0.6366683915748793,
+    "std": 0.031766861610552775
+  },
+  "sensitivity": {
+    "mean": 0.6153846086221473,
+    "std": 0.038696300369620885
+  },
+  "specificity": {
+    "mean": 0.7125346463545084,
+    "std": 0.014013955141966246
+  },
+  "precision": {
+    "mean": 0.6597644479828387,
+    "std": 0.02402079228012036
+  },
+  "auc": {
+    "mean": 0.7368236318137308,
+    "std": 0.03469319712144294
+  }
+}

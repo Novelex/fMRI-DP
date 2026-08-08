@@ -1,0 +1,30 @@
+Task 3: algorithm=linear_svm feature-set=global_pcc
+Loading feature set: global_pcc
+X shape: (956, 4005), y counts: [501 455]
+Wrote /users/3171356m/muhammad/GraSTIACL/ml/results/linear_svm__global_pcc.json
+{
+  "accuracy": {
+    "mean": 0.6422611256544503,
+    "std": 0.03557683661438641
+  },
+  "f1": {
+    "mean": 0.6280848816689522,
+    "std": 0.03714174320612891
+  },
+  "sensitivity": {
+    "mean": 0.635164828185002,
+    "std": 0.04362512752341445
+  },
+  "specificity": {
+    "mean": 0.648673260853136,
+    "std": 0.0414001393418084
+  },
+  "precision": {
+    "mean": 0.6218604616469191,
+    "std": 0.036361161698144705
+  },
+  "auc": {
+    "mean": 0.6888088347296268,
+    "std": 0.027364708005786616
+  }
+}

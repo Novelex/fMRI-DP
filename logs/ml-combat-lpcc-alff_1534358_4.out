@@ -1,0 +1,30 @@
+Task 4: algorithm=gradient_boosting feature-combo=lpcc_alff
+Loading feature sets for combo: lpcc_alff = ['local_pcc', 'alff']
+X shape: (956, 8280), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_combinations/results/gradient_boosting__lpcc_alff_combat.json
+{
+  "accuracy": {
+    "mean": 0.6307155322862129,
+    "std": 0.022663431875389772
+  },
+  "f1": {
+    "mean": 0.5881404076929574,
+    "std": 0.023141375338588968
+  },
+  "sensitivity": {
+    "mean": 0.5538461477599324,
+    "std": 0.022627758302963107
+  },
+  "specificity": {
+    "mean": 0.7004950425149005,
+    "std": 0.03050385597729925
+  },
+  "precision": {
+    "mean": 0.6273881701751142,
+    "std": 0.028911615596381904
+  },
+  "auc": {
+    "mean": 0.6778966380154499,
+    "std": 0.02678854962575901
+  }
+}

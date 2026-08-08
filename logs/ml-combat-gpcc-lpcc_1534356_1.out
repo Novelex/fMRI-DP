@@ -1,0 +1,30 @@
+Task 1: algorithm=linear_svm feature-combo=gpcc_lpcc
+Loading feature sets for combo: gpcc_lpcc = ['global_pcc', 'local_pcc']
+X shape: (956, 12015), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_combinations/results/linear_svm__gpcc_lpcc_combat.json
+{
+  "accuracy": {
+    "mean": 0.6443662739965096,
+    "std": 0.022199279694989943
+  },
+  "f1": {
+    "mean": 0.6315978196003658,
+    "std": 0.025269898898224136
+  },
+  "sensitivity": {
+    "mean": 0.6417582347059534,
+    "std": 0.043179961513161974
+  },
+  "specificity": {
+    "mean": 0.6466336569135283,
+    "std": 0.04763082176041922
+  },
+  "precision": {
+    "mean": 0.6237386838908062,
+    "std": 0.02602770069446666
+  },
+  "auc": {
+    "mean": 0.7051659231857252,
+    "std": 0.023807479792645306
+  }
+}

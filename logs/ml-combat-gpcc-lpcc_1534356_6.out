@@ -1,0 +1,30 @@
+Task 6: algorithm=mlp feature-combo=gpcc_lpcc
+Loading feature sets for combo: gpcc_lpcc = ['global_pcc', 'local_pcc']
+X shape: (956, 12015), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_combinations/results/mlp__gpcc_lpcc_combat.json
+{
+  "accuracy": {
+    "mean": 0.6537576352530541,
+    "std": 0.005592146752762804
+  },
+  "f1": {
+    "mean": 0.6266919115841916,
+    "std": 0.006362260047143315
+  },
+  "sensitivity": {
+    "mean": 0.6109890042748461,
+    "std": 0.021533975524094133
+  },
+  "specificity": {
+    "mean": 0.6925346465545085,
+    "std": 0.027888654795230196
+  },
+  "precision": {
+    "mean": 0.6441639998629113,
+    "std": 0.012674343642694727
+  },
+  "auc": {
+    "mean": 0.717986726145142,
+    "std": 0.026947485875758685
+  }
+}

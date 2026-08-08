@@ -1,0 +1,5 @@
+07-Aug-26 19:53:40 - Using Device: cuda
+07-Aug-26 19:53:40 - Seed: 123, Fold: 0, ComBat: False
+07-Aug-26 19:53:40 - Namespace(fold=0, combat=False, num_dyn_windows=3, model_lr=0.0005, view_lr=0.0005, num_gc_layers=2, pooling_type='standard', emb_dim=512, vib_hidden_dim=400, batch_size=32, drop_ratio=0.3, epochs=300, kld_lambda=0.003, reg_lambda=0.2, gamma_mode='paper_literal', node_feature_mode='alff_pcc', mij_source='alff', template=90, eval_interval=5, downstream_classifier='linear', ce_lambda=2.0, seed=123)
+07-Aug-26 19:53:40 - Loading raw subject data...
+[2026-08-07T19:54:11.539] error: *** JOB 1684969 ON node12 CANCELLED AT 2026-08-07T19:54:11 DUE to SIGNAL Terminated ***

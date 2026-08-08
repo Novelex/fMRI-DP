@@ -1,0 +1,76 @@
+02-Aug-26 21:53:54 - Using Device: cuda
+02-Aug-26 21:53:54 - Seed: 123, Fold: 0, ComBat: False
+02-Aug-26 21:53:54 - Namespace(fold=0, combat=False, num_dyn_windows=3, model_lr=0.0005, view_lr=0.0005, num_gc_layers=1, pooling_type='standard', emb_dim=32, vib_hidden_dim=400, batch_size=32, drop_ratio=0.3, epochs=2, kld_lambda=0.003, eval_interval=1, downstream_classifier='linear', ce_lambda=2.0, seed=123)
+02-Aug-26 21:53:54 - Loading raw subject data...
+02-Aug-26 21:53:55 - Loaded 956 subjects (455 ASD, 501 NC)
+02-Aug-26 21:53:55 - Train/Val/Test sizes: 611/153/192
+02-Aug-26 21:55:41 - Epoch 1, Model Loss 6.127512144769272, View Loss -2.4735054775657903
+02-Aug-26 21:55:44 - Epoch 1: Train_acc 0.5204582651391162 Val_acc 0.5098039215686274 Test_acc 0.546875 Test_auc 0.5337830486345339
+02-Aug-26 21:57:29 - Epoch 2, Model Loss 6.012053900576652, View Loss 1.5642753853150164
+02-Aug-26 21:57:30 - Epoch 2: Train_acc 0.5351882160392799 Val_acc 0.5163398692810458 Test_acc 0.546875 Test_auc 0.5164835164835165
+02-Aug-26 21:57:30 - FinishedTraining! BestEpoch (eval-interval index): 1
+02-Aug-26 21:57:30 - Wrote /users/3171356m/muhammad/GraSTIACL/nested_cv/results/nocombat__emb32_bs32__fold0.json
+02-Aug-26 21:57:30 - {
+  "emb_dim": 32,
+  "batch_size": 32,
+  "fold": 0,
+  "combat": false,
+  "n_train": 611,
+  "n_val": 153,
+  "n_test": 192,
+  "best_val_epoch_idx": 1,
+  "train_accuracy": 0.5351882160392799,
+  "val_accuracy": 0.5163398692810458,
+  "test_accuracy": 0.546875,
+  "train_f1": 0.3364485981308411,
+  "val_f1": 0.28846153846153844,
+  "test_f1": 0.37410071942446044,
+  "train_sensitivity": 0.24742267956212138,
+  "val_sensitivity": 0.20547944924000755,
+  "test_sensitivity": 0.2857142825745683,
+  "train_specificity": 0.7968749975097656,
+  "val_specificity": 0.7999999900000001,
+  "test_specificity": 0.7821782100774435,
+  "train_precision": 0.5255474452554745,
+  "val_precision": 0.4838709677419355,
+  "test_precision": 0.5416666666666666,
+  "test_auc": 0.5164835164835165
+}
+02-Aug-26 21:57:35 - Using Device: cuda
+02-Aug-26 21:57:35 - Seed: 123, Fold: 0, ComBat: True
+02-Aug-26 21:57:35 - Namespace(fold=0, combat=True, num_dyn_windows=3, model_lr=0.0005, view_lr=0.0005, num_gc_layers=1, pooling_type='standard', emb_dim=32, vib_hidden_dim=400, batch_size=32, drop_ratio=0.3, epochs=2, kld_lambda=0.003, eval_interval=1, downstream_classifier='linear', ce_lambda=2.0, seed=123)
+02-Aug-26 21:57:35 - Loading raw subject data...
+02-Aug-26 21:57:36 - Loaded 956 subjects (455 ASD, 501 NC)
+02-Aug-26 21:57:37 - Train/Val/Test sizes: 611/153/192
+02-Aug-26 21:59:24 - Epoch 1, Model Loss 5.956890664982523, View Loss -2.750294654146934
+02-Aug-26 21:59:27 - Epoch 1: Train_acc 0.5482815057283142 Val_acc 0.477124183006536 Test_acc 0.5625 Test_auc 0.5588075291045589
+02-Aug-26 22:01:15 - Epoch 2, Model Loss 6.014829392128802, View Loss 1.4953453154493666
+02-Aug-26 22:01:15 - Epoch 2: Train_acc 0.5433715220949263 Val_acc 0.49019607843137253 Test_acc 0.5416666666666666 Test_auc 0.5416167990425416
+02-Aug-26 22:01:15 - FinishedTraining! BestEpoch (eval-interval index): 1
+02-Aug-26 22:01:15 - Wrote /users/3171356m/muhammad/GraSTIACL/nested_cv/results/combat__emb32_bs32__fold0.json
+02-Aug-26 22:01:15 - {
+  "emb_dim": 32,
+  "batch_size": 32,
+  "fold": 0,
+  "combat": true,
+  "n_train": 611,
+  "n_val": 153,
+  "n_test": 192,
+  "best_val_epoch_idx": 1,
+  "train_accuracy": 0.5433715220949263,
+  "val_accuracy": 0.49019607843137253,
+  "test_accuracy": 0.5416666666666666,
+  "train_f1": 0.34352941176470586,
+  "val_f1": 0.2909090909090909,
+  "test_f1": 0.40540540540540543,
+  "train_sensitivity": 0.25085910566715086,
+  "val_sensitivity": 0.2191780791893414,
+  "test_sensitivity": 0.32967032604757884,
+  "train_specificity": 0.8093749974707032,
+  "val_specificity": 0.7374999907812502,
+  "test_specificity": 0.732673260072542,
+  "train_precision": 0.5447761194029851,
+  "val_precision": 0.43243243243243246,
+  "test_precision": 0.5263157894736842,
+  "test_auc": 0.5416167990425416
+}

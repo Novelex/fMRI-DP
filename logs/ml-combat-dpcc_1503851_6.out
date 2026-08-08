@@ -1,0 +1,30 @@
+Task 6: algorithm=mlp feature-set=local_pcc_combat
+Loading feature set: local_pcc / dynamic PCC (+ SITE/AGE/SEX covariates)
+X shape: (956, 8010), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_dPCC/results/mlp__local_pcc_combat.json
+{
+  "accuracy": {
+    "mean": 0.6401341623036649,
+    "std": 0.03509746951712977
+  },
+  "f1": {
+    "mean": 0.6165404425862008,
+    "std": 0.03329368855689151
+  },
+  "sensitivity": {
+    "mean": 0.6087912021011955,
+    "std": 0.053655188930091115
+  },
+  "specificity": {
+    "mean": 0.6684752408550967,
+    "std": 0.0763174218101069
+  },
+  "precision": {
+    "mean": 0.6289901552838393,
+    "std": 0.04432113248469121
+  },
+  "auc": {
+    "mean": 0.702131432923512,
+    "std": 0.03629657857816082
+  }
+}

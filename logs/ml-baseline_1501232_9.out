@@ -1,0 +1,30 @@
+Task 9: algorithm=random_forest feature-set=global_pcc
+Loading feature set: global_pcc
+X shape: (956, 4005), y counts: [501 455]
+Wrote /users/3171356m/muhammad/GraSTIACL/ml/results/random_forest__global_pcc.json
+{
+  "accuracy": {
+    "mean": 0.6422447643979057,
+    "std": 0.028575504827835937
+  },
+  "f1": {
+    "mean": 0.5910110727146312,
+    "std": 0.04132641831059375
+  },
+  "sensitivity": {
+    "mean": 0.5450549390653303,
+    "std": 0.04943833738727977
+  },
+  "specificity": {
+    "mean": 0.7304950422149006,
+    "std": 0.014858743974065025
+  },
+  "precision": {
+    "mean": 0.6463098591549297,
+    "std": 0.03028717233761643
+  },
+  "auc": {
+    "mean": 0.6941628767272332,
+    "std": 0.03757400294355412
+  }
+}

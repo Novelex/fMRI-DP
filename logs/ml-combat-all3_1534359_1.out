@@ -1,0 +1,30 @@
+Task 1: algorithm=linear_svm feature-combo=all3
+Loading feature sets for combo: all3 = ['global_pcc', 'local_pcc', 'alff']
+X shape: (956, 12285), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_combinations/results/linear_svm__all3_combat.json
+{
+  "accuracy": {
+    "mean": 0.6339005235602093,
+    "std": 0.016325090919024985
+  },
+  "f1": {
+    "mean": 0.6179340370741143,
+    "std": 0.02592599820006711
+  },
+  "sensitivity": {
+    "mean": 0.6241758173167492,
+    "std": 0.04835164782031159
+  },
+  "specificity": {
+    "mean": 0.6426336569535281,
+    "std": 0.03982165870817483
+  },
+  "precision": {
+    "mean": 0.6138920508387052,
+    "std": 0.01801737011690394
+  },
+  "auc": {
+    "mean": 0.700894570775759,
+    "std": 0.02108307008213248
+  }
+}

@@ -1,0 +1,30 @@
+Task 8: algorithm=rbf_svm feature-set=alff
+Loading feature set: alff
+X shape: (956, 270), y counts: [501 455]
+Wrote /users/3171356m/muhammad/GraSTIACL/ml/results/rbf_svm__alff.json
+{
+  "accuracy": {
+    "mean": 0.5721967713787085,
+    "std": 0.028790861399583936
+  },
+  "f1": {
+    "mean": 0.5142971349187934,
+    "std": 0.037784426114842014
+  },
+  "sensitivity": {
+    "mean": 0.4769230716821641,
+    "std": 0.043735711040557915
+  },
+  "specificity": {
+    "mean": 0.6587128647127439,
+    "std": 0.03213050504610732
+  },
+  "precision": {
+    "mean": 0.5591486446370169,
+    "std": 0.03656718432199639
+  },
+  "auc": {
+    "mean": 0.6052288107931674,
+    "std": 0.0258240636149876
+  }
+}

@@ -1,0 +1,30 @@
+Task 20: algorithm=mlp feature-set=alff
+Loading feature set: alff
+X shape: (956, 270), y counts: [501 455]
+Wrote /users/3171356m/muhammad/GraSTIACL/ml/results/mlp__alff.json
+{
+  "accuracy": {
+    "mean": 0.5899760034904014,
+    "std": 0.025463647780512688
+  },
+  "f1": {
+    "mean": 0.5532739724544055,
+    "std": 0.027998482777656725
+  },
+  "sensitivity": {
+    "mean": 0.5340659281970777,
+    "std": 0.03584506868368077
+  },
+  "specificity": {
+    "mean": 0.640673260933136,
+    "std": 0.04368917269831971
+  },
+  "precision": {
+    "mean": 0.5753172583380927,
+    "std": 0.029786505636082962
+  },
+  "auc": {
+    "mean": 0.6086663039930367,
+    "std": 0.02979869463076091
+  }
+}

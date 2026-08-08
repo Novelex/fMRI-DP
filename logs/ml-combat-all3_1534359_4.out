@@ -1,0 +1,30 @@
+Task 4: algorithm=gradient_boosting feature-combo=all3
+Loading feature sets for combo: all3 = ['global_pcc', 'local_pcc', 'alff']
+X shape: (956, 12285), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_combinations/results/gradient_boosting__all3_combat.json
+{
+  "accuracy": {
+    "mean": 0.6317517452006981,
+    "std": 0.0302315488898488
+  },
+  "f1": {
+    "mean": 0.596268987544035,
+    "std": 0.03229800793977316
+  },
+  "sensitivity": {
+    "mean": 0.5714285651491366,
+    "std": 0.0347503035760228
+  },
+  "specificity": {
+    "mean": 0.6864752406750967,
+    "std": 0.04117329283515456
+  },
+  "precision": {
+    "mean": 0.6243447598253563,
+    "std": 0.03800890254397811
+  },
+  "auc": {
+    "mean": 0.6895748014361874,
+    "std": 0.02809252673204161
+  }
+}

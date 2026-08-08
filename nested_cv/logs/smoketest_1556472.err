@@ -1,0 +1,7 @@
+02-Aug-26 21:51:54 - Using Device: cuda
+02-Aug-26 21:51:54 - Seed: 123, Fold: 0, ComBat: False
+02-Aug-26 21:51:54 - Namespace(fold=0, combat=False, num_dyn_windows=3, model_lr=0.0005, view_lr=0.0005, num_gc_layers=1, pooling_type='standard', emb_dim=32, vib_hidden_dim=400, batch_size=32, drop_ratio=0.3, epochs=2, kld_lambda=0.003, eval_interval=1, downstream_classifier='linear', ce_lambda=2.0, seed=123)
+02-Aug-26 21:51:54 - Loading raw subject data...
+02-Aug-26 21:51:57 - Loaded 956 subjects (455 ASD, 501 NC)
+02-Aug-26 21:51:57 - Train/Val/Test sizes: 611/153/192
+[2026-08-02T21:53:29.312] error: *** JOB 1556472 ON node01 CANCELLED AT 2026-08-02T21:53:29 DUE to SIGNAL Terminated ***

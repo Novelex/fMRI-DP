@@ -1,0 +1,30 @@
+Task 1: algorithm=linear_svm feature-set=local_pcc_combat
+Loading feature set: local_pcc / dynamic PCC (+ SITE/AGE/SEX covariates)
+X shape: (956, 8010), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_dPCC/results/linear_svm__local_pcc_combat.json
+{
+  "accuracy": {
+    "mean": 0.6349258289703317,
+    "std": 0.017233856893542752
+  },
+  "f1": {
+    "mean": 0.6187821208045927,
+    "std": 0.01923779410282087
+  },
+  "sensitivity": {
+    "mean": 0.6241758173167493,
+    "std": 0.04734210767434609
+  },
+  "specificity": {
+    "mean": 0.6445346470345085,
+    "std": 0.05896697165674234
+  },
+  "precision": {
+    "mean": 0.6169903415244574,
+    "std": 0.026002612160163283
+  },
+  "auc": {
+    "mean": 0.6835441192470896,
+    "std": 0.025229299674760997
+  }
+}

@@ -1,0 +1,30 @@
+Task 0: algorithm=elasticnet feature-set=local_pcc_combat
+Loading feature set: local_pcc / dynamic PCC (+ SITE/AGE/SEX covariates)
+X shape: (956, 8010), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_dPCC/results/elasticnet__local_pcc_combat.json
+{
+  "accuracy": {
+    "mean": 0.6506217277486911,
+    "std": 0.028042945529090434
+  },
+  "f1": {
+    "mean": 0.627516465582561,
+    "std": 0.029402739577304042
+  },
+  "sensitivity": {
+    "mean": 0.6197802129694482,
+    "std": 0.053203157379790374
+  },
+  "specificity": {
+    "mean": 0.6785544486743124,
+    "std": 0.06945360930563481
+  },
+  "precision": {
+    "mean": 0.6396142772968186,
+    "std": 0.03802517891511187
+  },
+  "auc": {
+    "mean": 0.7004950495049506,
+    "std": 0.02925862771685732
+  }
+}

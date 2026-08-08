@@ -1,0 +1,50 @@
+Task 1: reg_lambda=0.1
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+validation time cost : 0.46713 sec
+validation time cost : 0.07103 sec
+validation time cost : 0.07018 sec
+validation time cost : 0.06989 sec
+validation time cost : 0.06951 sec
+mean validation time 0.14955:
+
+validation time cost : 0.11868 sec
+validation time cost : 0.11715 sec
+validation time cost : 0.12163 sec
+validation time cost : 0.12020 sec
+validation time cost : 0.11915 sec
+mean validation time 0.11936:
+
+validation time cost : 0.12379 sec
+validation time cost : 0.11939 sec
+validation time cost : 0.12248 sec
+validation time cost : 0.11995 sec
+validation time cost : 0.12098 sec
+mean validation time 0.12132:
+
+validation time cost : 0.11941 sec
+validation time cost : 0.11702 sec
+validation time cost : 0.11969 sec
+validation time cost : 0.11686 sec
+validation time cost : 0.12058 sec
+mean validation time 0.11871:
+

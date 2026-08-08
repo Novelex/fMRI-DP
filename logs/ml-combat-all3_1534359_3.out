@@ -1,0 +1,30 @@
+Task 3: algorithm=random_forest feature-combo=all3
+Loading feature sets for combo: all3 = ['global_pcc', 'local_pcc', 'alff']
+X shape: (956, 12285), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_combinations/results/random_forest__all3_combat.json
+{
+  "accuracy": {
+    "mean": 0.6547720331588133,
+    "std": 0.03412212042607264
+  },
+  "f1": {
+    "mean": 0.6004376032994962,
+    "std": 0.039021466390006365
+  },
+  "sensitivity": {
+    "mean": 0.5450549390653303,
+    "std": 0.03716820733944336
+  },
+  "specificity": {
+    "mean": 0.7543960320758809,
+    "std": 0.036070251018340126
+  },
+  "precision": {
+    "mean": 0.668800439260039,
+    "std": 0.04460371027481068
+  },
+  "auc": {
+    "mean": 0.7167035143074747,
+    "std": 0.038943463162498734
+  }
+}

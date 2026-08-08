@@ -1,0 +1,30 @@
+Task 13: algorithm=gradient_boosting feature-set=local_pcc
+Loading feature set: local_pcc
+X shape: (956, 8010), y counts: [501 455]
+Wrote /users/3171356m/muhammad/GraSTIACL/ml/results/gradient_boosting__local_pcc.json
+{
+  "accuracy": {
+    "mean": 0.6056282722513089,
+    "std": 0.01900206224498377
+  },
+  "f1": {
+    "mean": 0.5619126765807247,
+    "std": 0.02122555851975405
+  },
+  "sensitivity": {
+    "mean": 0.5318681260234273,
+    "std": 0.029974025378276335
+  },
+  "specificity": {
+    "mean": 0.6725346467545085,
+    "std": 0.03520174990329302
+  },
+  "precision": {
+    "mean": 0.5968298156465053,
+    "std": 0.02485964390280956
+  },
+  "auc": {
+    "mean": 0.6437867479055599,
+    "std": 0.01691472418039416
+  }
+}

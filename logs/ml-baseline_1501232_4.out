@@ -1,0 +1,30 @@
+Task 4: algorithm=linear_svm feature-set=local_pcc
+Loading feature set: local_pcc
+X shape: (956, 8010), y counts: [501 455]
+Wrote /users/3171356m/muhammad/GraSTIACL/ml/results/linear_svm__local_pcc.json
+{
+  "accuracy": {
+    "mean": 0.6296847731239092,
+    "std": 0.020619167851341706
+  },
+  "f1": {
+    "mean": 0.6156049330519815,
+    "std": 0.0189640665772294
+  },
+  "sensitivity": {
+    "mean": 0.6241758173167493,
+    "std": 0.044718658737983565
+  },
+  "specificity": {
+    "mean": 0.6345544491143124,
+    "std": 0.06261466237321198
+  },
+  "precision": {
+    "mean": 0.6106246810248035,
+    "std": 0.02883445592835534
+  },
+  "auc": {
+    "mean": 0.6788651942117289,
+    "std": 0.014247800549628833
+  }
+}

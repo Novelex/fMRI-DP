@@ -1,0 +1,220 @@
+"""Shared model construction + one-epoch training step for the two-phase
+adversarial contrastive loop, used by both GraSTIACL.py (single transductive
+run) and nested_cv/run_nested_cv.py (per-fold retraining). Extracted so every
+architectural fix (separate encoders, gamma_mode, reg_lambda, mij_source,
+Item 4a/4b's L_CE placement, the dyn_weight=None speedup, gradient clipping)
+lives in exactly one place instead of being duplicated -- and drifting -- across
+two copies of the same loop.
+"""
+import numpy as np
+import torch
+import torch.nn.functional as F
+from torch_scatter import scatter
+
+from unsupervised.encoder import TA_encoder
+from unsupervised.learning import GInfoMinMax
+from unsupervised.learning import GraSTI
+from unsupervised.view_learner import ViewLearner
+
+
+def init_module_weights(module):
+    # Xavier-initializes a module's own Linear layers exactly once. Used for
+    # each of model_encoder/model_net/view_encoder/view_net -- each wrapper's
+    # own init_emb() only touches its own private head (proj_head /
+    # mlp_edge_model), so the encoder/net backbones need this explicit call.
+    for m in module.modules():
+        if isinstance(m, torch.nn.Linear):
+            torch.nn.init.xavier_uniform_(m.weight.data)
+            if m.bias is not None:
+                m.bias.data.fill_(0.0)
+
+
+def build_model_and_view_learner(num_dataset_features, emb_dim, num_gc_layers, drop_ratio,
+                                  pooling_type, gamma_mode, mij_source, num_dyn_windows,
+                                  vib_hidden_dim, model_lr, view_lr, device):
+    # model (Theta) and view_learner (Phi) are two independent networks, each
+    # with its own TAEncoder + ToyNet -- not a shared backbone (Issue A).
+    beta_convention = "literal" if gamma_mode in ("literal_beta", "paper_literal") else "reversed"
+    gamma_orig_mode = "signal_strength" if gamma_mode in ("signal_strength", "paper_literal") else "one"
+    gamma_orig = None if gamma_orig_mode == "signal_strength" else 1.0
+
+    beta = 0.5  # TransConv's own weighting scalar -- unrelated to beta_convention's Beta distribution.
+
+    model_encoder = TA_encoder.TAEncoder(num_dataset_features=num_dataset_features, beta=beta, emb_dim=emb_dim,
+                                         num_gc_layers=num_gc_layers, drop_ratio=drop_ratio,
+                                         pooling_type=pooling_type,
+                                         beta_convention=beta_convention, gamma_orig_mode=gamma_orig_mode)
+    model_net = GraSTI.ToyNet(input_dim=90 * (1 + num_dyn_windows), hidden_dim=vib_hidden_dim)
+    init_module_weights(model_encoder)
+    init_module_weights(model_net)
+
+    view_encoder = TA_encoder.TAEncoder(num_dataset_features=num_dataset_features, beta=beta, emb_dim=emb_dim,
+                                        num_gc_layers=num_gc_layers, drop_ratio=drop_ratio,
+                                        pooling_type=pooling_type,
+                                        beta_convention=beta_convention, gamma_orig_mode=gamma_orig_mode)
+    view_net = GraSTI.ToyNet(input_dim=90 * (1 + num_dyn_windows), hidden_dim=vib_hidden_dim)
+    init_module_weights(view_encoder)
+    init_module_weights(view_net)
+
+    model = GInfoMinMax(model_encoder, model_net, emb_dim).to(device)
+    view_learner = ViewLearner(view_encoder, view_net, mij_source=mij_source).to(device)
+
+    # Two independent optimizers -- each network only ever moves in its own
+    # one direction (view_learner always ascends, model always descends), so
+    # there is no shared tensor for two optimizers to disagree about.
+    model_optimizer = torch.optim.Adam(model.parameters(), lr=model_lr)
+    view_optimizer = torch.optim.Adam(view_learner.parameters(), lr=view_lr)
+
+    return model, view_learner, model_optimizer, view_optimizer, gamma_orig, beta
+
+
+def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, dataloader, device,
+                     beta, gamma_orig, ce_lambda, reg_lambda, kld_lambda, template):
+    model_loss_all = 0
+    view_loss_all = 0
+    reg_all = 0
+    num_graphs_seen = 0
+    num_graph_with_edges_seen = 0
+    # Accumulated separately per diagnostic group (not pooled) so the two
+    # group-level averages can later be contrasted (Fig. 3/4 interpretability).
+    aug_edge_weight_all_asd = torch.zeros(template, template)
+    aug_edge_weight_all_nc = torch.zeros(template, template)
+    n_asd_seen = 0
+    n_nc_seen = 0
+
+    for batch in dataloader:
+        batch = batch.to(device)
+        gcn_w = batch.edge_weight.abs().clamp(1e-6, 1.0)
+
+        # ---- Phase 1: train view_learner to maximize contrastive loss ----
+        view_learner.train()
+        view_optimizer.zero_grad()
+        model.eval()
+
+        # dyn_weight=None: model's own edge_logits/mu/std from get_mu_std_logits
+        # are never used downstream -- passing None skips ToyNet's expensive
+        # batch_size x 90 row-by-row loop entirely for this call.
+        x, _ = model(batch.batch, batch.x, batch.edge_index, beta, None, gcn_w,
+                    batch.edge_weight, None, gamma=gamma_orig)
+        # edge_logits_vl (not model's edge_logits) drives the gate below --
+        # view_learner IS the augmenter (Eq. 3's Phi), so the augmentation it
+        # produces must come from its own forward pass.
+        edge_logits_vl, mu, std, edge_prod = view_learner(batch.batch, batch.x, batch.edge_index, beta, None,
+                                             gcn_w, batch.edge_weight, batch.dyn_weight, gamma=gamma_orig)
+        temperature = 1
+        bias = 0.0 + 0.0001
+        eps = (bias - (1 - bias)) * torch.rand(edge_logits_vl.size()) + (1 - bias)
+        gate_inputs_ = torch.log(eps) - torch.log(1 - eps)
+        # Reassigned in place -- ce_loss's use of gate_inputs_ below must also
+        # be on the right device (this is what crashed on GPU before the fix).
+        gate_inputs_ = gate_inputs_.to(device)
+        gate_inputs = (gate_inputs_ + edge_logits_vl) / temperature
+        # Eq. (12): A = sigmoid(...) -- always positive, never multiplied by
+        # the raw signed PCC.
+        batch_aug_edge_weight = torch.sigmoid(gate_inputs).squeeze()
+        # gamma = the gate's own mean -- exact, since edge_weight for this
+        # call IS batch_aug_edge_weight itself (Eq. 18's literal definition).
+        gamma_aug = batch_aug_edge_weight.mean()
+        x_aug, _ = model(batch.batch, batch.x, batch.edge_index, beta, None, batch_aug_edge_weight,
+                        batch.edge_weight, None, gamma=gamma_aug)
+        row, col = batch.edge_index
+        edge_batch = batch.batch[row]
+        edge_drop_out_prob = 1 - torch.sigmoid(gate_inputs).squeeze()
+
+        uni, edge_batch_num = edge_batch.unique(return_counts=True)
+        sum_pe = scatter(edge_drop_out_prob, edge_batch, reduce="sum")
+        reg = []
+        for b_id in range(batch.num_graphs):
+            if b_id in uni:
+                num_edges = edge_batch_num[uni.tolist().index(b_id)]
+                reg.append(sum_pe[b_id] / num_edges)
+            # else: no edges in that graph -- don't include.
+        num_graph_with_edges = len(reg)
+        reg = torch.stack(reg)
+        reg = reg.mean()
+
+        mu = torch.reshape(mu, [batch.num_graphs, -1])
+        std = torch.reshape(std, [batch.num_graphs, -1])
+        kld_loss = - 0.5 * torch.mean((1 + 2 * std.log() - mu.pow(2) - std.pow(2)).sum(1))
+        # L_CE (Eq. 13/14): M_ij (edge_prod) is a fixed, non-learnable target
+        # (.detach()ed below) -- its only real gradient path is into
+        # edge_logits_vl, i.e. view_net (Phi). Kept entirely within Phase 1's
+        # own ascent step (Item 4b) -- a separate view_optimizer.step() after
+        # model_loss.backward() in Phase 2 would also pick up calc_loss's own
+        # gradient into view_net, inverting the adversarial objective.
+        edge_prod_sig = torch.sigmoid(edge_prod.squeeze()).detach()
+        edge_logits_sig = torch.sigmoid((edge_logits_vl + gate_inputs_) / temperature)
+        ce_loss = F.binary_cross_entropy(edge_logits_sig, edge_prod_sig)
+        # reg = mean edge-drop probability -- penalizes high drop rates so
+        # the view_learner can't maximize view_loss just by destroying the
+        # whole graph (Issue B).
+        view_loss = model.calc_loss(x, x_aug) - ce_lambda * ce_loss \
+                    - reg_lambda * reg - kld_lambda * kld_loss
+        view_loss_all += view_loss.item() * batch.num_graphs
+        reg_all += reg.item() * num_graph_with_edges
+        num_graphs_seen += batch.num_graphs
+        num_graph_with_edges_seen += num_graph_with_edges
+
+        (-view_loss).backward()
+        # Unconstrained ascent has no natural upper bound -- observed
+        # empirically to diverge (NaN) on some configs. Clipping
+        # view_learner's gradient norm only is the standard mitigation.
+        torch.nn.utils.clip_grad_norm_(view_learner.parameters(), max_norm=5.0)
+        view_optimizer.step()
+
+        # ---- Phase 2: train model to minimize contrastive loss ----
+        model.train()
+        view_learner.eval()
+        model_optimizer.zero_grad()
+
+        x, _ = model(batch.batch, batch.x, batch.edge_index, beta, None, gcn_w,
+                    batch.edge_weight, None, gamma=gamma_orig)
+        # mu/std/edge_prod discarded here -- ce_loss (Item 4b) moved entirely
+        # to Phase 1; only edge_logits_vl (for the gate) is needed here.
+        edge_logits_vl, _, _, _ = view_learner(batch.batch, batch.x, batch.edge_index, beta, None,
+                                             gcn_w, batch.edge_weight, batch.dyn_weight, gamma=gamma_orig)
+        eps = (bias - (1 - bias)) * torch.rand(edge_logits_vl.size()) + (1 - bias)
+        gate_inputs_ = torch.log(eps) - torch.log(1 - eps)
+        gate_inputs_ = gate_inputs_.to(device)
+        gate_inputs = (gate_inputs_ + edge_logits_vl) / temperature
+        batch_aug_edge_weight = torch.sigmoid(gate_inputs).squeeze()
+        gamma_aug = batch_aug_edge_weight.mean()
+        x_aug, _ = model(batch.batch, batch.x, batch.edge_index, beta, None, batch_aug_edge_weight,
+                        batch.edge_weight, None, gamma=gamma_aug)
+
+        # Fig. 3/4 interpretability: learned adjacency summed separately per
+        # diagnostic group (y=1 ASD, y=0 NC), normalized by subject count at
+        # epoch end.
+        per_subject_aug = batch_aug_edge_weight.detach().reshape(
+            batch.num_graphs, template, template).cpu()
+        y_flat = batch.y.view(-1)
+        asd_mask = (y_flat == 1).cpu()
+        nc_mask = (y_flat == 0).cpu()
+        if asd_mask.any():
+            aug_edge_weight_all_asd += per_subject_aug[asd_mask].sum(dim=0)
+            n_asd_seen += int(asd_mask.sum())
+        if nc_mask.any():
+            aug_edge_weight_all_nc += per_subject_aug[nc_mask].sum(dim=0)
+            n_nc_seen += int(nc_mask.sum())
+
+        # ce_loss/L_CE moved to Phase 1's view_loss (Item 4b) -- model_loss no
+        # longer includes it.
+        model_loss = model.calc_loss(x, x_aug)
+        model_loss_all += model_loss.item() * batch.num_graphs
+
+        model_loss.backward()
+        model_optimizer.step()
+
+    fin_model_loss = model_loss_all / num_graphs_seen
+    fin_view_loss = view_loss_all / num_graphs_seen
+    fin_reg = reg_all / num_graph_with_edges_seen
+    fin_aug_edge_weight_asd = aug_edge_weight_all_asd / max(n_asd_seen, 1)
+    fin_aug_edge_weight_nc = aug_edge_weight_all_nc / max(n_nc_seen, 1)
+    # np.random.beta requires both shape parameters strictly > 0; fin_reg can
+    # reach exactly 0 or 1 if the gate saturates, which would otherwise crash
+    # the run. Clamp only for this call -- fin_reg itself (returned) stays
+    # the true, unclamped value.
+    fin_reg_beta = float(np.clip(fin_reg, 1e-4, 1 - 1e-4))
+    next_beta = np.random.beta(fin_reg_beta, 1 - fin_reg_beta)
+
+    return fin_model_loss, fin_view_loss, fin_reg, fin_aug_edge_weight_asd, fin_aug_edge_weight_nc, next_beta

@@ -1,0 +1,30 @@
+Task 15: algorithm=knn feature-set=global_pcc
+Loading feature set: global_pcc
+X shape: (956, 4005), y counts: [501 455]
+Wrote /users/3171356m/muhammad/GraSTIACL/ml/results/knn__global_pcc.json
+{
+  "accuracy": {
+    "mean": 0.5522633071553228,
+    "std": 0.027976609014409744
+  },
+  "f1": {
+    "mean": 0.44022179955064217,
+    "std": 0.03544932656105426
+  },
+  "sensitivity": {
+    "mean": 0.3714285673469388,
+    "std": 0.04471865873798353
+  },
+  "specificity": {
+    "mean": 0.7165742502741163,
+    "std": 0.057779130578281185
+  },
+  "precision": {
+    "mean": 0.5462182199591026,
+    "std": 0.039172333799416176
+  },
+  "auc": {
+    "mean": 0.572862474159504,
+    "std": 0.014797234887741638
+  }
+}

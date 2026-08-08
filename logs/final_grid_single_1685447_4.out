@@ -1,0 +1,449 @@
+Task 4: batch_size=128 emb_dim=512 mij_source=alff
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+validation time cost : 0.45991 sec
+validation time cost : 0.32486 sec
+validation time cost : 0.32593 sec
+validation time cost : 0.32775 sec
+validation time cost : 0.32538 sec
+mean validation time 0.35277:
+
+validation time cost : 0.28936 sec
+validation time cost : 0.28759 sec
+validation time cost : 0.28800 sec
+validation time cost : 0.28727 sec
+validation time cost : 0.28833 sec
+mean validation time 0.28811:
+
+validation time cost : 0.28980 sec
+validation time cost : 0.28832 sec
+validation time cost : 0.28907 sec
+validation time cost : 0.28765 sec
+validation time cost : 0.28850 sec
+mean validation time 0.28867:
+
+validation time cost : 0.28967 sec
+validation time cost : 0.28916 sec
+validation time cost : 0.28863 sec
+validation time cost : 0.28931 sec
+validation time cost : 0.28836 sec
+mean validation time 0.28903:
+
+validation time cost : 0.29110 sec
+validation time cost : 0.28860 sec
+validation time cost : 0.28824 sec
+validation time cost : 0.28840 sec
+validation time cost : 0.29303 sec
+mean validation time 0.28988:
+
+validation time cost : 0.29033 sec
+validation time cost : 0.28986 sec
+validation time cost : 0.28855 sec
+validation time cost : 0.28824 sec
+validation time cost : 0.28905 sec
+mean validation time 0.28920:
+
+validation time cost : 0.29178 sec
+validation time cost : 0.28918 sec
+validation time cost : 0.28942 sec
+validation time cost : 0.28751 sec
+validation time cost : 0.28853 sec
+mean validation time 0.28928:
+
+validation time cost : 0.29102 sec
+validation time cost : 0.28818 sec
+validation time cost : 0.28886 sec
+validation time cost : 0.28893 sec
+validation time cost : 0.28941 sec
+mean validation time 0.28928:
+
+validation time cost : 0.28777 sec
+validation time cost : 0.28676 sec
+validation time cost : 0.28669 sec
+validation time cost : 0.28642 sec
+validation time cost : 0.28672 sec
+mean validation time 0.28687:
+
+validation time cost : 0.28688 sec
+validation time cost : 0.28784 sec
+validation time cost : 0.28754 sec
+validation time cost : 0.28618 sec
+validation time cost : 0.28577 sec
+mean validation time 0.28684:
+
+validation time cost : 0.28533 sec
+validation time cost : 0.28906 sec
+validation time cost : 0.28561 sec
+validation time cost : 0.28527 sec
+validation time cost : 0.28513 sec
+mean validation time 0.28608:
+
+validation time cost : 0.28496 sec
+validation time cost : 0.28604 sec
+validation time cost : 0.28535 sec
+validation time cost : 0.28547 sec
+validation time cost : 0.28562 sec
+mean validation time 0.28549:
+
+validation time cost : 0.28606 sec
+validation time cost : 0.28708 sec
+validation time cost : 0.28509 sec
+validation time cost : 0.28823 sec
+validation time cost : 0.28676 sec
+mean validation time 0.28664:
+
+validation time cost : 0.28581 sec
+validation time cost : 0.28609 sec
+validation time cost : 0.28379 sec
+validation time cost : 0.28429 sec
+validation time cost : 0.28604 sec
+mean validation time 0.28520:
+
+validation time cost : 0.28733 sec
+validation time cost : 0.28659 sec
+validation time cost : 0.28632 sec
+validation time cost : 0.28659 sec
+validation time cost : 0.28541 sec
+mean validation time 0.28645:
+
+validation time cost : 0.28477 sec
+validation time cost : 0.28472 sec
+validation time cost : 0.28424 sec
+validation time cost : 0.28699 sec
+validation time cost : 0.28536 sec
+mean validation time 0.28521:
+
+validation time cost : 0.28582 sec
+validation time cost : 0.28583 sec
+validation time cost : 0.28571 sec
+validation time cost : 0.28657 sec
+validation time cost : 0.28455 sec
+mean validation time 0.28569:
+
+validation time cost : 0.28405 sec
+validation time cost : 0.28598 sec
+validation time cost : 0.28644 sec
+validation time cost : 0.28642 sec
+validation time cost : 0.28399 sec
+mean validation time 0.28538:
+
+validation time cost : 0.28538 sec
+validation time cost : 0.28572 sec
+validation time cost : 0.28445 sec
+validation time cost : 0.28417 sec
+validation time cost : 0.28360 sec
+mean validation time 0.28466:
+
+validation time cost : 0.28570 sec
+validation time cost : 0.28433 sec
+validation time cost : 0.28392 sec
+validation time cost : 0.28517 sec
+validation time cost : 0.28447 sec
+mean validation time 0.28472:
+
+validation time cost : 0.28483 sec
+validation time cost : 0.28558 sec
+validation time cost : 0.28499 sec
+validation time cost : 0.28513 sec
+validation time cost : 0.28633 sec
+mean validation time 0.28537:
+
+validation time cost : 0.28726 sec
+validation time cost : 0.28420 sec
+validation time cost : 0.28414 sec
+validation time cost : 0.28629 sec
+validation time cost : 0.28558 sec
+mean validation time 0.28549:
+
+validation time cost : 0.28569 sec
+validation time cost : 0.28427 sec
+validation time cost : 0.28540 sec
+validation time cost : 0.28622 sec
+validation time cost : 0.28449 sec
+mean validation time 0.28521:
+
+validation time cost : 0.28560 sec
+validation time cost : 0.28572 sec
+validation time cost : 0.28610 sec
+validation time cost : 0.28640 sec
+validation time cost : 0.28540 sec
+mean validation time 0.28584:
+
+validation time cost : 0.28805 sec
+validation time cost : 0.28437 sec
+validation time cost : 0.28547 sec
+validation time cost : 0.28561 sec
+validation time cost : 0.28312 sec
+mean validation time 0.28532:
+
+validation time cost : 0.28570 sec
+validation time cost : 0.28719 sec
+validation time cost : 0.28573 sec
+validation time cost : 0.28494 sec
+validation time cost : 0.28615 sec
+mean validation time 0.28594:
+
+validation time cost : 0.28520 sec
+validation time cost : 0.28441 sec
+validation time cost : 0.28432 sec
+validation time cost : 0.28378 sec
+validation time cost : 0.28377 sec
+mean validation time 0.28430:
+
+validation time cost : 0.28834 sec
+validation time cost : 0.28603 sec
+validation time cost : 0.28605 sec
+validation time cost : 0.28663 sec
+validation time cost : 0.28402 sec
+mean validation time 0.28621:
+
+validation time cost : 0.28904 sec
+validation time cost : 0.28492 sec
+validation time cost : 0.28469 sec
+validation time cost : 0.28592 sec
+validation time cost : 0.28883 sec
+mean validation time 0.28668:
+
+validation time cost : 0.28863 sec
+validation time cost : 0.28526 sec
+validation time cost : 0.28394 sec
+validation time cost : 0.28694 sec
+validation time cost : 0.28585 sec
+mean validation time 0.28612:
+
+validation time cost : 0.28510 sec
+validation time cost : 0.28415 sec
+validation time cost : 0.28490 sec
+validation time cost : 0.28403 sec
+validation time cost : 0.28538 sec
+mean validation time 0.28471:
+
+validation time cost : 0.28489 sec
+validation time cost : 0.28448 sec
+validation time cost : 0.28373 sec
+validation time cost : 0.28515 sec
+validation time cost : 0.28413 sec
+mean validation time 0.28448:
+
+validation time cost : 0.28840 sec
+validation time cost : 0.28589 sec
+validation time cost : 0.28565 sec
+validation time cost : 0.28524 sec
+validation time cost : 0.28576 sec
+mean validation time 0.28619:
+
+validation time cost : 0.28629 sec
+validation time cost : 0.28599 sec
+validation time cost : 0.28440 sec
+validation time cost : 0.28730 sec
+validation time cost : 0.28583 sec
+mean validation time 0.28596:
+
+validation time cost : 0.28477 sec
+validation time cost : 0.28618 sec
+validation time cost : 0.28407 sec
+validation time cost : 0.28590 sec
+validation time cost : 0.28483 sec
+mean validation time 0.28515:
+
+validation time cost : 0.28640 sec
+validation time cost : 0.28612 sec
+validation time cost : 0.28430 sec
+validation time cost : 0.28418 sec
+validation time cost : 0.28478 sec
+mean validation time 0.28516:
+
+validation time cost : 0.28657 sec
+validation time cost : 0.28704 sec
+validation time cost : 0.28487 sec
+validation time cost : 0.28389 sec
+validation time cost : 0.28658 sec
+mean validation time 0.28579:
+
+validation time cost : 0.28613 sec
+validation time cost : 0.28509 sec
+validation time cost : 0.28429 sec
+validation time cost : 0.28448 sec
+validation time cost : 0.28525 sec
+mean validation time 0.28505:
+
+validation time cost : 0.28624 sec
+validation time cost : 0.28431 sec
+validation time cost : 0.28450 sec
+validation time cost : 0.28725 sec
+validation time cost : 0.28470 sec
+mean validation time 0.28540:
+
+validation time cost : 0.28717 sec
+validation time cost : 0.28479 sec
+validation time cost : 0.28580 sec
+validation time cost : 0.28646 sec
+validation time cost : 0.28470 sec
+mean validation time 0.28578:
+
+validation time cost : 0.28603 sec
+validation time cost : 0.28815 sec
+validation time cost : 0.28509 sec
+validation time cost : 0.28502 sec
+validation time cost : 0.28442 sec
+mean validation time 0.28574:
+
+validation time cost : 0.28661 sec
+validation time cost : 0.28462 sec
+validation time cost : 0.28454 sec
+validation time cost : 0.28406 sec
+validation time cost : 0.28378 sec
+mean validation time 0.28472:
+
+validation time cost : 0.28569 sec
+validation time cost : 0.28579 sec
+validation time cost : 0.28543 sec
+validation time cost : 0.28467 sec
+validation time cost : 0.28407 sec
+mean validation time 0.28513:
+
+validation time cost : 0.28612 sec
+validation time cost : 0.28409 sec
+validation time cost : 0.28434 sec
+validation time cost : 0.28417 sec
+validation time cost : 0.28377 sec
+mean validation time 0.28450:
+
+validation time cost : 0.28506 sec
+validation time cost : 0.28751 sec
+validation time cost : 0.28561 sec
+validation time cost : 0.28482 sec
+validation time cost : 0.28518 sec
+mean validation time 0.28563:
+
+validation time cost : 0.28672 sec
+validation time cost : 0.28599 sec
+validation time cost : 0.28635 sec
+validation time cost : 0.28542 sec
+validation time cost : 0.28605 sec
+mean validation time 0.28610:
+
+validation time cost : 0.28621 sec
+validation time cost : 0.28734 sec
+validation time cost : 0.28430 sec
+validation time cost : 0.28478 sec
+validation time cost : 0.28504 sec
+mean validation time 0.28553:
+
+validation time cost : 0.28504 sec
+validation time cost : 0.28545 sec
+validation time cost : 0.28707 sec
+validation time cost : 0.28701 sec
+validation time cost : 0.28379 sec
+mean validation time 0.28567:
+
+validation time cost : 0.28441 sec
+validation time cost : 0.28514 sec
+validation time cost : 0.28644 sec
+validation time cost : 0.28435 sec
+validation time cost : 0.28460 sec
+mean validation time 0.28499:
+
+validation time cost : 0.28788 sec
+validation time cost : 0.28706 sec
+validation time cost : 0.28467 sec
+validation time cost : 0.28591 sec
+validation time cost : 0.28668 sec
+mean validation time 0.28644:
+
+validation time cost : 0.28621 sec
+validation time cost : 0.28680 sec
+validation time cost : 0.28669 sec
+validation time cost : 0.28683 sec
+validation time cost : 0.28550 sec
+mean validation time 0.28641:
+
+validation time cost : 0.28878 sec
+validation time cost : 0.28748 sec
+validation time cost : 0.28775 sec
+validation time cost : 0.28789 sec
+validation time cost : 0.28383 sec
+mean validation time 0.28715:
+
+validation time cost : 0.28757 sec
+validation time cost : 0.28596 sec
+validation time cost : 0.28607 sec
+validation time cost : 0.28637 sec
+validation time cost : 0.28591 sec
+mean validation time 0.28638:
+
+validation time cost : 0.28700 sec
+validation time cost : 0.28440 sec
+validation time cost : 0.28473 sec
+validation time cost : 0.28540 sec
+validation time cost : 0.28583 sec
+mean validation time 0.28547:
+
+validation time cost : 0.28796 sec
+validation time cost : 0.28567 sec
+validation time cost : 0.28369 sec
+validation time cost : 0.28550 sec
+validation time cost : 0.28605 sec
+mean validation time 0.28577:
+
+validation time cost : 0.28803 sec
+validation time cost : 0.28525 sec
+validation time cost : 0.28462 sec
+validation time cost : 0.28583 sec
+validation time cost : 0.28614 sec
+mean validation time 0.28597:
+
+validation time cost : 0.28739 sec
+validation time cost : 0.28615 sec
+validation time cost : 0.28673 sec
+validation time cost : 0.28506 sec
+validation time cost : 0.28608 sec
+mean validation time 0.28628:
+
+validation time cost : 0.29443 sec
+validation time cost : 0.28618 sec
+validation time cost : 0.28729 sec
+validation time cost : 0.28568 sec
+validation time cost : 0.28555 sec
+mean validation time 0.28782:
+
+validation time cost : 0.28713 sec
+validation time cost : 0.28675 sec
+validation time cost : 0.28838 sec
+validation time cost : 0.28760 sec
+validation time cost : 0.28635 sec
+mean validation time 0.28724:
+
+validation time cost : 0.28620 sec
+validation time cost : 0.28760 sec
+validation time cost : 0.28805 sec
+validation time cost : 0.28738 sec
+validation time cost : 0.28781 sec
+mean validation time 0.28741:
+
+validation time cost : 0.28758 sec
+validation time cost : 0.28627 sec
+validation time cost : 0.28707 sec
+validation time cost : 0.28498 sec
+validation time cost : 0.28563 sec
+mean validation time 0.28631:
+

@@ -1,0 +1,30 @@
+Task 5: algorithm=knn feature-combo=lpcc_alff
+Loading feature sets for combo: lpcc_alff = ['local_pcc', 'alff']
+X shape: (956, 8280), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_combinations/results/knn__lpcc_alff_combat.json
+{
+  "accuracy": {
+    "mean": 0.5543411867364746,
+    "std": 0.027921881785545194
+  },
+  "f1": {
+    "mean": 0.45182941351557765,
+    "std": 0.031405714176497894
+  },
+  "sensitivity": {
+    "mean": 0.3868131825624925,
+    "std": 0.03894515374053536
+  },
+  "specificity": {
+    "mean": 0.7064554384952926,
+    "std": 0.06002605003021463
+  },
+  "precision": {
+    "mean": 0.5479171841364463,
+    "std": 0.042504817281771974
+  },
+  "auc": {
+    "mean": 0.5712134696986182,
+    "std": 0.03805678572668031
+  }
+}

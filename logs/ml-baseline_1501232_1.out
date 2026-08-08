@@ -1,0 +1,30 @@
+Task 1: algorithm=elasticnet feature-set=local_pcc
+Loading feature set: local_pcc
+X shape: (956, 8010), y counts: [501 455]
+Wrote /users/3171356m/muhammad/GraSTIACL/ml/results/elasticnet__local_pcc.json
+{
+  "accuracy": {
+    "mean": 0.6370146160558464,
+    "std": 0.030971798617640836
+  },
+  "f1": {
+    "mean": 0.6089332837433363,
+    "std": 0.04345874482890945
+  },
+  "sensitivity": {
+    "mean": 0.597802191232943,
+    "std": 0.07005440560603608
+  },
+  "specificity": {
+    "mean": 0.6726138546737243,
+    "std": 0.05966243577390969
+  },
+  "precision": {
+    "mean": 0.6249768377480269,
+    "std": 0.03477102249468311
+  },
+  "auc": {
+    "mean": 0.6815597867479056,
+    "std": 0.017640751663790314
+  }
+}

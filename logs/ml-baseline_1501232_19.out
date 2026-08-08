@@ -1,0 +1,30 @@
+Task 19: algorithm=mlp feature-set=local_pcc
+Loading feature set: local_pcc
+X shape: (956, 8010), y counts: [501 455]
+Wrote /users/3171356m/muhammad/GraSTIACL/ml/results/mlp__local_pcc.json
+{
+  "accuracy": {
+    "mean": 0.6234293193717277,
+    "std": 0.024569704999690706
+  },
+  "f1": {
+    "mean": 0.5907905164261278,
+    "std": 0.034853804834044246
+  },
+  "sensitivity": {
+    "mean": 0.5736263673227873,
+    "std": 0.05356508779358778
+  },
+  "specificity": {
+    "mean": 0.6686138547137241,
+    "std": 0.04386931919207983
+  },
+  "precision": {
+    "mean": 0.6118095827076623,
+    "std": 0.02594174254334616
+  },
+  "auc": {
+    "mean": 0.675924708954412,
+    "std": 0.02436444683345496
+  }
+}

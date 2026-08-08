@@ -1,0 +1,30 @@
+Task 0: algorithm=elasticnet feature-combo=gpcc_lpcc
+Loading feature sets for combo: gpcc_lpcc = ['global_pcc', 'local_pcc']
+X shape: (956, 12015), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_combinations/results/elasticnet__gpcc_lpcc_combat.json
+{
+  "accuracy": {
+    "mean": 0.6485438481675392,
+    "std": 0.03872997999078167
+  },
+  "f1": {
+    "mean": 0.620436622745494,
+    "std": 0.04843922779284547
+  },
+  "sensitivity": {
+    "mean": 0.6065933999275451,
+    "std": 0.06716794119567591
+  },
+  "specificity": {
+    "mean": 0.6865940525539203,
+    "std": 0.05217322335923379
+  },
+  "precision": {
+    "mean": 0.6378751957945857,
+    "std": 0.0426811455390836
+  },
+  "auc": {
+    "mean": 0.7113539331955174,
+    "std": 0.03660893908294451
+  }
+}

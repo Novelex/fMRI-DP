@@ -1,0 +1,30 @@
+Task 2: algorithm=rbf_svm feature-combo=all3
+Loading feature sets for combo: all3 = ['global_pcc', 'local_pcc', 'alff']
+X shape: (956, 12285), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_combinations/results/rbf_svm__all3_combat.json
+{
+  "accuracy": {
+    "mean": 0.665265052356021,
+    "std": 0.02797422745055797
+  },
+  "f1": {
+    "mean": 0.6328692873412127,
+    "std": 0.03175763996158228
+  },
+  "sensitivity": {
+    "mean": 0.6065933999275451,
+    "std": 0.03502720280301804
+  },
+  "specificity": {
+    "mean": 0.7185544482743124,
+    "std": 0.02862599323828499
+  },
+  "precision": {
+    "mean": 0.6619495242188547,
+    "std": 0.032049252724625485
+  },
+  "auc": {
+    "mean": 0.7266676096181047,
+    "std": 0.027678807345915907
+  }
+}

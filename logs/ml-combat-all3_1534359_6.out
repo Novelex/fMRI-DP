@@ -1,0 +1,30 @@
+Task 6: algorithm=mlp feature-combo=all3
+Loading feature sets for combo: all3 = ['global_pcc', 'local_pcc', 'alff']
+X shape: (956, 12285), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_combinations/results/mlp__all3_combat.json
+{
+  "accuracy": {
+    "mean": 0.6579570244328097,
+    "std": 0.021987129122125207
+  },
+  "f1": {
+    "mean": 0.6472081502647341,
+    "std": 0.03069822959981651
+  },
+  "sensitivity": {
+    "mean": 0.6615384542688082,
+    "std": 0.0498276216447718
+  },
+  "specificity": {
+    "mean": 0.65469306277294,
+    "std": 0.010018823471949302
+  },
+  "precision": {
+    "mean": 0.6343644020526668,
+    "std": 0.014904866103640366
+  },
+  "auc": {
+    "mean": 0.71203916875204,
+    "std": 0.039146611347716825
+  }
+}

@@ -1,0 +1,430 @@
+08-Aug-26 12:59:07 - Using Device: cuda
+08-Aug-26 12:59:07 - Seed: 123
+08-Aug-26 12:59:07 - Namespace(name='GraSTIACL_ABIDE_979', path='/users/3171356m/muhammad/GraSTIACL/data/GraSTIACL_ABIDE_979', template=90, num_dyn_windows=3, model_lr=0.0005, view_lr=0.0005, num_gc_layers=2, pooling_type='standard', emb_dim=256, vib_hidden_dim=400, batch_size=256, drop_ratio=0.3, epochs=300, kld_lambda=0.003, reg_lambda=0.2, gamma_mode='paper_literal', node_feature_mode='alff_pcc', mij_source='alff', eval_interval=5, downstream_classifier='linear', ce_lambda=2.0, seed=123)
+/users/3171356m/muhammad/GraSTIACL/datasets/Dataset.py:45: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.data, self.slices = torch.load(path)
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 12:59:48 - Before training Embedding Eval Scores: Train: [0.7613967245381513, 0.08691404114761081, 0.7470873906760715, 0.09473485612208037, 0.7450171795703877, 0.10229704316567821, 0.77624999758006, 0.07396748393224668, 0.749473519999977, 0.08748558831236754] Val: [0.5843137254901961, 0.036178699354504684, 0.5706387364756855, 0.03254773478831965, 0.5780821838618879, 0.02656262899183429, 0.5899999926250001, 0.045689166635128044, 0.5635641025641025, 0.03861102573553015] Test: [0.5889452443280978, 0.031035254247577165, 0.5629143461263938, 0.032180112295545876, 0.556043949933583, 0.03154439546524252, 0.6188316769915676, 0.03457685413776713, 0.5701665713138744, 0.034924658940265134, 0.606050701773474, 0.024963677888514873]
+08-Aug-26 13:01:26 - Epoch 1, Model Loss 2.5170997386198164, View Loss -8.209243894122135, Reg 0.45325964714193945
+08-Aug-26 13:03:00 - Epoch 2, Model Loss 1.5156239061674812, View Loss -6.726963839271577, Reg 0.37619646361183423
+08-Aug-26 13:04:34 - Epoch 3, Model Loss 1.1734399865361935, View Loss -3.376296865391432, Reg 0.4392786612071752
+08-Aug-26 13:06:09 - Epoch 4, Model Loss 1.1431640246922001, View Loss -2.452919142016806, Reg 0.42247016921203007
+08-Aug-26 13:07:44 - Epoch 5, Model Loss 1.016304799702377, View Loss -1.7917556553206184, Reg 0.4231831751857343
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 13:08:38 - Metric: accuracy Train_mean: 0.7770760459120909 Val_mean: 0.5869281045751633 Test_mean: 0.5889234293193718
+08-Aug-26 13:08:38 - Metric: accuracy Train_std: 0.052407684588690766 Val_std: 0.01999615495526583 Test_std: 0.018033192597677553
+08-Aug-26 13:08:38 - Metric: f1 Train_mean: 0.7660034769707551 Val_mean: 0.5707150905122162 Test_mean: 0.5655600532640108
+08-Aug-26 13:08:38 - Metric: f1 Train_std: 0.05411193654660912 Val_std: 0.016948233815735098 Test_std: 0.031921543396308504
+08-Aug-26 13:08:38 - Metric: sen Train_mean: 0.7663230214215704 Val_mean: 0.5753424578720212 Test_mean: 0.564835158628185
+08-Aug-26 13:08:38 - Metric: sen Train_std: 0.05179778313861043 Val_std: 0.019372788260278166 Test_std: 0.05320315737979038
+08-Aug-26 13:08:38 - Metric: spe Train_mean: 0.7868282685751857 Val_mean: 0.5974999925312501 Test_mean: 0.610673261233136
+08-Aug-26 13:08:38 - Metric: spe Train_std: 0.05443491014687984 Val_std: 0.03482097025769814 Test_std: 0.0361820378564807
+08-Aug-26 13:08:38 - Metric: precision Train_mean: 0.7658420463746045 Val_mean: 0.5666920099986461 Test_mean: 0.5683785196231622
+08-Aug-26 13:08:38 - Metric: precision Train_std: 0.05730573090428161 Val_std: 0.022329403454854225 Test_std: 0.01664414239118293
+08-Aug-26 13:10:13 - Epoch 6, Model Loss 0.9552980177572082, View Loss -2.577098045389024, Reg 0.4212575602232163
+08-Aug-26 13:11:47 - Epoch 7, Model Loss 0.9736216158048877, View Loss -3.030237820357957, Reg 0.4117113748354892
+08-Aug-26 13:13:21 - Epoch 8, Model Loss 0.9779193266665087, View Loss -3.1347631051450593, Reg 0.4127635905932183
+08-Aug-26 13:14:55 - Epoch 9, Model Loss 0.9959599742330767, View Loss -3.0291024411572574, Reg 0.42694213487613153
+08-Aug-26 13:16:30 - Epoch 10, Model Loss 1.2881066569723345, View Loss -2.929009545298301, Reg 0.4707862814599999
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 13:17:14 - Metric: accuracy Train_mean: 0.7515393173090295 Val_mean: 0.5895424836601307 Test_mean: 0.6108420593368238
+08-Aug-26 13:17:14 - Metric: accuracy Train_std: 0.048760489371599325 Val_std: 0.02963603672877026 Test_std: 0.0247609862892001
+08-Aug-26 13:17:14 - Metric: f1 Train_mean: 0.7394935620538208 Val_mean: 0.5723279895283888 Test_mean: 0.5913553946174732
+08-Aug-26 13:17:14 - Metric: f1 Train_std: 0.051480380424013886 Val_std: 0.02648676086019925 Test_std: 0.020894340769225646
+08-Aug-26 13:17:14 - Metric: sen Train_mean: 0.7415807534653582 Val_mean: 0.5753424578720212 Test_mean: 0.5912087847119913
+08-Aug-26 13:17:14 - Metric: sen Train_std: 0.05263007464821732 Val_std: 0.028734488597339923 Test_std: 0.021308482655582963
+08-Aug-26 13:17:14 - Metric: spe Train_mean: 0.7605841097786759 Val_mean: 0.6024999924687501 Test_mean: 0.6286732610531359
+08-Aug-26 13:17:14 - Metric: spe Train_std: 0.04692865162466861 Val_std: 0.047037218717601706 Test_std: 0.04026043011416152
+08-Aug-26 13:17:14 - Metric: precision Train_mean: 0.7375591236696948 Val_mean: 0.5702284153521119 Test_mean: 0.592171855391116
+08-Aug-26 13:17:14 - Metric: precision Train_std: 0.05120149252882673 Val_std: 0.032787127248323715 Test_std: 0.028673932018396193
+08-Aug-26 13:18:48 - Epoch 11, Model Loss 3.039091672857436, View Loss -2.5632464795930616, Reg 0.5760968359943214
+08-Aug-26 13:20:22 - Epoch 12, Model Loss 3.9987779022759473, View Loss -1.8050062910782243, Reg 0.44838296045319304
+08-Aug-26 13:21:56 - Epoch 13, Model Loss 3.420307740007983, View Loss -1.3480501334537522, Reg 0.4986286839181908
+08-Aug-26 13:23:31 - Epoch 14, Model Loss 5.0298189717855415, View Loss -0.16578556254319068, Reg 0.4272122193579893
+08-Aug-26 13:25:05 - Epoch 15, Model Loss 5.295157759758219, View Loss 1.0092574492658033, Reg 0.4213673411303484
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/sklearn/svm/_base.py:1298: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+  warnings.warn(
+08-Aug-26 13:26:00 - Metric: accuracy Train_mean: 0.7459955285987827 Val_mean: 0.6339869281045751 Test_mean: 0.6056773560209424
+08-Aug-26 13:26:00 - Metric: accuracy Train_std: 0.011578236700335923 Val_std: 0.035798859967657894 Test_std: 0.029114597430111362
+08-Aug-26 13:26:00 - Metric: f1 Train_mean: 0.7327317875187372 Val_mean: 0.6285895076818229 Test_mean: 0.5834655278600056
+08-Aug-26 13:26:00 - Metric: f1 Train_std: 0.01521800979347706 Val_std: 0.03684855459457284 Test_std: 0.02611899157157391
+08-Aug-26 13:26:00 - Metric: sen Train_mean: 0.7326460455922815 Val_mean: 0.6493150595984238 Test_mean: 0.5802197738437387
+08-Aug-26 13:26:00 - Metric: sen Train_std: 0.023246095487522347 Val_std: 0.03932246547341094 Test_std: 0.03502720280301804
+08-Aug-26 13:26:00 - Metric: spe Train_mean: 0.7581094213128102 Val_mean: 0.6199999922500001 Test_mean: 0.6287920729319596
+08-Aug-26 13:26:00 - Metric: spe Train_std: 0.004411196305312315 Val_std: 0.03409545381627145 Test_std: 0.05598350702631892
+08-Aug-26 13:26:00 - Metric: precision Train_mean: 0.7330154903788653 Val_mean: 0.609212184661885 Test_mean: 0.5888842340455244
+08-Aug-26 13:26:00 - Metric: precision Train_std: 0.007817760191761369 Val_std: 0.03512800005356191 Test_std: 0.03935911608150791
+08-Aug-26 13:27:35 - Epoch 16, Model Loss 5.2644669361194305, View Loss 0.9922488763242586, Reg 0.4302710418172461
+08-Aug-26 13:29:09 - Epoch 17, Model Loss 5.000910236246915, View Loss 1.054557965390353, Reg 0.42814211566079113
+08-Aug-26 13:30:44 - Epoch 18, Model Loss 4.899649286868682, View Loss 1.112061794831663, Reg 0.396974235149607
+08-Aug-26 13:32:18 - Epoch 19, Model Loss 5.108146388161631, View Loss 0.8649007895002804, Reg 0.41735365762371396
+08-Aug-26 13:33:53 - Epoch 20, Model Loss 4.268063042453144, View Loss 0.9071770108394543, Reg 0.428002144003513
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/sklearn/svm/_base.py:1298: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+  warnings.warn(
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/sklearn/svm/_base.py:1298: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+  warnings.warn(
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/sklearn/svm/_base.py:1298: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+  warnings.warn(
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/sklearn/svm/_base.py:1298: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+  warnings.warn(
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/sklearn/svm/_base.py:1298: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+  warnings.warn(
+08-Aug-26 13:35:08 - Metric: accuracy Train_mean: 0.7361867933207107 Val_mean: 0.6065359477124183 Test_mean: 0.5836496509598603
+08-Aug-26 13:35:08 - Metric: accuracy Train_std: 0.007184095562573669 Val_std: 0.032126028045606554 Test_std: 0.029951625652658395
+08-Aug-26 13:35:08 - Metric: f1 Train_mean: 0.7223187227103285 Val_mean: 0.6055171615882664 Test_mean: 0.5579678275636555
+08-Aug-26 13:35:08 - Metric: f1 Train_std: 0.00940139246187601 Val_std: 0.031737200272878484 Test_std: 0.022544847357630377
+08-Aug-26 13:35:08 - Metric: sen Train_mean: 0.7216494820561874 Val_mean: 0.6328767036592232 Test_mean: 0.551648345586282
+08-Aug-26 13:35:08 - Metric: sen Train_std: 0.016264136804864434 Val_std: 0.03399910541368585 Test_std: 0.027274007713452373
+08-Aug-26 13:35:08 - Metric: spe Train_mean: 0.7493691565425854 Val_mean: 0.58249999271875 Test_mean: 0.6127128651727439
+08-Aug-26 13:35:08 - Metric: spe Train_std: 0.010156444054014281 Val_std: 0.03588174978749642 Test_std: 0.0581201640327565
+08-Aug-26 13:35:08 - Metric: precision Train_mean: 0.7231912073388101 Val_mean: 0.5806297203531712 Test_mean: 0.5661839387563585
+08-Aug-26 13:35:08 - Metric: precision Train_std: 0.007103403507188131 Val_std: 0.03174187477367571 Test_std: 0.035052812038201445
+08-Aug-26 13:36:42 - Epoch 21, Model Loss 1.9064019624159425, View Loss 1.392731602221852, Reg 0.42268136654937616
+08-Aug-26 13:38:17 - Epoch 22, Model Loss 1.5274322606529651, View Loss 1.6793138437191313, Reg 0.420609802257067
+08-Aug-26 13:39:51 - Epoch 23, Model Loss 1.2040531745016825, View Loss 1.9826204617153151, Reg 0.3906185473607674
+08-Aug-26 13:41:25 - Epoch 24, Model Loss 1.0978277402941652, View Loss 2.1526253233394863, Reg 0.44692199499537255
+08-Aug-26 13:43:01 - Epoch 25, Model Loss 1.0760203939102684, View Loss 2.2846767563201396, Reg 0.45333502145491883
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 13:43:34 - Metric: accuracy Train_mean: 0.7992854315757946 Val_mean: 0.6169934640522875 Test_mean: 0.6234129581151832
+08-Aug-26 13:43:34 - Metric: accuracy Train_std: 0.04695854450677079 Val_std: 0.03977810210379855 Test_std: 0.0187694064569646
+08-Aug-26 13:43:34 - Metric: f1 Train_mean: 0.7870608732497779 Val_mean: 0.6026396379713699 Test_mean: 0.5971532220381462
+08-Aug-26 13:43:34 - Metric: f1 Train_std: 0.049011180778849875 Val_std: 0.03766785224289846 Test_std: 0.016769982797151927
+08-Aug-26 13:43:34 - Metric: sen Train_mean: 0.7793814406206824 Val_mean: 0.6082191697504223 Test_mean: 0.5868131803646903
+08-Aug-26 13:43:34 - Metric: sen Train_std: 0.04817864497071773 Val_std: 0.03932246547341094 Test_std: 0.03154439546524252
+08-Aug-26 13:43:34 - Metric: spe Train_mean: 0.8173539694146816 Val_mean: 0.6249999921875002 Test_mean: 0.6566138548337241
+08-Aug-26 13:43:34 - Metric: spe Train_std: 0.0485383798788902 Val_std: 0.05645794824745672 Test_std: 0.04633842720160705
+08-Aug-26 13:43:34 - Metric: precision Train_mean: 0.7951675423619105 Val_mean: 0.5982936791989133 Test_mean: 0.609712266276882
+08-Aug-26 13:43:34 - Metric: precision Train_std: 0.05204398197253955 Val_std: 0.04477147869416964 Test_std: 0.026143007884331763
+08-Aug-26 13:45:08 - Epoch 26, Model Loss 1.0163091740348849, View Loss 2.3656399180200807, Reg 0.4167328096583299
+08-Aug-26 13:46:42 - Epoch 27, Model Loss 0.9822205654248034, View Loss 2.4315083236375115, Reg 0.4253312166016471
+08-Aug-26 13:48:16 - Epoch 28, Model Loss 0.955502308562211, View Loss 2.463917221484324, Reg 0.43159140478118196
+08-Aug-26 13:49:49 - Epoch 29, Model Loss 0.9437775626840951, View Loss 2.4680139210433643, Reg 0.41994734463831374
+08-Aug-26 13:51:23 - Epoch 30, Model Loss 0.8998886760807436, View Loss 2.445307765545705, Reg 0.418942266428321
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 13:51:50 - Metric: accuracy Train_mean: 0.7816132344918326 Val_mean: 0.6575163398692812 Test_mean: 0.616115837696335
+08-Aug-26 13:51:50 - Metric: accuracy Train_std: 0.03904986374577069 Val_std: 0.016841959119902147 Test_std: 0.020151569293155258
+08-Aug-26 13:51:50 - Metric: f1 Train_mean: 0.7683319853354182 Val_mean: 0.6458981494695781 Test_mean: 0.5926605495772944
+08-Aug-26 13:51:50 - Metric: f1 Train_std: 0.040647548581764205 Val_std: 0.0145896274893701 Test_std: 0.01220689890296721
+08-Aug-26 13:51:50 - Metric: sen Train_mean: 0.7608247396535233 Val_mean: 0.6547945115781573 Test_mean: 0.5868131803646903
+08-Aug-26 13:51:50 - Metric: sen Train_std: 0.03817991577898626 Val_std: 0.026562628991834255 Test_std: 0.029157140693705265
+08-Aug-26 13:51:50 - Metric: spe Train_mean: 0.8004692342649846 Val_mean: 0.6599999917500001 Test_mean: 0.6428118747717636
+08-Aug-26 13:51:50 - Metric: spe Train_std: 0.0399302339629049 Val_std: 0.04062019151542743 Test_std: 0.05669392291294636
+08-Aug-26 13:51:50 - Metric: precision Train_mean: 0.7760091476484866 Val_mean: 0.6384253622739962 Test_mean: 0.6010326862452298
+08-Aug-26 13:51:50 - Metric: precision Train_std: 0.04327963961673707 Val_std: 0.02252953433879325 Test_std: 0.02928019206493557
+08-Aug-26 13:53:22 - Epoch 31, Model Loss 0.8678833016790606, View Loss 2.3654288876505576, Reg 0.4212306891275749
+08-Aug-26 13:54:54 - Epoch 32, Model Loss 0.8757449296229055, View Loss 2.172428169509856, Reg 0.423078831643739
+08-Aug-26 13:56:27 - Epoch 33, Model Loss 0.8762359110381314, View Loss 1.7630920310399523, Reg 0.42645887201301225
+08-Aug-26 13:57:59 - Epoch 34, Model Loss 0.8605417756355956, View Loss 1.0815852249516602, Reg 0.4256603322517922
+08-Aug-26 13:59:31 - Epoch 35, Model Loss 0.8565212760011521, View Loss 0.23322690867479876, Reg 0.42850154214324315
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 14:00:21 - Metric: accuracy Train_mean: 0.7358498336595959 Val_mean: 0.615686274509804 Test_mean: 0.5920211605584642
+08-Aug-26 14:00:21 - Metric: accuracy Train_std: 0.056575087276406776 Val_std: 0.019122534429186665 Test_std: 0.03294002930691634
+08-Aug-26 14:00:21 - Metric: f1 Train_mean: 0.7182267641467831 Val_mean: 0.6016380573388698 Test_mean: 0.5690542627445836
+08-Aug-26 14:00:21 - Metric: f1 Train_std: 0.059867044735213835 Val_std: 0.017298570294161632 Test_std: 0.024270638663548214
+08-Aug-26 14:00:21 - Metric: sen Train_mean: 0.7072164924150636 Val_mean: 0.6082191697504223 Test_mean: 0.5648351586281851
+08-Aug-26 14:00:21 - Metric: sen Train_std: 0.05747775795246152 Val_std: 0.022257639159856908 Test_std: 0.019159995145673347
+08-Aug-26 14:00:21 - Metric: spe Train_mean: 0.7618360568152559 Val_mean: 0.6224999922187502 Test_mean: 0.6167128651327438
+08-Aug-26 14:00:21 - Metric: spe Train_std: 0.05824095638120259 Val_std: 0.03482097025769819 Test_std: 0.0567472510342977
+08-Aug-26 14:00:21 - Metric: precision Train_mean: 0.7298609492896061 Val_mean: 0.595854673800175 Test_mean: 0.5744688340028112
+08-Aug-26 14:00:21 - Metric: precision Train_std: 0.06375209622584975 Val_std: 0.02257374860421016 Test_std: 0.03828222030013173
+08-Aug-26 14:01:52 - Epoch 36, Model Loss 0.8460792796881129, View Loss -0.5453525517276141, Reg 0.422629915271344
+08-Aug-26 14:03:24 - Epoch 37, Model Loss 0.8411359412899576, View Loss -1.103371816698976, Reg 0.41346762930997744
+08-Aug-26 14:04:55 - Epoch 38, Model Loss 0.856814792964249, View Loss -1.4266333395467143, Reg 0.4095411971523173
+08-Aug-26 14:06:25 - Epoch 39, Model Loss 0.8728602678207174, View Loss -1.613705401640058, Reg 0.41249547730429903
+08-Aug-26 14:07:57 - Epoch 40, Model Loss 0.889980355316625, View Loss -1.6789434320258296, Reg 0.4154639681762232
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 14:08:45 - Metric: accuracy Train_mean: 0.7541542312506018 Val_mean: 0.6104575163398692 Test_mean: 0.5909467713787085
+08-Aug-26 14:08:45 - Metric: accuracy Train_std: 0.060866899852475335 Val_std: 0.012807789504748646 Test_std: 0.02830377796436104
+08-Aug-26 14:08:45 - Metric: f1 Train_mean: 0.7380530216124666 Val_mean: 0.6056637333397189 Test_mean: 0.5649628280142899
+08-Aug-26 14:08:45 - Metric: f1 Train_std: 0.06508130158995547 Val_std: 0.013081704650768352 Test_std: 0.02982377261290608
+08-Aug-26 14:08:45 - Metric: sen Train_mean: 0.7285223342662464 Val_mean: 0.6273972516794898 Test_mean: 0.5582417521072335
+08-Aug-26 14:08:45 - Metric: sen Train_std: 0.06570676762419461 Val_std: 0.026562628991834286 Test_std: 0.032893690950829266
+08-Aug-26 14:08:45 - Metric: spe Train_mean: 0.7774123807542705 Val_mean: 0.5949999925625001 Test_mean: 0.6206534591533321
+08-Aug-26 14:08:45 - Metric: spe Train_std: 0.05703761870490496 Val_std: 0.03409545381627145 Test_std: 0.0332724297542539
+08-Aug-26 14:08:45 - Metric: precision Train_mean: 0.7479046059380096 Val_mean: 0.5862473878511298 Test_mean: 0.5722351083261005
+08-Aug-26 14:08:45 - Metric: precision Train_std: 0.06470450219518964 Val_std: 0.015782917919797662 Test_std: 0.029669638483965175
+08-Aug-26 14:10:16 - Epoch 41, Model Loss 0.9469303745604958, View Loss -1.7121619021044616, Reg 0.42843308159496996
+08-Aug-26 14:11:46 - Epoch 42, Model Loss 1.0451433898016, View Loss -1.6779299839769946, Reg 0.457670486497081
+08-Aug-26 14:13:17 - Epoch 43, Model Loss 1.2566160811539973, View Loss -1.646804570154166, Reg 0.49125554097746205
+08-Aug-26 14:14:47 - Epoch 44, Model Loss 1.5949061430647782, View Loss -1.6393146943846506, Reg 0.5554211967659795
+08-Aug-26 14:16:18 - Epoch 45, Model Loss 1.735343425343725, View Loss -1.6541915513481555, Reg 0.5612394964345828
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 14:17:15 - Metric: accuracy Train_mean: 0.7593829894205364 Val_mean: 0.6183006535947713 Test_mean: 0.5846749563699826
+08-Aug-26 14:17:15 - Metric: accuracy Train_std: 0.05039178702100199 Val_std: 0.018300653594771232 Test_std: 0.03262586804282251
+08-Aug-26 14:17:15 - Metric: f1 Train_mean: 0.7438299583704453 Val_mean: 0.6165031631260879 Test_mean: 0.5594045352327945
+08-Aug-26 14:17:15 - Metric: f1 Train_std: 0.0549215385370356 Val_std: 0.022235125810058334 Test_std: 0.03357662146393358
+08-Aug-26 14:17:15 - Metric: sen Train_mean: 0.7353951864763053 Val_mean: 0.6438356076186904 Test_mean: 0.5538461477599325
+08-Aug-26 14:17:15 - Metric: sen Train_std: 0.05819646201311608 Val_std: 0.03355465355107569 Test_std: 0.033040211457520556
+08-Aug-26 14:17:15 - Metric: spe Train_mean: 0.7811565396210929 Val_mean: 0.5949999925625 Test_mean: 0.6126534592333321
+08-Aug-26 14:17:15 - Metric: spe Train_std: 0.046178481765295855 Val_std: 0.021794494445272195 Test_std: 0.03425653260592085
+08-Aug-26 14:17:15 - Metric: precision Train_mean: 0.7527531825769673 Val_mean: 0.5918575895649066 Test_mean: 0.5651710552136744
+08-Aug-26 14:17:15 - Metric: precision Train_std: 0.05306189562183085 Val_std: 0.016651392457239067 Test_std: 0.03500122792428262
+08-Aug-26 14:18:46 - Epoch 46, Model Loss 2.6062535341813473, View Loss -1.4890457636142875, Reg 0.541200470724864
+08-Aug-26 14:20:17 - Epoch 47, Model Loss 2.3237986325220086, View Loss -1.0044696929564536, Reg 0.46856338309443646
+08-Aug-26 14:21:47 - Epoch 48, Model Loss 2.306268815714944, View Loss -1.1406786716133979, Reg 0.49845744426280386
+08-Aug-26 14:23:18 - Epoch 49, Model Loss 4.704113758757523, View Loss 0.6162859874789186, Reg 0.4567638458567184
+08-Aug-26 14:24:49 - Epoch 50, Model Loss 3.8162690445967797, View Loss 1.8774430163235845, Reg 0.4483693224615632
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 14:25:25 - Metric: accuracy Train_mean: 0.7430409807130709 Val_mean: 0.6169934640522876 Test_mean: 0.6108420593368238
+08-Aug-26 14:25:25 - Metric: accuracy Train_std: 0.04507140888747416 Val_std: 0.015244318679334111 Test_std: 0.03051360650216386
+08-Aug-26 14:25:25 - Metric: f1 Train_mean: 0.7254486203562609 Val_mean: 0.6085161796638285 Test_mean: 0.5830454086217216
+08-Aug-26 14:25:25 - Metric: f1 Train_std: 0.05089379684961212 Val_std: 0.02056102831694956 Test_std: 0.03906693346386763
+08-Aug-26 14:25:25 - Metric: sen Train_mean: 0.7161512002881403 Val_mean: 0.6246575256896229 Test_mean: 0.5736263673227872
+08-Aug-26 14:25:25 - Metric: sen Train_std: 0.060800468669679426 Val_std: 0.03075334796316463 Test_std: 0.053565087793587776
+08-Aug-26 14:25:25 - Metric: spe Train_mean: 0.7674474275142738 Val_mean: 0.6099999923750001 Test_mean: 0.6447128648527439
+08-Aug-26 14:25:25 - Metric: spe Train_std: 0.032951823047435984 Val_std: 0.014577379554896016 Test_std: 0.03606008521281047
+08-Aug-26 14:25:25 - Metric: precision Train_mean: 0.7354197912260141 Val_mean: 0.5935526315789474 Test_mean: 0.5943684065138304
+08-Aug-26 14:25:25 - Metric: precision Train_std: 0.04150525204646963 Val_std: 0.013353831967377753 Test_std: 0.032257816866630595
+08-Aug-26 14:26:56 - Epoch 51, Model Loss 4.881963270977451, View Loss 1.9509495511713386, Reg 0.47363255624990586
+08-Aug-26 14:28:26 - Epoch 52, Model Loss 4.9127942009451, View Loss 1.9337659141508605, Reg 0.40485728223453504
+08-Aug-26 14:29:56 - Epoch 53, Model Loss 4.03721242768994, View Loss 1.7414131214429145, Reg 0.45010650768938426
+08-Aug-26 14:31:27 - Epoch 54, Model Loss 1.3337647171698854, View Loss 1.8005915087137263, Reg 0.4457745888741944
+08-Aug-26 14:32:58 - Epoch 55, Model Loss 1.1384456686394984, View Loss 1.8399160327272934, Reg 0.4277386366074055
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 14:33:37 - Metric: accuracy Train_mean: 0.7629873880812554 Val_mean: 0.603921568627451 Test_mean: 0.5930355584642234
+08-Aug-26 14:33:37 - Metric: accuracy Train_std: 0.02868358662902862 Val_std: 0.032179172876055345 Test_std: 0.03162536983302896
+08-Aug-26 14:33:37 - Metric: f1 Train_mean: 0.7508848692653194 Val_mean: 0.5938932993775984 Test_mean: 0.5694456925475558
+08-Aug-26 14:33:37 - Metric: f1 Train_std: 0.0305916641947348 Val_std: 0.037595867601167156 Test_std: 0.02875981236003454
+08-Aug-26 14:33:37 - Metric: sen Train_mean: 0.7512027465594407 Val_mean: 0.6082191697504223 Test_mean: 0.564835158628185
+08-Aug-26 14:33:37 - Metric: sen Train_std: 0.0327165091258179 Val_std: 0.047136028214808515 Test_std: 0.025630557497885294
+08-Aug-26 14:33:37 - Metric: spe Train_mean: 0.7736799041303659 Val_mean: 0.5999999925000001 Test_mean: 0.6186138552137243
+08-Aug-26 14:33:37 - Metric: spe Train_std: 0.02771990656199114 Val_std: 0.023717082154799334 Test_std: 0.043656652491174085
+08-Aug-26 14:33:37 - Metric: precision Train_mean: 0.750705240813059 Val_mean: 0.5805547953016308 Test_mean: 0.5745662711606483
+08-Aug-26 14:33:37 - Metric: precision Train_std: 0.03000707790999517 Val_std: 0.030245653677633863 Test_std: 0.035624279527195976
+08-Aug-26 14:35:07 - Epoch 56, Model Loss 1.0712402071414133, View Loss 2.3489365258476225, Reg 0.44608926760601697
+08-Aug-26 14:36:38 - Epoch 57, Model Loss 0.9893446996122225, View Loss 2.578856140998617, Reg 0.4545179660350209
+08-Aug-26 14:38:09 - Epoch 58, Model Loss 0.9332348699350237, View Loss 2.724071575507958, Reg 0.43895856655791216
+08-Aug-26 14:39:40 - Epoch 59, Model Loss 0.9158110887934473, View Loss 2.7546176072443878, Reg 0.4233361645971881
+08-Aug-26 14:41:10 - Epoch 60, Model Loss 0.922219667474595, View Loss 2.799021719888663, Reg 0.435655046831115
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 14:41:51 - Metric: accuracy Train_mean: 0.7665778804702459 Val_mean: 0.6130718954248366 Test_mean: 0.6056173647469459
+08-Aug-26 14:41:51 - Metric: accuracy Train_std: 0.03411446399954817 Val_std: 0.022413631633310133 Test_std: 0.02821827665423256
+08-Aug-26 14:41:51 - Metric: f1 Train_mean: 0.7546758151921586 Val_mean: 0.5994661594125492 Test_mean: 0.5833278890264694
+08-Aug-26 14:41:51 - Metric: f1 Train_std: 0.035576386767941566 Val_std: 0.028802739924361862 Test_std: 0.021787227434241194
+08-Aug-26 14:41:51 - Metric: sen Train_mean: 0.7546391726644701 Val_mean: 0.6082191697504225 Test_mean: 0.5802197738437387
+08-Aug-26 14:41:51 - Metric: sen Train_std: 0.03508522054774898 Val_std: 0.04297092308631097 Test_std: 0.03703802057398379
+08-Aug-26 14:41:51 - Metric: spe Train_mean: 0.7774104337137843 Val_mean: 0.6174999922812502 Test_mean: 0.6287128650127439
+08-Aug-26 14:41:51 - Metric: spe Train_std: 0.03442853964021439 Val_std: 0.029154759109792004 Test_std: 0.06507796530665996
+08-Aug-26 14:41:51 - Metric: precision Train_mean: 0.7547875011546794 Val_mean: 0.5919425077547653 Test_mean: 0.5895789640543461
+08-Aug-26 14:41:51 - Metric: precision Train_std: 0.03680919063764728 Val_std: 0.022535025405878886 Test_std: 0.03545092080827093
+08-Aug-26 14:43:22 - Epoch 61, Model Loss 0.8814692766596582, View Loss 2.822278494615435, Reg 0.4499041719915478
+08-Aug-26 14:44:53 - Epoch 62, Model Loss 0.8822823835217304, View Loss 2.8327516651552593, Reg 0.43776416653868544
+08-Aug-26 14:46:23 - Epoch 63, Model Loss 0.8794260611095189, View Loss 2.8396027157994994, Reg 0.4290171932725228
+08-Aug-26 14:47:54 - Epoch 64, Model Loss 0.8796034255785922, View Loss 2.832610813643643, Reg 0.43809359530025943
+08-Aug-26 14:49:24 - Epoch 65, Model Loss 0.851837436773787, View Loss 2.810179215594814, Reg 0.4382854763683415
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 14:49:51 - Metric: accuracy Train_mean: 0.7528486462779329 Val_mean: 0.6392156862745099 Test_mean: 0.6233965968586388
+08-Aug-26 14:49:51 - Metric: accuracy Train_std: 0.03348046108786214 Val_std: 0.022791628462957778 Test_std: 0.02712623310393328
+08-Aug-26 14:49:51 - Metric: f1 Train_mean: 0.738542318371765 Val_mean: 0.6309293367375559 Test_mean: 0.599110681517888
+08-Aug-26 14:49:51 - Metric: f1 Train_std: 0.03567289966739389 Val_std: 0.023809037327197444 Test_std: 0.022651677029497334
+08-Aug-26 14:49:51 - Metric: sen Train_mean: 0.7340206160342934 Val_mean: 0.6465753336085571 Test_mean: 0.5912087847119913
+08-Aug-26 14:49:51 - Metric: sen Train_std: 0.03679383853836942 Val_std: 0.02925226878293142 Test_std: 0.03361990851138201
+08-Aug-26 14:49:51 - Metric: spe Train_mean: 0.7699337982230572 Val_mean: 0.6324999920937502 Test_mean: 0.6526138548737241
+08-Aug-26 14:49:51 - Metric: spe Train_std: 0.032105521445599125 Val_std: 0.028062430050024213 Test_std: 0.05885712106771212
+08-Aug-26 14:49:51 - Metric: precision Train_mean: 0.7432189318013172 Val_mean: 0.6163938142020334 Test_mean: 0.6093574861154715
+08-Aug-26 14:49:51 - Metric: precision Train_std: 0.03542609975569996 Val_std: 0.023907370248663334 Test_std: 0.03339984572342863
+08-Aug-26 14:51:23 - Epoch 66, Model Loss 0.8345745584954777, View Loss 2.739507948504332, Reg 0.43203879375338056
+08-Aug-26 14:52:53 - Epoch 67, Model Loss 0.8293965770609708, View Loss 2.575229581928652, Reg 0.4348077365045268
+08-Aug-26 14:54:23 - Epoch 68, Model Loss 0.84612730157924, View Loss 2.255582174496671, Reg 0.439119231127296
+08-Aug-26 14:55:54 - Epoch 69, Model Loss 0.8262266574045605, View Loss 1.699046782369893, Reg 0.4363884861000412
+08-Aug-26 14:57:25 - Epoch 70, Model Loss 0.8307171291886014, View Loss 0.9330191495029497, Reg 0.43341090352465417
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 14:58:05 - Metric: accuracy Train_mean: 0.741725768321513 Val_mean: 0.6169934640522875 Test_mean: 0.5878054101221641
+08-Aug-26 14:58:05 - Metric: accuracy Train_std: 0.04841510991829618 Val_std: 0.02323710958775318 Test_std: 0.03215106021696443
+08-Aug-26 14:58:05 - Metric: f1 Train_mean: 0.7236162892904364 Val_mean: 0.609022498330769 Test_mean: 0.5598816972311492
+08-Aug-26 14:58:05 - Metric: f1 Train_std: 0.05465853167916189 Val_std: 0.01941664944030598 Test_std: 0.0331511218822568
+08-Aug-26 14:58:05 - Metric: sen Train_mean: 0.7134020594041166 Val_mean: 0.6246575256896229 Test_mean: 0.5516483455862818
+08-Aug-26 14:58:05 - Metric: sen Train_std: 0.06438509079526977 Val_std: 0.013969916284227949 Test_std: 0.04525551660592619
+08-Aug-26 14:58:05 - Metric: spe Train_mean: 0.7674299041498971 Val_mean: 0.6099999923750001 Test_mean: 0.6206336571735281
+08-Aug-26 14:58:05 - Metric: spe Train_std: 0.03564577668299481 Val_std: 0.0339116494917307 Test_std: 0.057250726258684104
+08-Aug-26 14:58:05 - Metric: precision Train_mean: 0.7345485566962587 Val_mean: 0.594359154814851 Test_mean: 0.5706818989526046
+08-Aug-26 14:58:05 - Metric: precision Train_std: 0.04557776095696567 Val_std: 0.025715627973450145 Test_std: 0.03661412135407473
+08-Aug-26 14:59:37 - Epoch 71, Model Loss 0.825506399864931, View Loss 0.1034939164397108, Reg 0.42859244795523926
+08-Aug-26 15:01:07 - Epoch 72, Model Loss 0.810360213203909, View Loss -0.5728141303840542, Reg 0.41903320665638816
+08-Aug-26 15:02:38 - Epoch 73, Model Loss 0.8036167818632086, View Loss -1.0266552714623167, Reg 0.41190986765478443
+08-Aug-26 15:04:09 - Epoch 74, Model Loss 0.8122606033061838, View Loss -1.2785955921875383, Reg 0.4092026477578295
+08-Aug-26 15:05:39 - Epoch 75, Model Loss 0.8077573681476226, View Loss -1.4041219256413033, Reg 0.4093634064726251
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 15:06:26 - Metric: accuracy Train_mean: 0.7227774033781543 Val_mean: 0.6026143790849672 Test_mean: 0.5930410122164049
+08-Aug-26 15:06:26 - Metric: accuracy Train_std: 0.027321761948448604 Val_std: 0.03541494688665114 Test_std: 0.02728969528016676
+08-Aug-26 15:06:26 - Metric: f1 Train_mean: 0.7054262316880459 Val_mean: 0.5983355153382107 Test_mean: 0.5732539447959106
+08-Aug-26 15:06:26 - Metric: f1 Train_std: 0.029971905003352638 Val_std: 0.028802049512072547 Test_std: 0.027984084738273397
+08-Aug-26 15:06:26 - Metric: sen Train_mean: 0.698281784541987 Val_mean: 0.6191780737098893 Test_mean: 0.5758241694964378
+08-Aug-26 15:06:26 - Metric: sen Train_std: 0.03334573038907501 Val_std: 0.023568014107404275 Test_std: 0.052287371967700606
+08-Aug-26 15:06:26 - Metric: spe Train_mean: 0.7450058387991751 Val_mean: 0.5874999926562501 Test_mean: 0.6085940533339202
+08-Aug-26 15:06:26 - Metric: spe Train_std: 0.024472440169335755 Val_std: 0.055901698738723506 Test_std: 0.07075816885347809
+08-Aug-26 15:06:26 - Metric: precision Train_mean: 0.7128647727251972 Val_mean: 0.579563616772919 Test_mean: 0.5744470452851344
+08-Aug-26 15:06:26 - Metric: precision Train_std: 0.027760339279943678 Val_std: 0.03822275924811646 Test_std: 0.03361344244443037
+08-Aug-26 15:07:58 - Epoch 76, Model Loss 0.8045869090567074, View Loss -1.454664664288445, Reg 0.40688703050174474
+08-Aug-26 15:09:28 - Epoch 77, Model Loss 0.8002936530811517, View Loss -1.489674849989025, Reg 0.40629095986298436
+08-Aug-26 15:10:59 - Epoch 78, Model Loss 0.8150183705605224, View Loss -1.4847429252568647, Reg 0.40644657960995473
+08-Aug-26 15:12:30 - Epoch 79, Model Loss 0.8021304028802337, View Loss -1.4818154638282424, Reg 0.40835571862663683
+08-Aug-26 15:14:00 - Epoch 80, Model Loss 0.8158172069733113, View Loss -1.4813822278417803, Reg 0.4079742419171034
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 15:14:47 - Metric: accuracy Train_mean: 0.7244145994458886 Val_mean: 0.6065359477124181 Test_mean: 0.6003654013961606
+08-Aug-26 15:14:47 - Metric: accuracy Train_std: 0.02241297431444947 Val_std: 0.03239088024408853 Test_std: 0.02626768245768568
+08-Aug-26 15:14:47 - Metric: f1 Train_mean: 0.708120133545347 Val_mean: 0.5997407455805397 Test_mean: 0.5807797655941656
+08-Aug-26 15:14:47 - Metric: f1 Train_std: 0.024590762559054617 Val_std: 0.023675807066989334 Test_std: 0.02291778554836134
+08-Aug-26 15:14:47 - Metric: sen Train_mean: 0.7030927810890283 Val_mean: 0.6164383477200227 Test_mean: 0.5824175760173893
+08-Aug-26 15:14:47 - Metric: sen Train_std: 0.027023509530967348 Val_std: 0.015006097260331981 Test_std: 0.04504154133343185
+08-Aug-26 15:14:47 - Metric: spe Train_mean: 0.7437616799245402 Val_mean: 0.5974999925312501 Test_mean: 0.6165742512741164
+08-Aug-26 15:14:47 - Metric: spe Train_std: 0.01909228473235761 Val_std: 0.05722761499595278 Test_std: 0.06966548204137259
+08-Aug-26 15:14:47 - Metric: precision Train_mean: 0.7132695339958242 Val_mean: 0.5849084249084249 Test_mean: 0.5825518330338858
+08-Aug-26 15:14:47 - Metric: precision Train_std: 0.02254304059997138 Val_std: 0.03840003790006914 Test_std: 0.03386778870213509
+08-Aug-26 15:16:19 - Epoch 81, Model Loss 0.8168399174343093, View Loss -1.4804922427093634, Reg 0.4054998923794495
+08-Aug-26 15:17:49 - Epoch 82, Model Loss 0.8117892592521891, View Loss -1.4781434870165262, Reg 0.4063139216171648
+08-Aug-26 15:19:20 - Epoch 83, Model Loss 0.806577445572889, View Loss -1.4825811695354254, Reg 0.41053326920485395
+08-Aug-26 15:20:51 - Epoch 84, Model Loss 0.8130833885659733, View Loss -1.4771045690799858, Reg 0.40878276271301334
+08-Aug-26 15:22:21 - Epoch 85, Model Loss 0.8324293132606411, View Loss -1.4672437043369564, Reg 0.4111719759937111
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 15:23:08 - Metric: accuracy Train_mean: 0.7240867323470578 Val_mean: 0.6039215686274509 Test_mean: 0.6056010034904015
+08-Aug-26 15:23:08 - Metric: accuracy Train_std: 0.023171161237529814 Val_std: 0.02286647801900118 Test_std: 0.023315767127931184
+08-Aug-26 15:23:08 - Metric: f1 Train_mean: 0.7064358706685658 Val_mean: 0.5966911490020023 Test_mean: 0.5836069932254904
+08-Aug-26 15:23:08 - Metric: f1 Train_std: 0.025649061771438705 Val_std: 0.015254464369026761 Test_std: 0.02608583088256493
+08-Aug-26 15:23:08 - Metric: sen Train_mean: 0.698281784541987 Val_mean: 0.6136986217301559 Test_mean: 0.5824175760173892
+08-Aug-26 15:23:08 - Metric: sen Train_std: 0.02820382743391564 Val_std: 0.023568014107404278 Test_std: 0.05154302976132309
+08-Aug-26 15:23:08 - Metric: spe Train_mean: 0.747496103588931 Val_mean: 0.5949999925625001 Test_mean: 0.6265742511741162
+08-Aug-26 15:23:08 - Metric: spe Train_std: 0.01873024456348538 Val_std: 0.052796779544897456 Test_std: 0.06420120134303824
+08-Aug-26 15:23:08 - Metric: precision Train_mean: 0.7148108663362448 Val_mean: 0.5820265396179398 Test_mean: 0.5883697203737834
+08-Aug-26 15:23:08 - Metric: precision Train_std: 0.023066143219858205 Val_std: 0.029188366396030407 Test_std: 0.03036709830460569
+08-Aug-26 15:24:39 - Epoch 86, Model Loss 0.8223916234830433, View Loss -1.4625142762850518, Reg 0.41094089215270646
+08-Aug-26 15:26:10 - Epoch 87, Model Loss 0.8274926630522915, View Loss -1.4579241899266902, Reg 0.412588043567027
+08-Aug-26 15:27:40 - Epoch 88, Model Loss 0.8468556882946062, View Loss -1.4610728304755238, Reg 0.4203398536937506
+08-Aug-26 15:29:11 - Epoch 89, Model Loss 0.862258702142468, View Loss -1.448737494616329, Reg 0.41795627454833506
+08-Aug-26 15:30:41 - Epoch 90, Model Loss 0.8897230640116097, View Loss -1.4414043501331217, Reg 0.4295484264026626
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 15:31:25 - Metric: accuracy Train_mean: 0.7365050330006525 Val_mean: 0.6065359477124183 Test_mean: 0.6098003926701571
+08-Aug-26 15:31:25 - Metric: accuracy Train_std: 0.01930521297456519 Val_std: 0.03565537698558396 Test_std: 0.017098601195366533
+08-Aug-26 15:31:25 - Metric: f1 Train_mean: 0.7191685460864313 Val_mean: 0.5998860084317131 Test_mean: 0.5873146025055804
+08-Aug-26 15:31:25 - Metric: f1 Train_std: 0.020089787074197 Val_std: 0.02430166757286773 Test_std: 0.022315293792622863
+08-Aug-26 15:31:25 - Metric: sen Train_mean: 0.7092783480780811 Val_mean: 0.6164383477200226 Test_mean: 0.5846153781910398
+08-Aug-26 15:31:25 - Metric: sen Train_std: 0.02091425979713718 Val_std: 0.017327548585476756 Test_std: 0.040763157774012355
+08-Aug-26 15:31:25 - Metric: spe Train_mean: 0.7612013216147776 Val_mean: 0.5974999925312501 Test_mean: 0.6326138550737241
+08-Aug-26 15:31:25 - Metric: spe Train_std: 0.02153430622530181 Val_std: 0.0686476502306343 Test_std: 0.04010879197236862
+08-Aug-26 15:31:25 - Metric: precision Train_mean: 0.7294821446953563 Val_mean: 0.585818870784388 Test_mean: 0.5917465165768865
+08-Aug-26 15:31:25 - Metric: precision Train_std: 0.02184215729516824 Val_std: 0.04311407929653296 Test_std: 0.02025471055090594
+08-Aug-26 15:32:57 - Epoch 91, Model Loss 0.9494033922211396, View Loss -1.4319778995035084, Reg 0.44138446899138734
+08-Aug-26 15:34:27 - Epoch 92, Model Loss 1.0484336764243856, View Loss -1.4247232705479387, Reg 0.4660295059740793
+08-Aug-26 15:35:58 - Epoch 93, Model Loss 1.206269991447736, View Loss -1.417018086840418, Reg 0.49558775893813894
+08-Aug-26 15:37:29 - Epoch 94, Model Loss 1.3476654645289337, View Loss -1.4313145736271367, Reg 0.5222647087843348
+08-Aug-26 15:38:59 - Epoch 95, Model Loss 1.2900449937856346, View Loss -1.464442341397497, Reg 0.5078365953646943
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 15:39:44 - Metric: accuracy Train_mean: 0.7358519730860157 Val_mean: 0.6 Test_mean: 0.602481457242583
+08-Aug-26 15:39:44 - Metric: accuracy Train_std: 0.019353797490982243 Val_std: 0.03368391823980423 Test_std: 0.019280571342217574
+08-Aug-26 15:39:44 - Metric: f1 Train_mean: 0.7195264596420532 Val_mean: 0.5892185140956614 Test_mean: 0.5824926523960173
+08-Aug-26 15:39:44 - Metric: f1 Train_std: 0.021863358868058416 Val_std: 0.024742128958889144 Test_std: 0.024279013907859828
+08-Aug-26 15:39:44 - Metric: sen Train_mean: 0.7127147741831108 Val_mean: 0.5999999917808221 Test_mean: 0.5846153781910397
+08-Aug-26 15:39:44 - Metric: sen Train_std: 0.025401674981542482 Val_std: 0.02356801410740426 Test_std: 0.05126111499577063
+08-Aug-26 15:39:44 - Metric: spe Train_mean: 0.7568457920333124 Val_mean: 0.5999999925000001 Test_mean: 0.6186336571935283
+08-Aug-26 15:39:44 - Metric: spe Train_std: 0.014425063642144478 Val_std: 0.06471089471883773 Test_std: 0.05912850671457505
+08-Aug-26 15:39:44 - Metric: precision Train_mean: 0.726526099136815 Val_mean: 0.5806106174527227 Test_mean: 0.5836709119228065
+08-Aug-26 15:39:44 - Metric: precision Train_std: 0.018463843064633015 Val_std: 0.04323021431979051 Test_std: 0.024100645435717938
+08-Aug-26 15:41:15 - Epoch 96, Model Loss 1.1919729569965825, View Loss -1.4670831613460844, Reg 0.5080163700810038
+08-Aug-26 15:42:45 - Epoch 97, Model Loss 1.0042694525239857, View Loss -1.4668804856025026, Reg 0.45689829248763525
+08-Aug-26 15:44:16 - Epoch 98, Model Loss 0.9096886732588253, View Loss -1.4714472742759035, Reg 0.43703031178298857
+08-Aug-26 15:45:46 - Epoch 99, Model Loss 0.8598022780159028, View Loss -1.4693724650219395, Reg 0.4294361156649171
+08-Aug-26 15:47:17 - Epoch 100, Model Loss 0.8354199007465251, View Loss -1.4702425456944868, Reg 0.4158805921736123
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 15:48:04 - Metric: accuracy Train_mean: 0.7603623118641892 Val_mean: 0.5986928104575164 Test_mean: 0.5920047993019197
+08-Aug-26 15:48:04 - Metric: accuracy Train_std: 0.04125655630191554 Val_std: 0.01876169946981351 Test_std: 0.027698232314484615
+08-Aug-26 15:48:04 - Metric: f1 Train_mean: 0.7448418688452862 Val_mean: 0.5914086293243297 Test_mean: 0.582484073911906
+08-Aug-26 15:48:04 - Metric: f1 Train_std: 0.045834930213087176 Val_std: 0.008235456274124997 Test_std: 0.022778563570353353
+08-Aug-26 15:48:04 - Metric: sen Train_mean: 0.7367697569183169 Val_mean: 0.6082191697504223 Test_mean: 0.597802191232943
+08-Aug-26 15:48:04 - Metric: sen Train_std: 0.05155097327329336 Val_std: 0.010958903959467081 Test_std: 0.0315443954652425
+08-Aug-26 15:48:04 - Metric: spe Train_mean: 0.7817737514571946 Val_mean: 0.5899999926250001 Test_mean: 0.5866534594933321
+08-Aug-26 15:48:04 - Metric: spe Train_std: 0.032661883925793805 Val_std: 0.04430011231292197 Test_std: 0.05527648855755929
+08-Aug-26 15:48:04 - Metric: precision Train_mean: 0.7532494209702876 Val_mean: 0.5763121447467687 Test_mean: 0.5693935269326447
+08-Aug-26 15:48:04 - Metric: precision Train_std: 0.04017846655893254 Val_std: 0.022014535592094486 Test_std: 0.0315428697885638
+08-Aug-26 15:49:35 - Epoch 101, Model Loss 0.828624231545995, View Loss -1.4576557665190437, Reg 0.42039117828073863
+08-Aug-26 15:51:06 - Epoch 102, Model Loss 0.8101094891336672, View Loss -1.46563699454942, Reg 0.4118569389796157
+08-Aug-26 15:52:36 - Epoch 103, Model Loss 0.8041490635612519, View Loss -1.4539574664008168, Reg 0.4129755134113663
+08-Aug-26 15:54:07 - Epoch 104, Model Loss 0.7953100236888709, View Loss -1.4446977132533882, Reg 0.4167362805689728
+08-Aug-26 15:55:38 - Epoch 105, Model Loss 0.7903846128216349, View Loss -1.4471196759196006, Reg 0.41151332269153834
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 15:56:25 - Metric: accuracy Train_mean: 0.7391220863686445 Val_mean: 0.6143790849673202 Test_mean: 0.5961932809773124
+08-Aug-26 15:56:25 - Metric: accuracy Train_std: 0.020798378096607822 Val_std: 0.03877750842925838 Test_std: 0.021479543250352725
+08-Aug-26 15:56:25 - Metric: f1 Train_mean: 0.7218412306153646 Val_mean: 0.6049566275815019 Test_mean: 0.5746794206344475
+08-Aug-26 15:56:25 - Metric: f1 Train_std: 0.02318306763854227 Val_std: 0.0248069177613041 Test_std: 0.02023057279628618
+08-Aug-26 15:56:25 - Metric: sen Train_mean: 0.7120274889621048 Val_mean: 0.6164383477200226 Test_mean: 0.5736263673227873
+08-Aug-26 15:56:25 - Metric: sen Train_std: 0.027267126263518272 Val_std: 0.015006097260331981 Test_std: 0.03361990851138201
+08-Aug-26 15:56:25 - Metric: spe Train_mean: 0.7637032686474514 Val_mean: 0.6124999923437502 Test_mean: 0.6166336572135281
+08-Aug-26 15:56:25 - Metric: spe Train_std: 0.01900209537739679 Val_std: 0.07786205653871148 Test_std: 0.04844290435971312
+08-Aug-26 15:56:25 - Metric: precision Train_mean: 0.7321103706581847 Val_mean: 0.5963453633444147 Test_mean: 0.5774123634807673
+08-Aug-26 15:56:25 - Metric: precision Train_std: 0.021424261190294995 Val_std: 0.050755945502781674 Test_std: 0.02597690010528672
+08-Aug-26 15:57:57 - Epoch 106, Model Loss 0.7857812174194527, View Loss -1.4524345622401855, Reg 0.41217243708826007
+08-Aug-26 15:59:27 - Epoch 107, Model Loss 0.7829277739864015, View Loss -1.4503496216929608, Reg 0.41311443375743084
+08-Aug-26 16:00:58 - Epoch 108, Model Loss 0.7781168845906916, View Loss -1.4500943701636342, Reg 0.4107179329983859
+08-Aug-26 16:02:29 - Epoch 109, Model Loss 0.77669404316148, View Loss -1.449740124546833, Reg 0.41110140820926205
+08-Aug-26 16:03:59 - Epoch 110, Model Loss 0.7846080271768769, View Loss -1.4490342374626064, Reg 0.41089476351957444
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 16:04:46 - Metric: accuracy Train_mean: 0.738466352170983 Val_mean: 0.6091503267973858 Test_mean: 0.5951570680628272
+08-Aug-26 16:04:46 - Metric: accuracy Train_std: 0.02124435921484492 Val_std: 0.04079604322699931 Test_std: 0.01950042153556407
+08-Aug-26 16:04:46 - Metric: f1 Train_mean: 0.7209364788718701 Val_mean: 0.5996918656782027 Test_mean: 0.57294969666299
+08-Aug-26 16:04:46 - Metric: f1 Train_std: 0.023763955691727234 Val_std: 0.027140199872751184 Test_std: 0.023947346299730363
+08-Aug-26 16:04:46 - Metric: sen Train_mean: 0.7106529185200929 Val_mean: 0.610958895740289 Test_mean: 0.5714285651491366
+08-Aug-26 16:04:46 - Metric: sen Train_std: 0.028287444063969866 Val_std: 0.00671093071021517 Test_std: 0.0354384952074827
+08-Aug-26 16:04:46 - Metric: spe Train_mean: 0.763701321606965 Val_mean: 0.6074999924062501 Test_mean: 0.616673261173136
+08-Aug-26 16:04:46 - Metric: spe Train_std: 0.019731646496479894 Val_std: 0.07524958377584227 Test_std: 0.031065425512150368
+08-Aug-26 16:04:46 - Metric: precision Train_mean: 0.7317445484450505 Val_mean: 0.5906897685512142 Test_mean: 0.5753825900902362
+08-Aug-26 16:04:46 - Metric: precision Train_std: 0.022006174386336307 Val_std: 0.05064050215115013 Test_std: 0.020575452050210618
+08-Aug-26 16:06:18 - Epoch 111, Model Loss 0.7875780256223479, View Loss -1.4475535393758798, Reg 0.40780324728917877
+08-Aug-26 16:07:48 - Epoch 112, Model Loss 0.7751679121201008, View Loss -1.44425018861204, Reg 0.40795104386417436
+08-Aug-26 16:09:18 - Epoch 113, Model Loss 0.7767601494509805, View Loss -1.4485286244787432, Reg 0.40875716089703545
+08-Aug-26 16:10:49 - Epoch 114, Model Loss 0.778432426841688, View Loss -1.4436079787409954, Reg 0.40544094488211757
+08-Aug-26 16:12:19 - Epoch 115, Model Loss 0.7714667180592046, View Loss -1.4522996103414432, Reg 0.40877965179946135
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 16:13:12 - Metric: accuracy Train_mean: 0.7381395547853621 Val_mean: 0.6156862745098041 Test_mean: 0.5962041884816754
+08-Aug-26 16:13:12 - Metric: accuracy Train_std: 0.021403158685630898 Val_std: 0.03589419664770193 Test_std: 0.017956283392295838
+08-Aug-26 16:13:12 - Metric: f1 Train_mean: 0.7201465308734135 Val_mean: 0.603565223757548 Test_mean: 0.5717870277870277
+08-Aug-26 16:13:12 - Metric: f1 Train_std: 0.023406296811967597 Val_std: 0.020588957197257396 Test_std: 0.02096718592210876
+08-Aug-26 16:13:12 - Metric: sen Train_mean: 0.7085910628570755 Val_mean: 0.610958895740289 Test_mean: 0.5670329608018356
+08-Aug-26 16:13:12 - Metric: sen Train_std: 0.026830544644490407 Val_std: 0.00671093071021517 Test_std: 0.03154439546524253
+08-Aug-26 16:13:12 - Metric: spe Train_mean: 0.7649454804816 Val_mean: 0.6199999922500001 Test_mean: 0.6226534591333321
+08-Aug-26 16:13:12 - Metric: spe Train_std: 0.021841100100780424 Val_std: 0.07356969392818964 Test_std: 0.032255863368457066
+08-Aug-26 16:13:12 - Metric: precision Train_mean: 0.7323190979975033 Val_mean: 0.5985159285159284 Test_mean: 0.5775202457819775
+08-Aug-26 16:13:12 - Metric: precision Train_std: 0.023363658058822883 Val_std: 0.046147600787100396 Test_std: 0.019988205855883703
+08-Aug-26 16:14:43 - Epoch 116, Model Loss 0.7726763080353517, View Loss -1.4396718017226982, Reg 0.40719314524319383
+08-Aug-26 16:16:13 - Epoch 117, Model Loss 0.7678109626889728, View Loss -1.4386804218571556, Reg 0.4052554042269495
+08-Aug-26 16:17:44 - Epoch 118, Model Loss 0.7630789474463363, View Loss -1.4426035886030317, Reg 0.4062942522090848
+08-Aug-26 16:19:15 - Epoch 119, Model Loss 0.7717611280944058, View Loss -1.43606364278115, Reg 0.4071041811959015
+08-Aug-26 16:20:45 - Epoch 120, Model Loss 0.7648590853024726, View Loss -1.4390760555426945, Reg 0.4038023193012222
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+08-Aug-26 16:21:34 - Metric: accuracy Train_mean: 0.7365050330006525 Val_mean: 0.6078431372549019 Test_mean: 0.594099040139616
+08-Aug-26 16:21:34 - Metric: accuracy Train_std: 0.023268643436311673 Val_std: 0.04071218693437238 Test_std: 0.022803196377713213
+08-Aug-26 16:21:34 - Metric: f1 Train_mean: 0.7188074897213437 Val_mean: 0.5966399925676211 Test_mean: 0.5661891481433632
+08-Aug-26 16:21:34 - Metric: f1 Train_std: 0.026275473641000892 Val_std: 0.028926470193261843 Test_std: 0.016100957454609734
+08-Aug-26 16:21:34 - Metric: sen Train_mean: 0.7085910628570754 Val_mean: 0.6054794437605555 Test_mean: 0.556043949933583
+08-Aug-26 16:21:34 - Metric: sen Train_std: 0.03092019749979858 Val_std: 0.013421861420430286 Test_std: 0.016446845475414626
+08-Aug-26 16:21:34 - Metric: spe Train_mean: 0.7618321627342833 Val_mean: 0.6099999923750001 Test_mean: 0.6285940531339202
+08-Aug-26 16:21:34 - Metric: spe Train_std: 0.019338622894755148 Val_std: 0.0721976444884977 Test_std: 0.04453039572222702
+08-Aug-26 16:21:34 - Metric: precision Train_mean: 0.7294952512251849 Val_mean: 0.5897278119310083 Test_mean: 0.5776725398463414
+08-Aug-26 16:21:34 - Metric: precision Train_std: 0.02315384546506569 Val_std: 0.050429369238275575 Test_std: 0.0286208432505516
+08-Aug-26 16:23:06 - Epoch 121, Model Loss 0.7730651071380871, View Loss -1.4463038883448645, Reg 0.40860968840670886
+08-Aug-26 16:24:36 - Epoch 122, Model Loss 0.7641998277548466, View Loss -1.4429702130321678, Reg 0.40422537673467374

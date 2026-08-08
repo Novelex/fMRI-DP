@@ -1,0 +1,30 @@
+Task 10: algorithm=random_forest feature-set=local_pcc
+Loading feature set: local_pcc
+X shape: (956, 8010), y counts: [501 455]
+Wrote /users/3171356m/muhammad/GraSTIACL/ml/results/random_forest__local_pcc.json
+{
+  "accuracy": {
+    "mean": 0.611921902268761,
+    "std": 0.015719541690722986
+  },
+  "f1": {
+    "mean": 0.5192277078299302,
+    "std": 0.029762589043675333
+  },
+  "sensitivity": {
+    "mean": 0.44175823690375565,
+    "std": 0.03831999029134669
+  },
+  "specificity": {
+    "mean": 0.7664554378952927,
+    "std": 0.029469870541643864
+  },
+  "precision": {
+    "mean": 0.632527562810097,
+    "std": 0.023033844710765864
+  },
+  "auc": {
+    "mean": 0.6664611032531824,
+    "std": 0.01570251358410949
+  }
+}

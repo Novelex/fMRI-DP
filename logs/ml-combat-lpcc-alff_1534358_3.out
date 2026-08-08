@@ -1,0 +1,30 @@
+Task 3: algorithm=random_forest feature-combo=lpcc_alff
+Loading feature sets for combo: lpcc_alff = ['local_pcc', 'alff']
+X shape: (956, 8280), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_combinations/results/random_forest__lpcc_alff_combat.json
+{
+  "accuracy": {
+    "mean": 0.6380071989528796,
+    "std": 0.036582906193858664
+  },
+  "f1": {
+    "mean": 0.5701621774081673,
+    "std": 0.04683139566132285
+  },
+  "sensitivity": {
+    "mean": 0.5054944999396208,
+    "std": 0.048650425006431935
+  },
+  "specificity": {
+    "mean": 0.7583564280762731,
+    "std": 0.03715785488593379
+  },
+  "precision": {
+    "mean": 0.6551519509414245,
+    "std": 0.04797398044638475
+  },
+  "auc": {
+    "mean": 0.6940734414100752,
+    "std": 0.03880759034976393
+  }
+}

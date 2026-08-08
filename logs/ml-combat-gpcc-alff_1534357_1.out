@@ -1,0 +1,30 @@
+Task 1: algorithm=linear_svm feature-combo=gpcc_alff
+Loading feature sets for combo: gpcc_alff = ['global_pcc', 'alff']
+X shape: (956, 4275), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_combinations/results/linear_svm__gpcc_alff_combat.json
+{
+  "accuracy": {
+    "mean": 0.6474694589877836,
+    "std": 0.022888092580460744
+  },
+  "f1": {
+    "mean": 0.6297032749649412,
+    "std": 0.027632860381830313
+  },
+  "sensitivity": {
+    "mean": 0.6307692238377008,
+    "std": 0.037812418340710224
+  },
+  "specificity": {
+    "mean": 0.6626534587333321,
+    "std": 0.02341289180560103
+  },
+  "precision": {
+    "mean": 0.6292532327420125,
+    "std": 0.02184320187705145
+  },
+  "auc": {
+    "mean": 0.6894740507017735,
+    "std": 0.015154910734335171
+  }
+}

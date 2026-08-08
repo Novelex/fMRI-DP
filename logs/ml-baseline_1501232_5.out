@@ -1,0 +1,30 @@
+Task 5: algorithm=linear_svm feature-set=alff
+Loading feature set: alff
+X shape: (956, 270), y counts: [501 455]
+Wrote /users/3171356m/muhammad/GraSTIACL/ml/results/linear_svm__alff.json
+{
+  "accuracy": {
+    "mean": 0.5857766143106458,
+    "std": 0.02174788976563224
+  },
+  "f1": {
+    "mean": 0.5484492666514871,
+    "std": 0.02814406812715409
+  },
+  "sensitivity": {
+    "mean": 0.5296703238497766,
+    "std": 0.04016630039926496
+  },
+  "specificity": {
+    "mean": 0.636653458993332,
+    "std": 0.03449845922029336
+  },
+  "precision": {
+    "mean": 0.5699751595515739,
+    "std": 0.02402876350434902
+  },
+  "auc": {
+    "mean": 0.5980835600043519,
+    "std": 0.022810930771195784
+  }
+}

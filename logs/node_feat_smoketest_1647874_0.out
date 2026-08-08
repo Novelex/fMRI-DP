@@ -1,0 +1,50 @@
+Task 0: node_feature_mode=alff
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+validation time cost : 0.24641 sec
+validation time cost : 0.09625 sec
+validation time cost : 0.07001 sec
+validation time cost : 0.07264 sec
+validation time cost : 0.07191 sec
+mean validation time 0.11144:
+
+validation time cost : 0.07922 sec
+validation time cost : 0.07805 sec
+validation time cost : 0.08017 sec
+validation time cost : 0.10052 sec
+validation time cost : 0.07737 sec
+mean validation time 0.08307:
+
+validation time cost : 0.11809 sec
+validation time cost : 0.11833 sec
+validation time cost : 0.11978 sec
+validation time cost : 0.11861 sec
+validation time cost : 0.11945 sec
+mean validation time 0.11885:
+
+validation time cost : 0.07674 sec
+validation time cost : 0.07653 sec
+validation time cost : 0.07643 sec
+validation time cost : 0.07614 sec
+validation time cost : 0.07643 sec
+mean validation time 0.07645:
+

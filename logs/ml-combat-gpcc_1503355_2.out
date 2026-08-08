@@ -1,0 +1,30 @@
+Task 2: algorithm=rbf_svm feature-set=global_pcc_combat
+Loading feature set: global_pcc (+ SITE/AGE/SEX covariates)
+X shape: (956, 4005), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_gPCC/results/rbf_svm__global_pcc_combat.json
+{
+  "accuracy": {
+    "mean": 0.668400959860384,
+    "std": 0.01625358697086444
+  },
+  "f1": {
+    "mean": 0.638647090337609,
+    "std": 0.027166196955321176
+  },
+  "sensitivity": {
+    "mean": 0.6175824107957977,
+    "std": 0.04250347119405792
+  },
+  "specificity": {
+    "mean": 0.7145940522739203,
+    "std": 0.011348037717845304
+  },
+  "precision": {
+    "mean": 0.6623063123261403,
+    "std": 0.011002022104524833
+  },
+  "auc": {
+    "mean": 0.7322661299096943,
+    "std": 0.023227468473280905
+  }
+}

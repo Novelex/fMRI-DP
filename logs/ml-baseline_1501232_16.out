@@ -1,0 +1,30 @@
+Task 16: algorithm=knn feature-set=local_pcc
+Loading feature set: local_pcc
+X shape: (956, 8010), y counts: [501 455]
+Wrote /users/3171356m/muhammad/GraSTIACL/ml/results/knn__local_pcc.json
+{
+  "accuracy": {
+    "mean": 0.5616873909249563,
+    "std": 0.025743561270601394
+  },
+  "f1": {
+    "mean": 0.45032658694304695,
+    "std": 0.03441051146672114
+  },
+  "sensitivity": {
+    "mean": 0.3780219738678904,
+    "std": 0.03716820733944337
+  },
+  "specificity": {
+    "mean": 0.7284752402550966,
+    "std": 0.03804364933205652
+  },
+  "precision": {
+    "mean": 0.5593088624338625,
+    "std": 0.039217058838490915
+  },
+  "auc": {
+    "mean": 0.5705177891415515,
+    "std": 0.022291055294532125
+  }
+}

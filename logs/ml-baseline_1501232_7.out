@@ -1,0 +1,30 @@
+Task 7: algorithm=rbf_svm feature-set=local_pcc
+Loading feature set: local_pcc
+X shape: (956, 8010), y counts: [501 455]
+Wrote /users/3171356m/muhammad/GraSTIACL/ml/results/rbf_svm__local_pcc.json
+{
+  "accuracy": {
+    "mean": 0.6474694589877836,
+    "std": 0.022403918374703267
+  },
+  "f1": {
+    "mean": 0.61188945545034,
+    "std": 0.034937046250463163
+  },
+  "sensitivity": {
+    "mean": 0.5868131803646903,
+    "std": 0.056291201468737104
+  },
+  "specificity": {
+    "mean": 0.7025742504141163,
+    "std": 0.038813749823181615
+  },
+  "precision": {
+    "mean": 0.642405151081372,
+    "std": 0.02653108021649401
+  },
+  "auc": {
+    "mean": 0.6887666195190948,
+    "std": 0.01932492308740561
+  }
+}

@@ -1,0 +1,30 @@
+Task 3: algorithm=random_forest feature-set=local_pcc_combat
+Loading feature set: local_pcc / dynamic PCC (+ SITE/AGE/SEX covariates)
+X shape: (956, 8010), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_dPCC/results/random_forest__local_pcc_combat.json
+{
+  "accuracy": {
+    "mean": 0.6391143106457242,
+    "std": 0.04006578021999871
+  },
+  "f1": {
+    "mean": 0.5527029451248621,
+    "std": 0.07216069933343083
+  },
+  "sensitivity": {
+    "mean": 0.47472526950851357,
+    "std": 0.08027244908601561
+  },
+  "specificity": {
+    "mean": 0.7885148436147045,
+    "std": 0.03588362465706368
+  },
+  "precision": {
+    "mean": 0.6680565369757916,
+    "std": 0.053501652569700256
+  },
+  "auc": {
+    "mean": 0.6825388967468176,
+    "std": 0.044125268811171486
+  }
+}

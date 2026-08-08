@@ -1,0 +1,30 @@
+Task 4: algorithm=gradient_boosting feature-set=global_pcc_combat
+Loading feature set: global_pcc (+ SITE/AGE/SEX covariates)
+X shape: (956, 4005), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_gPCC/results/gradient_boosting__global_pcc_combat.json
+{
+  "accuracy": {
+    "mean": 0.6704624781849912,
+    "std": 0.031600785216825585
+  },
+  "f1": {
+    "mean": 0.646427212992739,
+    "std": 0.033329078191395294
+  },
+  "sensitivity": {
+    "mean": 0.6329670260113515,
+    "std": 0.03584506868368075
+  },
+  "specificity": {
+    "mean": 0.7044554385152927,
+    "std": 0.03801247831479528
+  },
+  "precision": {
+    "mean": 0.6611035145283601,
+    "std": 0.03710534497292108
+  },
+  "auc": {
+    "mean": 0.7334438037210314,
+    "std": 0.04300293562703092
+  }
+}

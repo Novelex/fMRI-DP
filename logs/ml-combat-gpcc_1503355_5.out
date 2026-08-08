@@ -1,0 +1,30 @@
+Task 5: algorithm=knn feature-set=global_pcc_combat
+Loading feature set: global_pcc (+ SITE/AGE/SEX covariates)
+X shape: (956, 4005), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_gPCC/results/knn__global_pcc_combat.json
+{
+  "accuracy": {
+    "mean": 0.5345113438045376,
+    "std": 0.0434955169424539
+  },
+  "f1": {
+    "mean": 0.488537647747428,
+    "std": 0.04928014630671034
+  },
+  "sensitivity": {
+    "mean": 0.46813186298756204,
+    "std": 0.05498899281637063
+  },
+  "specificity": {
+    "mean": 0.5947524693123518,
+    "std": 0.0650030268916195
+  },
+  "precision": {
+    "mean": 0.5130779602980432,
+    "std": 0.05236582340980808
+  },
+  "auc": {
+    "mean": 0.5561613534979871,
+    "std": 0.05483922446972461
+  }
+}

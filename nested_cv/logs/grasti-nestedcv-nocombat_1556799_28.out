@@ -1,0 +1,42 @@
+Task 28: emb_dim=256 batch_size=128 fold=3 combat=no
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+validation time cost : 0.24927 sec
+validation time cost : 0.25131 sec
+validation time cost : 0.25020 sec
+validation time cost : 0.24902 sec
+validation time cost : 0.25032 sec
+validation time cost : 0.26840 sec
+validation time cost : 0.24781 sec
+validation time cost : 0.28912 sec
+validation time cost : 0.25199 sec
+validation time cost : 0.24810 sec
+validation time cost : 0.26926 sec
+validation time cost : 0.28442 sec
+validation time cost : 0.26819 sec
+validation time cost : 0.28007 sec
+validation time cost : 0.27240 sec
+validation time cost : 0.29771 sec
+validation time cost : 0.24735 sec
+validation time cost : 0.26891 sec
+validation time cost : 0.27320 sec
+validation time cost : 0.27370 sec

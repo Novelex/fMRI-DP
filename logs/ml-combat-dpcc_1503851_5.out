@@ -1,0 +1,30 @@
+Task 5: algorithm=knn feature-set=local_pcc_combat
+Loading feature set: local_pcc / dynamic PCC (+ SITE/AGE/SEX covariates)
+X shape: (956, 8010), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_dPCC/results/knn__local_pcc_combat.json
+{
+  "accuracy": {
+    "mean": 0.5742255671902269,
+    "std": 0.035742179241732376
+  },
+  "f1": {
+    "mean": 0.4966467484684417,
+    "std": 0.05043154674605711
+  },
+  "sensitivity": {
+    "mean": 0.4439560390774062,
+    "std": 0.061223684062087516
+  },
+  "specificity": {
+    "mean": 0.6924356366554887,
+    "std": 0.05341752853042468
+  },
+  "precision": {
+    "mean": 0.5682311356024328,
+    "std": 0.04924737879431394
+  },
+  "auc": {
+    "mean": 0.5902131432923513,
+    "std": 0.03862064882501216
+  }
+}

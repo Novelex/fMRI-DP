@@ -1,0 +1,30 @@
+Task 3: algorithm=random_forest feature-combo=gpcc_lpcc
+Loading feature sets for combo: gpcc_lpcc = ['global_pcc', 'local_pcc']
+X shape: (956, 12015), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_combinations/results/random_forest__gpcc_lpcc_combat.json
+{
+  "accuracy": {
+    "mean": 0.669393542757417,
+    "std": 0.03252192739065351
+  },
+  "f1": {
+    "mean": 0.6154847857800251,
+    "std": 0.04455288860549657
+  },
+  "sensitivity": {
+    "mean": 0.5582417521072335,
+    "std": 0.05445939146028742
+  },
+  "specificity": {
+    "mean": 0.7704158338956848,
+    "std": 0.018366419198958192
+  },
+  "precision": {
+    "mean": 0.6870926337753617,
+    "std": 0.03169750956626051
+  },
+  "auc": {
+    "mean": 0.7140802959416821,
+    "std": 0.035559988245088325
+  }
+}

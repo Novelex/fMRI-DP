@@ -1,0 +1,30 @@
+Task 1: algorithm=linear_svm feature-set=global_pcc_combat
+Loading feature set: global_pcc (+ SITE/AGE/SEX covariates)
+X shape: (956, 4005), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_gPCC/results/linear_svm__global_pcc_combat.json
+{
+  "accuracy": {
+    "mean": 0.6391252181500873,
+    "std": 0.025795867321354703
+  },
+  "f1": {
+    "mean": 0.6240580642030304,
+    "std": 0.03201442751138633
+  },
+  "sensitivity": {
+    "mean": 0.630769223837701,
+    "std": 0.04428448672129112
+  },
+  "specificity": {
+    "mean": 0.6467326668125478,
+    "std": 0.017963899608107074
+  },
+  "precision": {
+    "mean": 0.6180319210410744,
+    "std": 0.022818041370420285
+  },
+  "auc": {
+    "mean": 0.6910242628658472,
+    "std": 0.02236121279758521
+  }
+}

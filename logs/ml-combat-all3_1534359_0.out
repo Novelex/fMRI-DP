@@ -1,0 +1,30 @@
+Task 0: algorithm=elasticnet feature-combo=all3
+Loading feature sets for combo: all3 = ['global_pcc', 'local_pcc', 'alff']
+X shape: (956, 12285), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_combinations/results/elasticnet__all3_combat.json
+{
+  "accuracy": {
+    "mean": 0.6453970331588132,
+    "std": 0.037664230115291845
+  },
+  "f1": {
+    "mean": 0.6214698226918063,
+    "std": 0.04439717309275527
+  },
+  "sensitivity": {
+    "mean": 0.6131868064484967,
+    "std": 0.05445939146028741
+  },
+  "specificity": {
+    "mean": 0.6746138546537243,
+    "std": 0.040560459010784845
+  },
+  "precision": {
+    "mean": 0.631122718290981,
+    "std": 0.04033929241999112
+  },
+  "auc": {
+    "mean": 0.7143150908497443,
+    "std": 0.03847509541025426
+  }
+}

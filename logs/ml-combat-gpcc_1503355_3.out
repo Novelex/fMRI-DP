@@ -1,0 +1,30 @@
+Task 3: algorithm=random_forest feature-set=global_pcc_combat
+Loading feature set: global_pcc (+ SITE/AGE/SEX covariates)
+X shape: (956, 4005), y counts: [501 455], sites: 19
+Wrote /users/3171356m/muhammad/GraSTIACL/ml_combat_gPCC/results/random_forest__global_pcc_combat.json
+{
+  "accuracy": {
+    "mean": 0.6662630890052357,
+    "std": 0.0342822636552302
+  },
+  "f1": {
+    "mean": 0.6186158501881183,
+    "std": 0.04086910854151301
+  },
+  "sensitivity": {
+    "mean": 0.5692307629754862,
+    "std": 0.043067951048188294
+  },
+  "specificity": {
+    "mean": 0.754336626136469,
+    "std": 0.041420062457221574
+  },
+  "precision": {
+    "mean": 0.6787831166128095,
+    "std": 0.046891320681135586
+  },
+  "auc": {
+    "mean": 0.7313756936133174,
+    "std": 0.05520999159525378
+  }
+}
