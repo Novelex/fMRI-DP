@@ -1,0 +1,49 @@
+Task 25: config=5 fold=0 batch_size=128 emb_dim=512 mij_source=alff_pcc combat=yes
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+validation time cost : 0.28838 sec
+validation time cost : 0.29211 sec
+validation time cost : 0.28671 sec
+validation time cost : 0.28176 sec
+validation time cost : 0.27997 sec
+validation time cost : 0.28643 sec
+validation time cost : 0.28131 sec
+validation time cost : 0.28155 sec
+validation time cost : 0.27720 sec
+validation time cost : 0.27879 sec
+validation time cost : 0.27916 sec
+validation time cost : 0.27854 sec
+validation time cost : 0.28054 sec
+validation time cost : 0.27629 sec
+validation time cost : 0.27923 sec
+validation time cost : 0.28501 sec
+validation time cost : 0.27690 sec
+validation time cost : 0.27844 sec
+validation time cost : 0.27879 sec
+validation time cost : 0.27802 sec
+validation time cost : 0.27782 sec
+validation time cost : 0.27909 sec
+validation time cost : 0.27859 sec
+validation time cost : 0.28139 sec
+validation time cost : 0.27837 sec
+validation time cost : 0.28041 sec
+validation time cost : 0.27654 sec

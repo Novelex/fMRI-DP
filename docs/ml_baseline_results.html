@@ -1,0 +1,472 @@
+<title>ML Baseline Results — ASD Classification</title>
+<style>
+  :root {
+    --bg: #f6f7f6;
+    --surface: #ffffff;
+    --surface-alt: #eff2f1;
+    --text: #1a2326;
+    --text-muted: #5b6b6c;
+    --text-faint: #8a9899;
+    --border: #dce3e2;
+    --border-strong: #c3cdcc;
+    --accent: #2b6e6e;
+    --accent-soft: #e4efee;
+    --highlight: #b4622a;
+    --highlight-soft: #f7ead9;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Helvetica, Arial, sans-serif;
+
+    --pipeline-combined: #2b6e6e;
+    --pipeline-gpcc: #4b7fa6;
+    --pipeline-dpcc: #7a5ba6;
+    --pipeline-base: #8a9899;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12181a;
+      --surface: #1a2225;
+      --surface-alt: #202a2d;
+      --text: #e6ecec;
+      --text-muted: #9caaab;
+      --text-faint: #6b7a7b;
+      --border: #2a3538;
+      --border-strong: #3a4649;
+      --accent: #5fb3b0;
+      --accent-soft: #1e3230;
+      --highlight: #e0955a;
+      --highlight-soft: #3a2a1c;
+
+      --pipeline-combined: #5fb3b0;
+      --pipeline-gpcc: #7ba6d1;
+      --pipeline-dpcc: #ab8fd6;
+      --pipeline-base: #8a9899;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #12181a;
+    --surface: #1a2225;
+    --surface-alt: #202a2d;
+    --text: #e6ecec;
+    --text-muted: #9caaab;
+    --text-faint: #6b7a7b;
+    --border: #2a3538;
+    --border-strong: #3a4649;
+    --accent: #5fb3b0;
+    --accent-soft: #1e3230;
+    --highlight: #e0955a;
+    --highlight-soft: #3a2a1c;
+
+    --pipeline-combined: #5fb3b0;
+    --pipeline-gpcc: #7ba6d1;
+    --pipeline-dpcc: #ab8fd6;
+    --pipeline-base: #8a9899;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    margin: 0;
+    padding: 48px 24px 80px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  header {
+    margin-bottom: 36px;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 10px;
+  }
+
+  h1 {
+    font-size: 30px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    margin: 0 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--text-muted);
+    font-size: 15px;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .lede code {
+    font-family: var(--mono);
+    font-size: 0.92em;
+    background: var(--surface-alt);
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+    color: var(--text);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 28px 0 36px;
+  }
+
+  .stat {
+    background: var(--surface);
+    padding: 18px 20px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin: 0 0 8px;
+  }
+
+  .stat-value {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+  }
+
+  .stat-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-bottom: 16px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .legend-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 2px;
+    flex: none;
+  }
+
+  .table-wrap {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: auto;
+    background: var(--surface);
+    max-height: 78vh;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 760px;
+    font-size: 13.5px;
+  }
+
+  thead th {
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    text-align: left;
+    font-size: 11px;
+    font-weight: 650;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-strong);
+    white-space: nowrap;
+    z-index: 1;
+  }
+
+  th.num, td.num {
+    text-align: right;
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  tbody td {
+    padding: 9px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  tbody tr:nth-child(even) { background: var(--surface-alt); }
+
+  tbody tr.best {
+    background: var(--highlight-soft);
+  }
+
+  tbody tr.best td { font-weight: 600; }
+
+  td.rank {
+    color: var(--text-faint);
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    width: 34px;
+  }
+
+  td.pipeline-cell {
+    position: relative;
+    padding-left: 20px;
+    color: var(--text-muted);
+  }
+
+  td.pipeline-cell::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    background: var(--dot-color, var(--text-faint));
+  }
+
+  td.feature {
+    color: var(--text-muted);
+    font-family: var(--mono);
+    font-size: 12.5px;
+  }
+
+  .accuracy-cell {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  .bar-track {
+    width: 56px;
+    height: 5px;
+    background: var(--surface-alt);
+    border-radius: 3px;
+    overflow: hidden;
+    flex: none;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+  }
+
+  tr.best .bar-fill { background: var(--highlight); }
+
+  footer {
+    margin-top: 28px;
+    font-size: 12.5px;
+    color: var(--text-faint);
+  }
+
+  @media (max-width: 640px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    body { padding: 32px 14px 60px; }
+    .bar-track { display: none; }
+  }
+</style>
+
+<div class="page">
+  <header>
+    <p class="eyebrow">GraSTI-ACL Reproduction — Classical ML Baselines</p>
+    <h1>ASD vs. TD Classification, 63 Configurations</h1>
+    <p class="lede">
+      Seven algorithms (<code>elasticnet</code>, <code>linear_svm</code>, <code>rbf_svm</code>,
+      <code>random_forest</code>, <code>gradient_boosting</code>, <code>mlp</code>, <code>knn</code>)
+      evaluated across five feature sets — global PCC, local (dynamic) PCC, ALFF, and their
+      combinations — with and without ComBat site harmonization. Ranked by mean test accuracy,
+      5-fold nested cross-validation.
+    </p>
+  </header>
+
+  <section class="stats">
+    <div class="stat">
+      <p class="stat-label">Best Accuracy</p>
+      <p class="stat-value">68.20%</p>
+      <p class="stat-sub">elasticnet · gpcc_alff_combat</p>
+    </div>
+    <div class="stat">
+      <p class="stat-label">Best AUC</p>
+      <p class="stat-value">0.7475</p>
+      <p class="stat-sub">same configuration</p>
+    </div>
+    <div class="stat">
+      <p class="stat-label">Weakest Feature Set</p>
+      <p class="stat-value">alff</p>
+      <p class="stat-sub">54–59% across all algorithms</p>
+    </div>
+    <div class="stat">
+      <p class="stat-label">Weakest Algorithm</p>
+      <p class="stat-value">knn</p>
+      <p class="stat-sub">bottom of nearly every feature set</p>
+    </div>
+  </section>
+
+  <div class="legend">
+    <span class="legend-item"><span class="legend-dot" style="background:var(--pipeline-combined)"></span>ml_combat_combinations — multi-feature + ComBat</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--pipeline-gpcc)"></span>ml_combat_gPCC — global PCC + ComBat</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--pipeline-dpcc)"></span>ml_combat_dPCC — local PCC + ComBat</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--pipeline-base)"></span>ml — no ComBat</span>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="num">#</th>
+          <th class="num">Accuracy</th>
+          <th class="num">AUC</th>
+          <th>Algorithm</th>
+          <th>Feature Set</th>
+          <th>Pipeline</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </div>
+
+  <footer>
+    Source: <code>ml/results/</code>, <code>ml_combat_gPCC/results/</code>,
+    <code>ml_combat_dPCC/results/</code>, <code>ml_combat_combinations/results/</code> —
+    63 result JSON files, each the mean of a 5-fold outer split with inner grid-search
+    hyperparameter selection.
+  </footer>
+</div>
+
+<script>
+  const rows = [
+    [68.20,0.7475,"elasticnet","gpcc_alff_combat","ml_combat_combinations"],
+    [67.57,0.7327,"gradient_boosting","gpcc_alff_combat","ml_combat_combinations"],
+    [67.05,0.7334,"gradient_boosting","global_pcc_combat","ml_combat_gPCC"],
+    [66.94,0.7141,"random_forest","gpcc_lpcc_combat","ml_combat_combinations"],
+    [66.84,0.7323,"rbf_svm","global_pcc_combat","ml_combat_gPCC"],
+    [66.84,0.7176,"random_forest","gpcc_alff_combat","ml_combat_combinations"],
+    [66.63,0.7173,"mlp","global_pcc_combat","ml_combat_gPCC"],
+    [66.63,0.7368,"elasticnet","global_pcc_combat","ml_combat_gPCC"],
+    [66.63,0.7314,"random_forest","global_pcc_combat","ml_combat_gPCC"],
+    [66.53,0.7267,"rbf_svm","all3_combat","ml_combat_combinations"],
+    [66.53,0.7108,"elasticnet","global_pcc","ml"],
+    [66.53,0.7244,"mlp","gpcc_alff_combat","ml_combat_combinations"],
+    [66.42,0.7125,"rbf_svm","lpcc_alff_combat","ml_combat_combinations"],
+    [66.21,0.7251,"rbf_svm","gpcc_lpcc_combat","ml_combat_combinations"],
+    [66.11,0.7297,"rbf_svm","gpcc_alff_combat","ml_combat_combinations"],
+    [65.80,0.7120,"mlp","all3_combat","ml_combat_combinations"],
+    [65.48,0.7064,"gradient_boosting","global_pcc","ml"],
+    [65.48,0.7167,"random_forest","all3_combat","ml_combat_combinations"],
+    [65.38,0.7180,"mlp","gpcc_lpcc_combat","ml_combat_combinations"],
+    [65.06,0.7250,"rbf_svm","global_pcc","ml"],
+    [65.06,0.7005,"elasticnet","local_pcc_combat","ml_combat_dPCC"],
+    [64.85,0.7114,"elasticnet","gpcc_lpcc_combat","ml_combat_combinations"],
+    [64.85,0.7070,"mlp","global_pcc","ml"],
+    [64.75,0.6895,"linear_svm","gpcc_alff_combat","ml_combat_combinations"],
+    [64.75,0.6888,"rbf_svm","local_pcc","ml"],
+    [64.64,0.7029,"rbf_svm","local_pcc_combat","ml_combat_dPCC"],
+    [64.54,0.7034,"mlp","lpcc_alff_combat","ml_combat_combinations"],
+    [64.54,0.7143,"elasticnet","all3_combat","ml_combat_combinations"],
+    [64.44,0.7052,"linear_svm","gpcc_lpcc_combat","ml_combat_combinations"],
+    [64.43,0.6981,"gradient_boosting","gpcc_lpcc_combat","ml_combat_combinations"],
+    [64.23,0.6888,"linear_svm","global_pcc","ml"],
+    [64.22,0.6942,"random_forest","global_pcc","ml"],
+    [64.01,0.7021,"mlp","local_pcc_combat","ml_combat_dPCC"],
+    [63.91,0.6910,"linear_svm","global_pcc_combat","ml_combat_gPCC"],
+    [63.91,0.6825,"random_forest","local_pcc_combat","ml_combat_dPCC"],
+    [63.80,0.7023,"elasticnet","lpcc_alff_combat","ml_combat_combinations"],
+    [63.80,0.6941,"random_forest","lpcc_alff_combat","ml_combat_combinations"],
+    [63.70,0.6816,"elasticnet","local_pcc","ml"],
+    [63.49,0.6835,"linear_svm","local_pcc_combat","ml_combat_dPCC"],
+    [63.39,0.7009,"linear_svm","all3_combat","ml_combat_combinations"],
+    [63.18,0.6896,"gradient_boosting","all3_combat","ml_combat_combinations"],
+    [63.07,0.6779,"gradient_boosting","lpcc_alff_combat","ml_combat_combinations"],
+    [62.97,0.6789,"linear_svm","local_pcc","ml"],
+    [62.45,0.6791,"linear_svm","lpcc_alff_combat","ml_combat_combinations"],
+    [62.34,0.6759,"mlp","local_pcc","ml"],
+    [61.19,0.6665,"random_forest","local_pcc","ml"],
+    [61.08,0.6679,"gradient_boosting","local_pcc_combat","ml_combat_dPCC"],
+    [60.56,0.6438,"gradient_boosting","local_pcc","ml"],
+    [59.00,0.6087,"mlp","alff","ml"],
+    [58.58,0.5981,"linear_svm","alff","ml"],
+    [58.26,0.6156,"elasticnet","alff","ml"],
+    [57.42,0.5902,"knn","local_pcc_combat","ml_combat_dPCC"],
+    [57.33,0.5931,"random_forest","alff","ml"],
+    [57.22,0.6052,"rbf_svm","alff","ml"],
+    [57.22,0.5758,"knn","gpcc_lpcc_combat","ml_combat_combinations"],
+    [56.17,0.5705,"knn","local_pcc","ml"],
+    [55.86,0.5753,"gradient_boosting","alff","ml"],
+    [55.43,0.5712,"knn","lpcc_alff_combat","ml_combat_combinations"],
+    [55.23,0.5729,"knn","global_pcc","ml"],
+    [54.91,0.5637,"knn","all3_combat","ml_combat_combinations"],
+    [54.71,0.5630,"knn","alff","ml"],
+    [54.39,0.5691,"knn","gpcc_alff_combat","ml_combat_combinations"],
+    [53.45,0.5562,"knn","global_pcc_combat","ml_combat_gPCC"],
+  ];
+
+  const pipelineVar = {
+    "ml_combat_combinations": "var(--pipeline-combined)",
+    "ml_combat_gPCC": "var(--pipeline-gpcc)",
+    "ml_combat_dPCC": "var(--pipeline-dpcc)",
+    "ml": "var(--pipeline-base)",
+  };
+  const pipelineLabel = {
+    "ml_combat_combinations": "ml_combat_combinations",
+    "ml_combat_gPCC": "ml_combat_gPCC",
+    "ml_combat_dPCC": "ml_combat_dPCC",
+    "ml": "ml (no ComBat)",
+  };
+
+  const maxAcc = Math.max(...rows.map(r => r[0]));
+  const tbody = document.getElementById("table-body");
+  rows.forEach((r, i) => {
+    const [acc, auc, algo, feat, pipe] = r;
+    const tr = document.createElement("tr");
+    if (i === 0) tr.className = "best";
+    const pct = (acc / maxAcc * 100).toFixed(0);
+    tr.innerHTML = `
+      <td class="rank">${i + 1}</td>
+      <td class="num">
+        <div class="accuracy-cell">
+          <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+          <span>${acc.toFixed(2)}%</span>
+        </div>
+      </td>
+      <td class="num">${auc.toFixed(4)}</td>
+      <td>${algo}</td>
+      <td class="feature">${feat}</td>
+      <td class="pipeline-cell" style="--dot-color:${pipelineVar[pipe]}">${pipelineLabel[pipe]}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+</script>

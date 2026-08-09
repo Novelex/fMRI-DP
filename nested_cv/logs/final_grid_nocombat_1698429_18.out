@@ -1,0 +1,82 @@
+Task 18: config=3 fold=3 batch_size=32 emb_dim=256 mij_source=alff_pcc combat=no
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+validation time cost : 0.19168 sec
+validation time cost : 0.19128 sec
+validation time cost : 0.23152 sec
+validation time cost : 0.19577 sec
+validation time cost : 0.19387 sec
+validation time cost : 0.19881 sec
+validation time cost : 0.20409 sec
+validation time cost : 0.20423 sec
+validation time cost : 0.20323 sec
+validation time cost : 0.19341 sec
+validation time cost : 0.20124 sec
+validation time cost : 0.19189 sec
+validation time cost : 0.20054 sec
+validation time cost : 0.18900 sec
+validation time cost : 0.20753 sec
+validation time cost : 0.20171 sec
+validation time cost : 0.19150 sec
+validation time cost : 0.20310 sec
+validation time cost : 0.19012 sec
+validation time cost : 0.18996 sec
+validation time cost : 0.20041 sec
+validation time cost : 0.20725 sec
+validation time cost : 0.19299 sec
+validation time cost : 0.21754 sec
+validation time cost : 0.19909 sec
+validation time cost : 0.21877 sec
+validation time cost : 0.19787 sec
+validation time cost : 0.19733 sec
+validation time cost : 0.18459 sec
+validation time cost : 0.18221 sec
+validation time cost : 0.18117 sec
+validation time cost : 0.18149 sec
+validation time cost : 0.18057 sec
+validation time cost : 0.18008 sec
+validation time cost : 0.18069 sec
+validation time cost : 0.18074 sec
+validation time cost : 0.18023 sec
+validation time cost : 0.18142 sec
+validation time cost : 0.18286 sec
+validation time cost : 0.18507 sec
+validation time cost : 0.18242 sec
+validation time cost : 0.18133 sec
+validation time cost : 0.18240 sec
+validation time cost : 0.18354 sec
+validation time cost : 0.18276 sec
+validation time cost : 0.18222 sec
+validation time cost : 0.18254 sec
+validation time cost : 0.18232 sec
+validation time cost : 0.18097 sec
+validation time cost : 0.18242 sec
+validation time cost : 0.18400 sec
+validation time cost : 0.18211 sec
+validation time cost : 0.19099 sec
+validation time cost : 0.18516 sec
+validation time cost : 0.18183 sec
+validation time cost : 0.19438 sec
+validation time cost : 0.18972 sec
+validation time cost : 0.18389 sec
+validation time cost : 0.19967 sec
+validation time cost : 0.19108 sec

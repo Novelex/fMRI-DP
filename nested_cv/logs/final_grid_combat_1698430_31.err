@@ -1,0 +1,7 @@
+09-Aug-26 19:34:02 - Using Device: cuda
+09-Aug-26 19:34:02 - Seed: 123, Fold: 1, ComBat: True
+09-Aug-26 19:34:02 - Namespace(fold=1, combat=True, num_dyn_windows=3, model_lr=0.0005, view_lr=0.0005, num_gc_layers=2, pooling_type='standard', emb_dim=256, vib_hidden_dim=400, batch_size=128, drop_ratio=0.3, epochs=300, kld_lambda=0.003, reg_lambda=0.2, gamma_mode='paper_literal', node_feature_mode='alff_pcc', mij_source='alff', template=90, eval_interval=5, downstream_classifier='linear', ce_lambda=2.0, weight_decay=0.0, contrastive_mode='self_supervised', supervised_temperature=0.1, seed=123)
+09-Aug-26 19:34:02 - Loading raw subject data...
+09-Aug-26 19:35:42 - Loaded 956 subjects (455 ASD, 501 NC)
+09-Aug-26 19:35:43 - alff_pcc scale stats (train_val_idx only): alff=[-3.4498,4.9343] pcc=[-0.6519,1.0013]
+09-Aug-26 19:35:43 - Train/Val/Test sizes: 612/153/191

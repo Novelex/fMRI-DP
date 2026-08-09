@@ -32,6 +32,7 @@ from torch_geometric.loader import DataLoader
 from datasets import TUEvaluator
 from unsupervised.embedding_evaluation import EmbeddingEvaluation
 from unsupervised.training import build_model_and_view_learner, train_one_epoch
+from supervised.sampler import ClassBalancedBatchSampler
 
 from nested_cv.data import load_all_subjects, harmonize_fold, build_windowed_data_list, compute_alff_pcc_scale_stats
 
@@ -93,7 +94,17 @@ def run(args):
     test_dataset = build_windowed_data_list(test_idx, x_h, ew_h, dw_h, y_all, **scale_stats)
     logging.info("Train/Val/Test sizes: %d/%d/%d" % (len(train_dataset), len(val_dataset), len(test_dataset)))
 
-    dataloader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, drop_last=False)
+    if args.contrastive_mode == "supervised":
+        # SupCon's positive sets (same-class peers within a batch) need
+        # every batch to reliably contain both classes -- plain shuffle=True
+        # gives no such guarantee. train_idx's own labels (not the full
+        # y_all) since batch_sampler indexes into train_dataset, which is
+        # itself already ordered by train_idx.
+        train_labels = y_all[train_idx]
+        batch_sampler = ClassBalancedBatchSampler(train_labels, args.batch_size, seed=args.seed)
+        dataloader = DataLoader(train_dataset, batch_sampler=batch_sampler)
+    else:
+        dataloader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, drop_last=False)
     val_loader = DataLoader(val_dataset, batch_size=args.batch_size, shuffle=False)
     test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
 
@@ -106,7 +117,7 @@ def run(args):
         num_dataset_features=num_dataset_features, emb_dim=args.emb_dim, num_gc_layers=args.num_gc_layers,
         drop_ratio=args.drop_ratio, pooling_type=args.pooling_type, gamma_mode=args.gamma_mode,
         mij_source=args.mij_source, num_dyn_windows=args.num_dyn_windows, vib_hidden_dim=args.vib_hidden_dim,
-        model_lr=args.model_lr, view_lr=args.view_lr, device=device)
+        model_lr=args.model_lr, view_lr=args.view_lr, device=device, weight_decay=args.weight_decay)
 
     if args.downstream_classifier == "linear":
         ee = EmbeddingEvaluation(LinearSVC(dual=False, fit_intercept=True, max_iter=10000), evaluator,
@@ -129,7 +140,8 @@ def run(args):
         # epoch instead).
         fin_model_loss, fin_view_loss, fin_reg, _, _, beta = train_one_epoch(
             model, view_learner, model_optimizer, view_optimizer, dataloader, device,
-            beta, gamma_orig, args.ce_lambda, args.reg_lambda, args.kld_lambda, args.template)
+            beta, gamma_orig, args.ce_lambda, args.reg_lambda, args.kld_lambda, args.template,
+            contrastive_mode=args.contrastive_mode, supervised_temperature=args.supervised_temperature)
         logging.info('Epoch {}, Model Loss {}, View Loss {}, Reg {}'.format(
             epoch, fin_model_loss, fin_view_loss, fin_reg))
 
@@ -158,6 +170,8 @@ def run(args):
         "emb_dim": args.emb_dim,
         "batch_size": args.batch_size,
         "fold": args.fold,
+        "contrastive_mode": args.contrastive_mode,
+        "weight_decay": args.weight_decay,
         "combat": args.combat,
         "n_train": len(train_dataset),
         "n_val": len(val_dataset),
@@ -228,6 +242,23 @@ def arg_parse():
     parser.add_argument('--eval_interval', type=int, default=5)
     parser.add_argument('--downstream_classifier', type=str, default="linear")
     parser.add_argument('--ce_lambda', type=float, default=2.0)
+    parser.add_argument('--weight_decay', type=float, default=0.0,
+                        help='L2 penalty on both optimizers (model_optimizer and view_optimizer). Default 0.0 '
+                             '(PyTorch Adam default, no change to existing behavior). Not tested/specified by '
+                             'the paper -- our own addition, targeting the overfitting pattern diagnosed this '
+                             'session (train accuracy hitting 100%% while val/test stay flat).')
+    parser.add_argument('--contrastive_mode', type=str, default='self_supervised',
+                        choices=['self_supervised', 'supervised'],
+                        help='self_supervised=current behavior (GInfoMinMax.calc_loss, both phases). '
+                             'supervised=Khosla et al. 2020 SupCon (L^sup_out, supervised/loss.py), applied '
+                             'ONLY in Phase 2 (model_loss) -- Phase 1 (view_loss/view_learner) always stays on '
+                             'the self-supervised loss regardless of this flag (see supervised/loss.py docstring '
+                             'for why). Also switches the train DataLoader to ClassBalancedBatchSampler.')
+    parser.add_argument('--supervised_temperature', type=float, default=0.1,
+                        help='Temperature for the supervised contrastive loss when --contrastive_mode=supervised. '
+                             'Khosla et al.\'s own validated value (Sec 4.5: "All our results used tau=0.1"), '
+                             'distinct from the self-supervised calc_loss default of 0.2. No effect when '
+                             'contrastive_mode=self_supervised.')
     parser.add_argument('--seed', type=int, default=123)
 
     return parser.parse_args()

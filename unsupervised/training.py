@@ -15,6 +15,7 @@ from unsupervised.encoder import TA_encoder
 from unsupervised.learning import GInfoMinMax
 from unsupervised.learning import GraSTI
 from unsupervised.view_learner import ViewLearner
+from supervised.loss import calc_loss_supervised
 
 
 def init_module_weights(module):
@@ -31,7 +32,7 @@ def init_module_weights(module):
 
 def build_model_and_view_learner(num_dataset_features, emb_dim, num_gc_layers, drop_ratio,
                                   pooling_type, gamma_mode, mij_source, num_dyn_windows,
-                                  vib_hidden_dim, model_lr, view_lr, device):
+                                  vib_hidden_dim, model_lr, view_lr, device, weight_decay=0.0):
     # model (Theta) and view_learner (Phi) are two independent networks, each
     # with its own TAEncoder + ToyNet -- not a shared backbone (Issue A).
     beta_convention = "literal" if gamma_mode in ("literal_beta", "paper_literal") else "reversed"
@@ -62,14 +63,23 @@ def build_model_and_view_learner(num_dataset_features, emb_dim, num_gc_layers, d
     # Two independent optimizers -- each network only ever moves in its own
     # one direction (view_learner always ascends, model always descends), so
     # there is no shared tensor for two optimizers to disagree about.
-    model_optimizer = torch.optim.Adam(model.parameters(), lr=model_lr)
-    view_optimizer = torch.optim.Adam(view_learner.parameters(), lr=view_lr)
+    # weight_decay applied to BOTH (unlike the SupCon loss change, which is
+    # deliberately asymmetric between phases): weight_decay doesn't change
+    # *what* either network optimizes for, just discourages weights from
+    # growing arbitrarily large regardless of objective -- so it isn't handing
+    # the adversary a new attack vector the way a shared supervised loss
+    # would. It also directly complements the gradient-clipping fix already
+    # in Phase 1 below, both addressing the same unconstrained-ascent
+    # instability from a different angle.
+    model_optimizer = torch.optim.Adam(model.parameters(), lr=model_lr, weight_decay=weight_decay)
+    view_optimizer = torch.optim.Adam(view_learner.parameters(), lr=view_lr, weight_decay=weight_decay)
 
     return model, view_learner, model_optimizer, view_optimizer, gamma_orig, beta
 
 
 def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, dataloader, device,
-                     beta, gamma_orig, ce_lambda, reg_lambda, kld_lambda, template):
+                     beta, gamma_orig, ce_lambda, reg_lambda, kld_lambda, template,
+                     contrastive_mode="self_supervised", supervised_temperature=0.1):
     model_loss_all = 0
     view_loss_all = 0
     reg_all = 0
@@ -199,7 +209,19 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
 
         # ce_loss/L_CE moved to Phase 1's view_loss (Item 4b) -- model_loss no
         # longer includes it.
-        model_loss = model.calc_loss(x, x_aug)
+        # contrastive_mode="supervised": only Phase 2 (Theta, the network
+        # actually evaluated downstream) uses label information -- Phase 1
+        # (view_learner/Phi, the adversary) deliberately stays on the
+        # self-supervised calc_loss above regardless of this flag. See
+        # supervised/loss.py's module docstring for why: an adversary
+        # maximizing a label-aware loss would be directly incentivized to
+        # attack class-discriminative structure specifically, not just
+        # generic redundant information.
+        if contrastive_mode == "supervised":
+            labels = batch.y.view(-1)
+            model_loss = calc_loss_supervised(x, x_aug, labels, temperature=supervised_temperature)
+        else:
+            model_loss = model.calc_loss(x, x_aug)
         model_loss_all += model_loss.item() * batch.num_graphs
 
         model_loss.backward()
