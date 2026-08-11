@@ -363,3 +363,36 @@
 09-Aug-26 19:34:08 - Epoch 295: Train_acc 0.7483660130718954 Val_acc 0.5686274509803921 Test_acc 0.5706806282722513 Test_auc 0.612967032967033
 09-Aug-26 19:35:03 - Epoch 296, Model Loss -1.5422597648271548, View Loss -2.1957353111965205, Reg 0.17258438857552272
 09-Aug-26 19:35:59 - Epoch 297, Model Loss -1.5482659059412338, View Loss -2.1772576905543506, Reg 0.173387556245514
+09-Aug-26 19:36:55 - Epoch 298, Model Loss -1.5497581257539637, View Loss -2.1925940326615874, Reg 0.1716602392056409
+09-Aug-26 19:37:51 - Epoch 299, Model Loss -1.5458561049567328, View Loss -2.1834457372528275, Reg 0.17224466868864943
+09-Aug-26 19:38:48 - Epoch 300, Model Loss -1.5484276067197713, View Loss -2.193674997566572, Reg 0.17281682915936888
+09-Aug-26 19:38:57 - Epoch 300: Train_acc 0.7107843137254902 Val_acc 0.5882352941176471 Test_acc 0.5863874345549738 Test_auc 0.621978021978022
+09-Aug-26 19:38:57 - FinishedTraining! BestEpoch (eval-interval index): 25
+09-Aug-26 19:38:57 - Wrote /users/3171356m/muhammad/GraSTIACL/nested_cv/results/combat__emb256_bs32__fold3.json
+09-Aug-26 19:38:57 - {
+  "emb_dim": 256,
+  "batch_size": 32,
+  "fold": 3,
+  "combat": true,
+  "n_train": 612,
+  "n_val": 153,
+  "n_test": 191,
+  "best_val_epoch_idx": 25,
+  "train_accuracy": 0.7107843137254902,
+  "val_accuracy": 0.6339869281045751,
+  "test_accuracy": 0.5916230366492147,
+  "train_f1": 0.6953528399311532,
+  "val_f1": 0.631578947368421,
+  "test_f1": 0.5979381443298969,
+  "train_sensitivity": 0.6941580732159517,
+  "val_sensitivity": 0.6575342375680242,
+  "test_sensitivity": 0.6373626303586525,
+  "train_specificity": 0.7258566955580789,
+  "val_specificity": 0.6124999923437501,
+  "test_specificity": 0.5499999945,
+  "train_precision": 0.696551724137931,
+  "val_precision": 0.6075949367088608,
+  "test_precision": 0.5631067961165048,
+  "test_auc": 0.6310989010989012,
+  "fin_reg": 0.17481590252296597
+}

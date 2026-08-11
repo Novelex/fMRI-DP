@@ -35,3 +35,426 @@
 09-Aug-26 19:34:07 - Epoch 20: Train_acc 0.7973856209150327 Val_acc 0.6078431372549019 Test_acc 0.6282722513089005 Test_auc 0.6248351648351648
 09-Aug-26 19:35:07 - Epoch 21, Model Loss -0.007405920745500552, View Loss -1.5709872869105121, Reg 0.16755018300480312
 09-Aug-26 19:36:06 - Epoch 22, Model Loss -0.01282600883175345, View Loss -1.5378690412621092, Reg 0.1728467365690306
+09-Aug-26 19:37:06 - Epoch 23, Model Loss -0.02476754726148119, View Loss -1.5266970037634855, Reg 0.1628682335802153
+09-Aug-26 19:38:05 - Epoch 24, Model Loss -0.027440884436657226, View Loss -1.4987698816785626, Reg 0.164142194331861
+09-Aug-26 19:39:05 - Epoch 25, Model Loss -0.030354204131107704, View Loss -1.4937098540511786, Reg 0.16790342681548176
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 19:39:20 - Epoch 25: Train_acc 1.0 Val_acc 0.5555555555555556 Test_acc 0.5759162303664922 Test_auc 0.6184615384615384
+09-Aug-26 19:40:19 - Epoch 26, Model Loss -0.027928426180010527, View Loss -1.4867738072389092, Reg 0.16710063435283362
+09-Aug-26 19:41:19 - Epoch 27, Model Loss -0.034491860009486376, View Loss -1.4834016865374995, Reg 0.16144949489948796
+09-Aug-26 19:42:18 - Epoch 28, Model Loss -0.038401805789642085, View Loss -1.4650351970024358, Reg 0.1649559024307463
+09-Aug-26 19:43:18 - Epoch 29, Model Loss -0.03928343055684582, View Loss -1.4498606803370457, Reg 0.16658320672371807
+09-Aug-26 19:44:17 - Epoch 30, Model Loss -0.041839061901460285, View Loss -1.438518688569661, Reg 0.1684960343089758
+09-Aug-26 19:44:32 - Epoch 30: Train_acc 0.8905228758169934 Val_acc 0.6078431372549019 Test_acc 0.5654450261780105 Test_auc 0.5934065934065935
+09-Aug-26 19:45:31 - Epoch 31, Model Loss -0.04337537843807071, View Loss -1.4489797338161594, Reg 0.16659308755709454
+09-Aug-26 19:46:31 - Epoch 32, Model Loss -0.042608097122580395, View Loss -1.412502302063836, Reg 0.16476660470167795
+09-Aug-26 19:47:31 - Epoch 33, Model Loss -0.04405193137966729, View Loss -1.417723812308966, Reg 0.16523960115862826
+09-Aug-26 19:48:30 - Epoch 34, Model Loss -0.051291567924755074, View Loss -1.404627760251363, Reg 0.1683968208194558
+09-Aug-26 19:49:30 - Epoch 35, Model Loss -0.04805089635591881, View Loss -1.3976736232346179, Reg 0.1693395906024509
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 19:49:46 - Epoch 35: Train_acc 0.8022875816993464 Val_acc 0.6209150326797386 Test_acc 0.6282722513089005 Test_auc 0.6246153846153846
+09-Aug-26 19:50:45 - Epoch 36, Model Loss -0.05135111150398753, View Loss -1.3846194136376475, Reg 0.16831606869993646
+09-Aug-26 19:51:45 - Epoch 37, Model Loss -0.06194073000764535, View Loss -1.3830176451626945, Reg 0.16840433227080925
+09-Aug-26 19:52:44 - Epoch 38, Model Loss -0.05580506507867302, View Loss -1.3645247711854822, Reg 0.17112265887603262
+09-Aug-26 19:53:43 - Epoch 39, Model Loss -0.05702560341436099, View Loss -1.364786927996118, Reg 0.171745887768814
+09-Aug-26 19:54:43 - Epoch 40, Model Loss -0.0537360072915071, View Loss -1.3554871658873713, Reg 0.1708586689303903
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 19:54:59 - Epoch 40: Train_acc 0.7973856209150327 Val_acc 0.6078431372549019 Test_acc 0.6335078534031413 Test_auc 0.6269230769230769
+09-Aug-26 19:55:58 - Epoch 41, Model Loss -0.05833998074134191, View Loss -1.3387711328618668, Reg 0.1722721979508992
+09-Aug-26 19:56:58 - Epoch 42, Model Loss -0.05902910505244934, View Loss -1.3431188966713699, Reg 0.17114278021591162
+09-Aug-26 19:57:57 - Epoch 43, Model Loss -0.06423289187593398, View Loss -1.3231094514622408, Reg 0.1724682846684861
+09-Aug-26 19:58:56 - Epoch 44, Model Loss -0.062129574663498825, View Loss -1.3366824544333165, Reg 0.17260946245754466
+09-Aug-26 19:59:56 - Epoch 45, Model Loss -0.06350831112830467, View Loss -1.3169331270105697, Reg 0.17093428998601204
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 20:00:10 - Epoch 45: Train_acc 0.795751633986928 Val_acc 0.6078431372549019 Test_acc 0.6230366492146597 Test_auc 0.6264835164835165
+09-Aug-26 20:01:10 - Epoch 46, Model Loss -0.06779615084330241, View Loss -1.319086423107222, Reg 0.17319210389860315
+09-Aug-26 20:02:09 - Epoch 47, Model Loss -0.07107161540611118, View Loss -1.312092379027722, Reg 0.17684707308516784
+09-Aug-26 20:03:09 - Epoch 48, Model Loss -0.0694400862930647, View Loss -1.3046464062983694, Reg 0.17275602200062445
+09-Aug-26 20:04:08 - Epoch 49, Model Loss -0.06956147777488808, View Loss -1.2961551885978848, Reg 0.17233605137447905
+09-Aug-26 20:05:08 - Epoch 50, Model Loss -0.07755450641407687, View Loss -1.2795561988369313, Reg 0.1744456409044515
+09-Aug-26 20:05:22 - Epoch 50: Train_acc 0.8741830065359477 Val_acc 0.6143790849673203 Test_acc 0.5759162303664922 Test_auc 0.5981318681318681
+09-Aug-26 20:06:22 - Epoch 51, Model Loss -0.07773907745585722, View Loss -1.2918506868524489, Reg 0.17581496080931494
+09-Aug-26 20:07:21 - Epoch 52, Model Loss -0.0698205865676107, View Loss -1.2788657994052164, Reg 0.17377067264778162
+09-Aug-26 20:08:20 - Epoch 53, Model Loss -0.0720626591077817, View Loss -1.2743932694391487, Reg 0.17221115490579916
+09-Aug-26 20:09:20 - Epoch 54, Model Loss -0.08078751649731904, View Loss -1.2660186298532423, Reg 0.1766902470315983
+09-Aug-26 20:10:19 - Epoch 55, Model Loss -0.07511084142074086, View Loss -1.2563668621910944, Reg 0.17269697941206638
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 20:10:37 - Epoch 55: Train_acc 0.8758169934640523 Val_acc 0.6013071895424836 Test_acc 0.5602094240837696 Test_auc 0.589010989010989
+09-Aug-26 20:11:36 - Epoch 56, Model Loss -0.07302547202390783, View Loss -1.2554698847477732, Reg 0.17505484166877722
+09-Aug-26 20:12:35 - Epoch 57, Model Loss -0.07852472335684534, View Loss -1.2583633801516365, Reg 0.17677633006588306
+09-Aug-26 20:13:35 - Epoch 58, Model Loss -0.07784488310221753, View Loss -1.283032777262669, Reg 0.1720286862912521
+09-Aug-26 20:14:34 - Epoch 59, Model Loss -0.07816331741077448, View Loss -1.265743137964236, Reg 0.17278653655955994
+09-Aug-26 20:15:34 - Epoch 60, Model Loss -0.07856565149001826, View Loss -1.2586573837629331, Reg 0.17243915640450772
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 20:15:49 - Epoch 60: Train_acc 0.8088235294117647 Val_acc 0.6339869281045751 Test_acc 0.6230366492146597 Test_auc 0.6276923076923078
+09-Aug-26 20:16:48 - Epoch 61, Model Loss -0.08281899355595408, View Loss -1.2512051077450024, Reg 0.17331337763203514
+09-Aug-26 20:17:48 - Epoch 62, Model Loss -0.08055294222301906, View Loss -1.238514350130667, Reg 0.1776261948097765
+09-Aug-26 20:18:47 - Epoch 63, Model Loss -0.08510532488230786, View Loss -1.2408484656826344, Reg 0.17396719919310677
+09-Aug-26 20:19:46 - Epoch 64, Model Loss -0.08578046533017376, View Loss -1.2329813421162126, Reg 0.1720014971260931
+09-Aug-26 20:20:46 - Epoch 65, Model Loss -0.08548335507025126, View Loss -1.2369781919554168, Reg 0.17406274806829838
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 20:20:58 - Epoch 65: Train_acc 0.8088235294117647 Val_acc 0.6209150326797386 Test_acc 0.612565445026178 Test_auc 0.6286813186813186
+09-Aug-26 20:21:57 - Epoch 66, Model Loss -0.08842509478525398, View Loss -1.221122576520334, Reg 0.17349880378620297
+09-Aug-26 20:22:57 - Epoch 67, Model Loss -0.08313633452833089, View Loss -1.2156264883240844, Reg 0.17591368723538967
+09-Aug-26 20:23:56 - Epoch 68, Model Loss -0.08721714354808034, View Loss -1.2195052687638726, Reg 0.17282389571853712
+09-Aug-26 20:24:56 - Epoch 69, Model Loss -0.08527375416818007, View Loss -1.2161528518776488, Reg 0.17062031015071993
+09-Aug-26 20:25:55 - Epoch 70, Model Loss -0.08841736566007527, View Loss -1.2242167081708222, Reg 0.1736190980361178
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 20:26:10 - Epoch 70: Train_acc 0.7941176470588235 Val_acc 0.6209150326797386 Test_acc 0.6178010471204188 Test_auc 0.6282417582417583
+09-Aug-26 20:27:09 - Epoch 71, Model Loss -0.08551235798916786, View Loss -1.2198693440630546, Reg 0.1760797187004214
+09-Aug-26 20:28:09 - Epoch 72, Model Loss -0.08665561831854528, View Loss -1.212053044169557, Reg 0.17575998107592264
+09-Aug-26 20:29:09 - Epoch 73, Model Loss -0.08465908010021533, View Loss -1.198157593315723, Reg 0.17557667634066412
+09-Aug-26 20:30:08 - Epoch 74, Model Loss -0.08706673570707732, View Loss -1.214974521032346, Reg 0.17329579104785048
+09-Aug-26 20:31:07 - Epoch 75, Model Loss -0.09134826492639928, View Loss -1.2142446196936314, Reg 0.17140911256565766
+09-Aug-26 20:31:23 - Epoch 75: Train_acc 0.8741830065359477 Val_acc 0.6143790849673203 Test_acc 0.5863874345549738 Test_auc 0.586043956043956
+09-Aug-26 20:32:23 - Epoch 76, Model Loss -0.09248382788078457, View Loss -1.2080137698478948, Reg 0.17566930507522782
+09-Aug-26 20:33:22 - Epoch 77, Model Loss -0.0915862960753098, View Loss -1.204838994281744, Reg 0.1766753145097907
+09-Aug-26 20:34:22 - Epoch 78, Model Loss -0.0936336934176925, View Loss -1.1972528789557664, Reg 0.1772363059271395
+09-Aug-26 20:35:21 - Epoch 79, Model Loss -0.09258359514809901, View Loss -1.188519786385929, Reg 0.17712034849949132
+09-Aug-26 20:36:21 - Epoch 80, Model Loss -0.09299409623239555, View Loss -1.174668555166207, Reg 0.17539213110808455
+09-Aug-26 20:36:36 - Epoch 80: Train_acc 1.0 Val_acc 0.5686274509803921 Test_acc 0.6020942408376964 Test_auc 0.6093406593406593
+09-Aug-26 20:37:36 - Epoch 81, Model Loss -0.09377720523503871, View Loss -1.177500888413074, Reg 0.1739403992112166
+09-Aug-26 20:38:35 - Epoch 82, Model Loss -0.09695730996287726, View Loss -1.1702186414618898, Reg 0.1720716625062469
+09-Aug-26 20:39:34 - Epoch 83, Model Loss -0.10113764977922626, View Loss -1.167856541334414, Reg 0.17233726645217223
+09-Aug-26 20:40:34 - Epoch 84, Model Loss -0.10051057268591489, View Loss -1.1668265325571197, Reg 0.17421344068704867
+09-Aug-26 20:41:34 - Epoch 85, Model Loss -0.09493600698857525, View Loss -1.1631807953703637, Reg 0.17522022108626523
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 20:41:50 - Epoch 85: Train_acc 0.8741830065359477 Val_acc 0.5947712418300654 Test_acc 0.5863874345549738 Test_auc 0.5985714285714285
+09-Aug-26 20:42:49 - Epoch 86, Model Loss -0.0994406794410905, View Loss -1.155047231250339, Reg 0.17321196432207145
+09-Aug-26 20:43:49 - Epoch 87, Model Loss -0.09987173360936782, View Loss -1.1609425240871953, Reg 0.175523672618118
+09-Aug-26 20:44:48 - Epoch 88, Model Loss -0.09874221896813586, View Loss -1.1662823483834859, Reg 0.17709808460637635
+09-Aug-26 20:45:47 - Epoch 89, Model Loss -0.09785012715782215, View Loss -1.1508799658881292, Reg 0.17147063001308566
+09-Aug-26 20:46:47 - Epoch 90, Model Loss -0.09710117414885876, View Loss -1.141900516023823, Reg 0.17330675460154715
+09-Aug-26 20:46:59 - Epoch 90: Train_acc 0.8022875816993464 Val_acc 0.6274509803921569 Test_acc 0.581151832460733 Test_auc 0.6328571428571429
+09-Aug-26 20:47:58 - Epoch 91, Model Loss -0.09732552349956985, View Loss -1.1365850182140576, Reg 0.1718893200159073
+09-Aug-26 20:48:58 - Epoch 92, Model Loss -0.09833131409158893, View Loss -1.145746057329614, Reg 0.17553020624163884
+09-Aug-26 20:49:57 - Epoch 93, Model Loss -0.09876122018870186, View Loss -1.142866611480713, Reg 0.17151074910085964
+09-Aug-26 20:50:57 - Epoch 94, Model Loss -0.10118516987445307, View Loss -1.1340747822343913, Reg 0.1724651020531561
+09-Aug-26 20:51:56 - Epoch 95, Model Loss -0.10085954541474386, View Loss -1.1307773761499942, Reg 0.17501407043606626
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 20:52:09 - Epoch 95: Train_acc 0.9689542483660131 Val_acc 0.5947712418300654 Test_acc 0.6020942408376964 Test_auc 0.5984615384615385
+09-Aug-26 20:53:09 - Epoch 96, Model Loss -0.09767303708332037, View Loss -1.1398339684492622, Reg 0.1772841598862916
+09-Aug-26 20:54:08 - Epoch 97, Model Loss -0.10592727178062489, View Loss -1.1302471511504228, Reg 0.1711798953075035
+09-Aug-26 20:55:08 - Epoch 98, Model Loss -0.10148212021472407, View Loss -1.1337466660667868, Reg 0.1701127635497673
+09-Aug-26 20:56:08 - Epoch 99, Model Loss -0.09956443972057766, View Loss -1.125554968329037, Reg 0.1712354228777044
+09-Aug-26 20:57:07 - Epoch 100, Model Loss -0.10211618741353352, View Loss -1.1193943452211768, Reg 0.17527995838059318
+09-Aug-26 20:57:21 - Epoch 100: Train_acc 0.7908496732026143 Val_acc 0.6339869281045751 Test_acc 0.6073298429319371 Test_auc 0.6331868131868132
+09-Aug-26 20:58:20 - Epoch 101, Model Loss -0.10281014870973973, View Loss -1.1296373317444246, Reg 0.17290799650881025
+09-Aug-26 20:59:20 - Epoch 102, Model Loss -0.10276742133439756, View Loss -1.1071627537409465, Reg 0.1732828325890248
+09-Aug-26 21:00:19 - Epoch 103, Model Loss -0.10685711300450992, View Loss -1.110760219736037, Reg 0.17469870381885105
+09-Aug-26 21:01:19 - Epoch 104, Model Loss -0.10168030156808741, View Loss -1.1056808373507332, Reg 0.17422395447889963
+09-Aug-26 21:02:18 - Epoch 105, Model Loss -0.10416725102592916, View Loss -1.1107273514753853, Reg 0.17197422897504047
+09-Aug-26 21:02:30 - Epoch 105: Train_acc 0.8709150326797386 Val_acc 0.6078431372549019 Test_acc 0.5968586387434555 Test_auc 0.611978021978022
+09-Aug-26 21:03:29 - Epoch 106, Model Loss -0.1053870082680696, View Loss -1.1359381987378487, Reg 0.1765308650880078
+09-Aug-26 21:04:29 - Epoch 107, Model Loss -0.10688741261663001, View Loss -1.1077713678085725, Reg 0.16998597317271763
+09-Aug-26 21:05:28 - Epoch 108, Model Loss -0.10594895150926378, View Loss -1.0992778750026928, Reg 0.1739566170312221
+09-Aug-26 21:06:28 - Epoch 109, Model Loss -0.10493229495154487, View Loss -1.0985413252138625, Reg 0.1704111098269232
+09-Aug-26 21:07:27 - Epoch 110, Model Loss -0.10485872918484258, View Loss -1.0892835816526725, Reg 0.17232075226462745
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 21:07:44 - Epoch 110: Train_acc 0.795751633986928 Val_acc 0.6143790849673203 Test_acc 0.6020942408376964 Test_auc 0.6358241758241758
+09-Aug-26 21:08:44 - Epoch 111, Model Loss -0.10580370823542277, View Loss -1.0914203396030502, Reg 0.17340960757794724
+09-Aug-26 21:09:43 - Epoch 112, Model Loss -0.10589476134262833, View Loss -1.0798873862409903, Reg 0.17403967688286226
+09-Aug-26 21:10:43 - Epoch 113, Model Loss -0.11162810465868782, View Loss -1.078764998055751, Reg 0.17379556060616486
+09-Aug-26 21:11:42 - Epoch 114, Model Loss -0.10644590737772923, View Loss -1.084517117419274, Reg 0.17239390323364656
+09-Aug-26 21:12:42 - Epoch 115, Model Loss -0.10646412360901926, View Loss -1.084286406149272, Reg 0.17522881116742403
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 21:12:55 - Epoch 115: Train_acc 0.8758169934640523 Val_acc 0.6274509803921569 Test_acc 0.6178010471204188 Test_auc 0.6123076923076922
+09-Aug-26 21:13:54 - Epoch 116, Model Loss -0.10579161940057294, View Loss -1.1035638782713149, Reg 0.17145123035689586
+09-Aug-26 21:14:53 - Epoch 117, Model Loss -0.10806042403956644, View Loss -1.084291093489703, Reg 0.16986454224664402
+09-Aug-26 21:15:53 - Epoch 118, Model Loss -0.10796805924060297, View Loss -1.080298445583169, Reg 0.17229149310417424
+09-Aug-26 21:16:52 - Epoch 119, Model Loss -0.10896328383801031, View Loss -1.066976188055051, Reg 0.17258657544266945
+09-Aug-26 21:17:52 - Epoch 120, Model Loss -0.10834445049560149, View Loss -1.073791934773813, Reg 0.17351233384578058
+09-Aug-26 21:17:58 - Epoch 120: Train_acc 0.7875816993464052 Val_acc 0.6013071895424836 Test_acc 0.5968586387434555 Test_auc 0.6369230769230769
+09-Aug-26 21:18:57 - Epoch 121, Model Loss -0.11028227521703134, View Loss -1.0575254906236735, Reg 0.17277117005360673
+09-Aug-26 21:19:56 - Epoch 122, Model Loss -0.10898814111753227, View Loss -1.0836591198553447, Reg 0.17132890497157777
+09-Aug-26 21:20:56 - Epoch 123, Model Loss -0.10843316051695082, View Loss -1.066285446578381, Reg 0.1690666994043425
+09-Aug-26 21:21:55 - Epoch 124, Model Loss -0.10924272560605816, View Loss -1.0689703732534173, Reg 0.17301005271135592
+09-Aug-26 21:22:55 - Epoch 125, Model Loss -0.11222675890704385, View Loss -1.0835729884166343, Reg 0.17284740634213866
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 21:23:08 - Epoch 125: Train_acc 0.7973856209150327 Val_acc 0.6339869281045751 Test_acc 0.581151832460733 Test_auc 0.6368131868131868
+09-Aug-26 21:24:08 - Epoch 126, Model Loss -0.11497859121148103, View Loss -1.0631868870429744, Reg 0.17323612835672167
+09-Aug-26 21:25:07 - Epoch 127, Model Loss -0.11104757411807191, View Loss -1.073687877530366, Reg 0.17239264871170318
+09-Aug-26 21:26:06 - Epoch 128, Model Loss -0.11118561204741984, View Loss -1.0785411432677625, Reg 0.1694570809018378
+09-Aug-26 21:27:06 - Epoch 129, Model Loss -0.11095737437017603, View Loss -1.1615958447549857, Reg 0.16966438887555615
+09-Aug-26 21:28:05 - Epoch 130, Model Loss -0.11398720702314688, View Loss -1.1898773409961876, Reg 0.17065855967842675
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 21:28:20 - Epoch 130: Train_acc 0.8611111111111112 Val_acc 0.6405228758169934 Test_acc 0.6020942408376964 Test_auc 0.6178021978021977
+09-Aug-26 21:29:19 - Epoch 131, Model Loss -0.11492727492369857, View Loss -1.3237978258943246, Reg 0.17735080703411227
+09-Aug-26 21:30:19 - Epoch 132, Model Loss -0.10969298532585693, View Loss -1.4124719021367091, Reg 0.1680845404956855
+09-Aug-26 21:31:18 - Epoch 133, Model Loss -0.11257325745875539, View Loss -1.1659217114542044, Reg 0.17324487611748815
+09-Aug-26 21:32:17 - Epoch 134, Model Loss -0.10963630247739406, View Loss -1.1495469948824715, Reg 0.17268241795839048
+09-Aug-26 21:33:17 - Epoch 135, Model Loss -0.11199402380612941, View Loss -1.120073225763109, Reg 0.168550035045817
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 21:33:30 - Epoch 135: Train_acc 0.7892156862745098 Val_acc 0.6274509803921569 Test_acc 0.6178010471204188 Test_auc 0.6385714285714286
+09-Aug-26 21:34:30 - Epoch 136, Model Loss -0.11711500516903946, View Loss -1.0840851060705248, Reg 0.1733724658006157
+09-Aug-26 21:35:29 - Epoch 137, Model Loss -0.1148371593235365, View Loss -1.0581854511709774, Reg 0.1731824035348456
+09-Aug-26 21:36:29 - Epoch 138, Model Loss -0.12006138352786794, View Loss -1.0542035235299005, Reg 0.1739224533434787
+09-Aug-26 21:37:28 - Epoch 139, Model Loss -0.11761253663137847, View Loss -1.0524056456447426, Reg 0.1735834964350158
+09-Aug-26 21:38:27 - Epoch 140, Model Loss -0.11780966808593352, View Loss -1.0481557035757825, Reg 0.1715649392674951
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 21:38:44 - Epoch 140: Train_acc 0.7941176470588235 Val_acc 0.6339869281045751 Test_acc 0.6282722513089005 Test_auc 0.6403296703296704
+09-Aug-26 21:39:44 - Epoch 141, Model Loss -0.11498318213263369, View Loss -1.0351709766325607, Reg 0.17296662595536974
+09-Aug-26 21:40:43 - Epoch 142, Model Loss -0.11734823697532704, View Loss -1.0471811138726528, Reg 0.17349417507648468
+09-Aug-26 21:41:42 - Epoch 143, Model Loss -0.11412858807183558, View Loss -1.0325306420232736, Reg 0.17200049592389
+09-Aug-26 21:42:42 - Epoch 144, Model Loss -0.11739073625577041, View Loss -1.0288685147279228, Reg 0.16996145433460186
+09-Aug-26 21:43:41 - Epoch 145, Model Loss -0.11869293334437352, View Loss -1.0643161309310814, Reg 0.17226286982399186
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 21:43:56 - Epoch 145: Train_acc 0.7843137254901961 Val_acc 0.6274509803921569 Test_acc 0.612565445026178 Test_auc 0.6431868131868133
+09-Aug-26 21:44:55 - Epoch 146, Model Loss -0.11746602899887983, View Loss -1.0443518527972153, Reg 0.17143225708818124
+09-Aug-26 21:45:54 - Epoch 147, Model Loss -0.11736073992610757, View Loss -1.0385836378421658, Reg 0.17138629012248097
+09-Aug-26 21:46:54 - Epoch 148, Model Loss -0.11659563912285699, View Loss -1.031116057844723, Reg 0.17034206739048552
+09-Aug-26 21:47:53 - Epoch 149, Model Loss -0.11856804642022825, View Loss -1.030815153340109, Reg 0.17090601556830937
+09-Aug-26 21:48:53 - Epoch 150, Model Loss -0.11991008492856244, View Loss -1.0624427101970497, Reg 0.17272956289497077
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 21:49:07 - Epoch 150: Train_acc 0.7941176470588235 Val_acc 0.6209150326797386 Test_acc 0.612565445026178 Test_auc 0.6351648351648352
+09-Aug-26 21:50:06 - Epoch 151, Model Loss -0.11960392722896501, View Loss -1.0581520055633744, Reg 0.17076543587095597
+09-Aug-26 21:51:06 - Epoch 152, Model Loss -0.1187971035639445, View Loss -1.092900711726519, Reg 0.1685096455944909
+09-Aug-26 21:52:05 - Epoch 153, Model Loss -0.12059284853779413, View Loss -1.0611937466789694, Reg 0.17376031955472784
+09-Aug-26 21:53:05 - Epoch 154, Model Loss -0.12379783197166094, View Loss -1.100098884183597, Reg 0.1725054459244597
+09-Aug-26 21:54:04 - Epoch 155, Model Loss -0.11827356519262774, View Loss -1.0422513266794042, Reg 0.16811997604136372
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 21:54:20 - Epoch 155: Train_acc 0.7892156862745098 Val_acc 0.6274509803921569 Test_acc 0.5916230366492147 Test_auc 0.6345054945054945
+09-Aug-26 21:55:19 - Epoch 156, Model Loss -0.1198403472993888, View Loss -1.0286083050023496, Reg 0.16990063149555057
+09-Aug-26 21:56:19 - Epoch 157, Model Loss -0.11854288429995767, View Loss -1.025163119914485, Reg 0.17286940844230403
+09-Aug-26 21:57:18 - Epoch 158, Model Loss -0.11947540266841065, View Loss -1.0285490712309195, Reg 0.17171946460125492
+09-Aug-26 21:58:17 - Epoch 159, Model Loss -0.12016492224986257, View Loss -1.0265860947128993, Reg 0.17320226756186266
+09-Aug-26 21:59:17 - Epoch 160, Model Loss -0.11792671174005745, View Loss -1.0152111949484333, Reg 0.16988647734028062
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 21:59:30 - Epoch 160: Train_acc 0.7908496732026143 Val_acc 0.6535947712418301 Test_acc 0.6073298429319371 Test_auc 0.6460439560439561
+09-Aug-26 22:00:29 - Epoch 161, Model Loss -0.1210411440313252, View Loss -1.0214633668949402, Reg 0.17004545276461083
+09-Aug-26 22:01:28 - Epoch 162, Model Loss -0.11971765405991498, View Loss -1.0170050898408578, Reg 0.16945764938600702
+09-Aug-26 22:02:28 - Epoch 163, Model Loss -0.12419490292181376, View Loss -1.0204779229132959, Reg 0.17179409175916435
+09-Aug-26 22:03:28 - Epoch 164, Model Loss -0.12043987925535714, View Loss -1.0159523689668941, Reg 0.1714169865145403
+09-Aug-26 22:04:27 - Epoch 165, Model Loss -0.11909977439182257, View Loss -1.0119127144221387, Reg 0.1698113415950264
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 22:04:40 - Epoch 165: Train_acc 0.7794117647058824 Val_acc 0.6339869281045751 Test_acc 0.6020942408376964 Test_auc 0.6398901098901099
+09-Aug-26 22:05:40 - Epoch 166, Model Loss -0.12116367170234131, View Loss -1.005691610909755, Reg 0.17049616516805163
+09-Aug-26 22:06:39 - Epoch 167, Model Loss -0.12412981776630178, View Loss -1.013794420591367, Reg 0.1707648256050995
+09-Aug-26 22:07:39 - Epoch 168, Model Loss -0.12171800697551054, View Loss -1.0157842628316942, Reg 0.17186189681486366
+09-Aug-26 22:08:38 - Epoch 169, Model Loss -0.1221572692487754, View Loss -1.0114530839172065, Reg 0.16965995164088954
+09-Aug-26 22:09:37 - Epoch 170, Model Loss -0.12237153684391695, View Loss -1.0146394929075553, Reg 0.17167756428905562
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 22:09:49 - Epoch 170: Train_acc 0.8643790849673203 Val_acc 0.6143790849673203 Test_acc 0.6020942408376964 Test_auc 0.6081318681318681
+09-Aug-26 22:10:49 - Epoch 171, Model Loss -0.12109788025126737, View Loss -1.0112102616067027, Reg 0.17124082498690663
+09-Aug-26 22:11:48 - Epoch 172, Model Loss -0.11917537333918553, View Loss -1.0082024647519479, Reg 0.16817137715863248
+09-Aug-26 22:12:48 - Epoch 173, Model Loss -0.12058333107848572, View Loss -1.0071315258936164, Reg 0.1705611688054465
+09-Aug-26 22:13:47 - Epoch 174, Model Loss -0.12197796425788231, View Loss -1.0005470350676893, Reg 0.1704566299525741
+09-Aug-26 22:14:47 - Epoch 175, Model Loss -0.12449790663968503, View Loss -1.0039246713413912, Reg 0.17003987671113482
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 22:15:00 - Epoch 175: Train_acc 0.7875816993464052 Val_acc 0.6405228758169934 Test_acc 0.6230366492146597 Test_auc 0.6440659340659342
+09-Aug-26 22:15:59 - Epoch 176, Model Loss -0.12516892599124535, View Loss -1.0055734807369756, Reg 0.17124760618396834
+09-Aug-26 22:16:59 - Epoch 177, Model Loss -0.11822816826938803, View Loss -0.9976096387002983, Reg 0.1699583002554825
+09-Aug-26 22:17:58 - Epoch 178, Model Loss -0.12265012622658723, View Loss -1.0038123535954095, Reg 0.16950542104789634
+09-Aug-26 22:18:57 - Epoch 179, Model Loss -0.12065034832050597, View Loss -1.0092714518503425, Reg 0.17074214876477234
+09-Aug-26 22:19:57 - Epoch 180, Model Loss -0.11936262464211657, View Loss -0.9993343329897114, Reg 0.17107022811774336
+09-Aug-26 22:20:06 - Epoch 180: Train_acc 0.9673202614379085 Val_acc 0.6078431372549019 Test_acc 0.5759162303664922 Test_auc 0.5874725274725274
+09-Aug-26 22:21:05 - Epoch 181, Model Loss -0.127602982365228, View Loss -1.001266727260515, Reg 0.17067724144926258
+09-Aug-26 22:22:05 - Epoch 182, Model Loss -0.1223975373249428, View Loss -0.9988292073891833, Reg 0.17006351618595372
+09-Aug-26 22:23:04 - Epoch 183, Model Loss -0.12452610957077126, View Loss -0.9970933159971549, Reg 0.16846782738476798
+09-Aug-26 22:24:04 - Epoch 184, Model Loss -0.12332812945048015, View Loss -0.9984592659021515, Reg 0.17068272234957202
+09-Aug-26 22:25:03 - Epoch 185, Model Loss -0.1219544593804802, View Loss -0.9922025125790266, Reg 0.17113439066737307
+09-Aug-26 22:25:18 - Epoch 185: Train_acc 0.7761437908496732 Val_acc 0.6470588235294118 Test_acc 0.5968586387434555 Test_auc 0.6313186813186813
+09-Aug-26 22:26:18 - Epoch 186, Model Loss -0.12420063353831472, View Loss -1.0011757152532441, Reg 0.1694562869523865
+09-Aug-26 22:27:17 - Epoch 187, Model Loss -0.12801933833976198, View Loss -1.0023836294809978, Reg 0.16962705611013898
+09-Aug-26 22:28:16 - Epoch 188, Model Loss -0.12629256684795703, View Loss -1.018985735045539, Reg 0.17238940259599997
+09-Aug-26 22:29:15 - Epoch 189, Model Loss -0.1293798090975269, View Loss -1.0145106190949484, Reg 0.17089674461121654
+09-Aug-26 22:30:15 - Epoch 190, Model Loss -0.12588258038938435, View Loss -1.0092606645783568, Reg 0.16793882944225486
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 22:30:28 - Epoch 190: Train_acc 0.7794117647058824 Val_acc 0.6274509803921569 Test_acc 0.612565445026178 Test_auc 0.6445054945054944
+09-Aug-26 22:31:27 - Epoch 191, Model Loss -0.12948591607848023, View Loss -1.0081732054941015, Reg 0.16832596784323647
+09-Aug-26 22:32:26 - Epoch 192, Model Loss -0.12399162498174929, View Loss -1.003186177584081, Reg 0.17104310625129276
+09-Aug-26 22:33:26 - Epoch 193, Model Loss -0.12559999009363013, View Loss -0.9938602470884136, Reg 0.170417901250272
+09-Aug-26 22:34:25 - Epoch 194, Model Loss -0.12668651926751232, View Loss -0.9945077545502606, Reg 0.17102419356115503
+09-Aug-26 22:35:24 - Epoch 195, Model Loss -0.12605980350301157, View Loss -1.0045241546007544, Reg 0.17130598513519063
+09-Aug-26 22:35:35 - Epoch 195: Train_acc 0.7941176470588235 Val_acc 0.6274509803921569 Test_acc 0.6230366492146597 Test_auc 0.6451648351648351
+09-Aug-26 22:36:34 - Epoch 196, Model Loss -0.12884692351023355, View Loss -1.006118571836185, Reg 0.16725513514350443
+09-Aug-26 22:37:34 - Epoch 197, Model Loss -0.12976335700041328, View Loss -1.0010230821721695, Reg 0.17053964071803623
+09-Aug-26 22:38:33 - Epoch 198, Model Loss -0.12824235242955825, View Loss -1.013866549223856, Reg 0.1687034743478875
+09-Aug-26 22:39:33 - Epoch 199, Model Loss -0.1268556158916623, View Loss -1.0013530028411766, Reg 0.1710175178409402
+09-Aug-26 22:40:32 - Epoch 200, Model Loss -0.12539643146633322, View Loss -0.9981978446050407, Reg 0.17172609951371462
+09-Aug-26 22:40:44 - Epoch 200: Train_acc 0.7892156862745098 Val_acc 0.6209150326797386 Test_acc 0.6020942408376964 Test_auc 0.6367032967032967
+09-Aug-26 22:41:43 - Epoch 201, Model Loss -0.1260256054354649, View Loss -0.9926579949123407, Reg 0.17269950773980883
+09-Aug-26 22:42:43 - Epoch 202, Model Loss -0.12769766921311423, View Loss -0.9909406612121981, Reg 0.16733451625880072
+09-Aug-26 22:43:42 - Epoch 203, Model Loss -0.12552525132310158, View Loss -0.9852241137448479, Reg 0.16871306173552095
+09-Aug-26 22:44:42 - Epoch 204, Model Loss -0.1270846331041623, View Loss -0.9783040113698424, Reg 0.1703422485418569
+09-Aug-26 22:45:41 - Epoch 205, Model Loss -0.13101114595637603, View Loss -0.9903038958318873, Reg 0.17175226741366917
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 22:45:55 - Epoch 205: Train_acc 0.7924836601307189 Val_acc 0.6274509803921569 Test_acc 0.6073298429319371 Test_auc 0.6476923076923077
+09-Aug-26 22:46:54 - Epoch 206, Model Loss -0.13016393137913124, View Loss -0.9877404683555653, Reg 0.17033610166677463
+09-Aug-26 22:47:53 - Epoch 207, Model Loss -0.1275239820573844, View Loss -0.9874028177822337, Reg 0.1697306723571291
+09-Aug-26 22:48:53 - Epoch 208, Model Loss -0.12689357684328664, View Loss -0.9942103094524808, Reg 0.1688082469444649
+09-Aug-26 22:49:52 - Epoch 209, Model Loss -0.1283923044703365, View Loss -0.9933702735339894, Reg 0.1688656415425095
+09-Aug-26 22:50:52 - Epoch 210, Model Loss -0.12815066529255287, View Loss -0.9881501314686794, Reg 0.1722449778146993
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 22:51:05 - Epoch 210: Train_acc 0.8660130718954249 Val_acc 0.6339869281045751 Test_acc 0.6073298429319371 Test_auc 0.6137362637362638
+09-Aug-26 22:52:05 - Epoch 211, Model Loss -0.12771523349425373, View Loss -0.9868373543608422, Reg 0.1702731619862949
+09-Aug-26 22:53:04 - Epoch 212, Model Loss -0.1286391964535308, View Loss -0.9928375202066758, Reg 0.16977441564104914
+09-Aug-26 22:54:03 - Epoch 213, Model Loss -0.12964259682137982, View Loss -0.9938539905485764, Reg 0.16730509844480776
+09-Aug-26 22:55:03 - Epoch 214, Model Loss -0.12937702891094233, View Loss -0.9851944010242139, Reg 0.16995041228197758
+09-Aug-26 22:56:02 - Epoch 215, Model Loss -0.1290265954787435, View Loss -0.9835998154933157, Reg 0.16951346455835828
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 22:56:13 - Epoch 215: Train_acc 0.7990196078431373 Val_acc 0.6274509803921569 Test_acc 0.5916230366492147 Test_auc 0.6371428571428571
+09-Aug-26 22:57:12 - Epoch 216, Model Loss -0.12751892423318104, View Loss -0.9839848950018291, Reg 0.17156287618711882
+09-Aug-26 22:58:12 - Epoch 217, Model Loss -0.12929993400386736, View Loss -0.9857477479510837, Reg 0.17112485596946642
+09-Aug-26 22:59:11 - Epoch 218, Model Loss -0.12927621310832454, View Loss -0.979062729411655, Reg 0.16847534662757824
+09-Aug-26 23:00:11 - Epoch 219, Model Loss -0.1274282014837452, View Loss -0.9829852861516616, Reg 0.17030494567615534
+09-Aug-26 23:01:10 - Epoch 220, Model Loss -0.13191540023080664, View Loss -0.986876910028894, Reg 0.16825537471210256
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 23:01:27 - Epoch 220: Train_acc 0.7973856209150327 Val_acc 0.6274509803921569 Test_acc 0.6073298429319371 Test_auc 0.6408791208791209
+09-Aug-26 23:02:26 - Epoch 221, Model Loss -0.12958785482481414, View Loss -0.9846609885396521, Reg 0.16984695283805623
+09-Aug-26 23:03:26 - Epoch 222, Model Loss -0.12974677424804837, View Loss -0.9875295645271251, Reg 0.17135186853751638
+09-Aug-26 23:04:25 - Epoch 223, Model Loss -0.12970698133013606, View Loss -0.9897628220078213, Reg 0.1703441661167768
+09-Aug-26 23:05:25 - Epoch 224, Model Loss -0.1269660784917719, View Loss -0.9899791853100646, Reg 0.16801954903244193
+09-Aug-26 23:06:24 - Epoch 225, Model Loss -0.12900801051675884, View Loss -0.9842851084042219, Reg 0.17038700510473812
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+09-Aug-26 23:06:38 - Epoch 225: Train_acc 0.7973856209150327 Val_acc 0.6339869281045751 Test_acc 0.5968586387434555 Test_auc 0.6457142857142858
+09-Aug-26 23:07:38 - Epoch 226, Model Loss -0.1333148058723001, View Loss -0.984247447618472, Reg 0.17051435257095138
+09-Aug-26 23:08:37 - Epoch 227, Model Loss -0.13191590316934523, View Loss -0.989351806297801, Reg 0.16888745245980283
+09-Aug-26 23:09:36 - Epoch 228, Model Loss -0.1317007596196692, View Loss -0.9824455688202304, Reg 0.17034227065011567
+09-Aug-26 23:10:35 - Epoch 229, Model Loss -0.13090309403301065, View Loss -0.9947226234510833, Reg 0.16940365273968067
+09-Aug-26 23:11:33 - Epoch 230, Model Loss -0.13166521246137183, View Loss -0.9817556205138661, Reg 0.16936040995946897
+09-Aug-26 23:11:42 - Epoch 230: Train_acc 0.7990196078431373 Val_acc 0.6405228758169934 Test_acc 0.5968586387434555 Test_auc 0.6416483516483517
+09-Aug-26 23:12:41 - Epoch 231, Model Loss -0.12986605385549707, View Loss -0.9822948064679414, Reg 0.17011499424385867
+09-Aug-26 23:13:39 - Epoch 232, Model Loss -0.13055003215284908, View Loss -0.9897882034576017, Reg 0.1693463966347813
+09-Aug-26 23:14:37 - Epoch 233, Model Loss -0.12809651895286212, View Loss -0.9788837292615105, Reg 0.17127781940831077
+09-Aug-26 23:15:35 - Epoch 234, Model Loss -0.13264622719459285, View Loss -0.9907986798317604, Reg 0.16897646819843964
+09-Aug-26 23:16:33 - Epoch 235, Model Loss -0.13153949808451085, View Loss -0.993569904682683, Reg 0.16903694801860386
+09-Aug-26 23:16:40 - Epoch 235: Train_acc 0.8594771241830066 Val_acc 0.6470588235294118 Test_acc 0.5759162303664922 Test_auc 0.6124175824175825
+09-Aug-26 23:17:38 - Epoch 236, Model Loss -0.13188441243826174, View Loss -1.0026489994884316, Reg 0.16831423264313367
+09-Aug-26 23:18:36 - Epoch 237, Model Loss -0.1338093230147767, View Loss -0.9902448965833078, Reg 0.17263687971760244
+09-Aug-26 23:19:33 - Epoch 238, Model Loss -0.13124868526957392, View Loss -1.001238667107875, Reg 0.16830231298029033
+09-Aug-26 23:20:31 - Epoch 239, Model Loss -0.13203257517097822, View Loss -1.0712105822719, Reg 0.17296239353862464
+09-Aug-26 23:21:28 - Epoch 240, Model Loss -0.13184426520384995, View Loss -1.0547546685910691, Reg 0.17539087045036889
+09-Aug-26 23:21:36 - Epoch 240: Train_acc 0.7941176470588235 Val_acc 0.6274509803921569 Test_acc 0.6178010471204188 Test_auc 0.6469230769230769
+09-Aug-26 23:22:33 - Epoch 241, Model Loss -0.1322093041114558, View Loss -1.2291317858727149, Reg 0.17599417804892548
+09-Aug-26 23:23:31 - Epoch 242, Model Loss -0.13012661614449195, View Loss -1.1252242692934922, Reg 0.16688275181390103
+09-Aug-26 23:24:29 - Epoch 243, Model Loss -0.1308381600317612, View Loss -1.0785920440761092, Reg 0.17106543208648956
+09-Aug-26 23:25:26 - Epoch 244, Model Loss -0.13415823652853373, View Loss -1.10304662448908, Reg 0.14962925484367445
+09-Aug-26 23:26:24 - Epoch 245, Model Loss -0.13277351700402554, View Loss -1.0206889428344428, Reg 0.1739716722684748
+09-Aug-26 23:26:33 - Epoch 245: Train_acc 0.8643790849673203 Val_acc 0.6535947712418301 Test_acc 0.5654450261780105 Test_auc 0.6037362637362638
+09-Aug-26 23:27:30 - Epoch 246, Model Loss -0.13320470460100112, View Loss -1.0022050960391176, Reg 0.17021587627385956
+09-Aug-26 23:28:28 - Epoch 247, Model Loss -0.1329717341980903, View Loss -0.9943290021684434, Reg 0.17068387314774633
+09-Aug-26 23:29:25 - Epoch 248, Model Loss -0.13572560611114004, View Loss -0.9931821511461844, Reg 0.16952785995661043
+09-Aug-26 23:30:23 - Epoch 249, Model Loss -0.1357842130598679, View Loss -0.9918105649013146, Reg 0.1713659028017443
+09-Aug-26 23:31:21 - Epoch 250, Model Loss -0.1342557481690949, View Loss -0.9869539153342154, Reg 0.170851566238341
+09-Aug-26 23:31:27 - Epoch 250: Train_acc 0.7941176470588235 Val_acc 0.6405228758169934 Test_acc 0.6178010471204188 Test_auc 0.6531868131868132
+09-Aug-26 23:32:24 - Epoch 251, Model Loss -0.13368614066660015, View Loss -0.9859091160344142, Reg 0.1699528947375179
+09-Aug-26 23:33:22 - Epoch 252, Model Loss -0.13238335356992834, View Loss -0.9854776033389023, Reg 0.16990362000621223
+09-Aug-26 23:34:19 - Epoch 253, Model Loss -0.13457289357590518, View Loss -0.9766169646207024, Reg 0.1692702253075207
+09-Aug-26 23:35:17 - Epoch 254, Model Loss -0.13483553754737954, View Loss -0.9772474874857984, Reg 0.17032710516374874
+09-Aug-26 23:36:14 - Epoch 255, Model Loss -0.13407612197539387, View Loss -0.9797710032244913, Reg 0.16953340221464244
+09-Aug-26 23:36:21 - Epoch 255: Train_acc 0.795751633986928 Val_acc 0.6405228758169934 Test_acc 0.612565445026178 Test_auc 0.6407692307692309
+09-Aug-26 23:37:18 - Epoch 256, Model Loss -0.13452410386278738, View Loss -0.9762135222067241, Reg 0.1697227775660995
+09-Aug-26 23:38:16 - Epoch 257, Model Loss -0.1323549876026079, View Loss -0.9659277208490309, Reg 0.16971719703253577
+09-Aug-26 23:39:13 - Epoch 258, Model Loss -0.13292761332069347, View Loss -0.9743087463129579, Reg 0.16987446875743617
+09-Aug-26 23:40:11 - Epoch 259, Model Loss -0.13305003872883867, View Loss -0.9724576192743638, Reg 0.16987393543221593
+09-Aug-26 23:41:08 - Epoch 260, Model Loss -0.134243208014108, View Loss -0.9703527322781631, Reg 0.16894393808701458
+09-Aug-26 23:41:14 - Epoch 260: Train_acc 0.795751633986928 Val_acc 0.6339869281045751 Test_acc 0.6230366492146597 Test_auc 0.6532967032967033
+09-Aug-26 23:42:12 - Epoch 261, Model Loss -0.13377991571925044, View Loss -0.9711990574606104, Reg 0.16968257579148985
+09-Aug-26 23:43:10 - Epoch 262, Model Loss -0.13351984896691016, View Loss -0.9754645598480125, Reg 0.17057049702974705
+09-Aug-26 23:44:07 - Epoch 263, Model Loss -0.13462063261106902, View Loss -0.9738972148084952, Reg 0.17000002535729627
+09-Aug-26 23:45:05 - Epoch 264, Model Loss -0.13422791708528606, View Loss -0.9729635520698199, Reg 0.1691000779080235
+09-Aug-26 23:46:03 - Epoch 265, Model Loss -0.13350842669119242, View Loss -0.9743466166888967, Reg 0.16863816109747667
+09-Aug-26 23:46:10 - Epoch 265: Train_acc 0.803921568627451 Val_acc 0.6405228758169934 Test_acc 0.6073298429319371 Test_auc 0.6531868131868132
+09-Aug-26 23:47:08 - Epoch 266, Model Loss -0.1359951566247379, View Loss -0.9739764687282587, Reg 0.1706141711644877
+09-Aug-26 23:48:05 - Epoch 267, Model Loss -0.13638159769033295, View Loss -0.9783842664918089, Reg 0.169796790562424
+09-Aug-26 23:49:03 - Epoch 268, Model Loss -0.13466816809442309, View Loss -0.9754810294294669, Reg 0.16942682609059453
+09-Aug-26 23:50:00 - Epoch 269, Model Loss -0.13562200720014136, View Loss -0.9849706989487791, Reg 0.17016473373556448
+09-Aug-26 23:50:58 - Epoch 270, Model Loss -0.1334424427911347, View Loss -0.9790107206581464, Reg 0.170104034391104
+09-Aug-26 23:51:05 - Epoch 270: Train_acc 0.795751633986928 Val_acc 0.6339869281045751 Test_acc 0.5759162303664922 Test_auc 0.6387912087912088
+09-Aug-26 23:52:03 - Epoch 271, Model Loss -0.13536049961264618, View Loss -0.9819092797298058, Reg 0.1686698248962951
+09-Aug-26 23:53:00 - Epoch 272, Model Loss -0.13560983246447994, View Loss -0.9810683742847318, Reg 0.16913138446854611
+09-Aug-26 23:53:57 - Epoch 273, Model Loss -0.13534683495565178, View Loss -0.983804232933942, Reg 0.17067567624297797
+09-Aug-26 23:54:55 - Epoch 274, Model Loss -0.1363528148800719, View Loss -0.9839043500376683, Reg 0.16704071473841572
+09-Aug-26 23:55:52 - Epoch 275, Model Loss -0.13783607256957908, View Loss -1.0089965115964803, Reg 0.17090768771233902
+09-Aug-26 23:55:58 - Epoch 275: Train_acc 0.8709150326797386 Val_acc 0.6274509803921569 Test_acc 0.5916230366492147 Test_auc 0.6110989010989011
+09-Aug-26 23:56:56 - Epoch 276, Model Loss -0.13592112765592687, View Loss -1.0050852002661212, Reg 0.16859340833293068
+09-Aug-26 23:57:53 - Epoch 277, Model Loss -0.13734201122732723, View Loss -1.0066418959424386, Reg 0.17100013208155537
+09-Aug-26 23:58:51 - Epoch 278, Model Loss -0.13762020831014596, View Loss -1.0445020401399898, Reg 0.16608397760032828
+09-Aug-26 23:59:48 - Epoch 279, Model Loss -0.13678683954126694, View Loss -1.1617190588533488, Reg 0.16910947820329977
+10-Aug-26 00:00:46 - Epoch 280, Model Loss -0.13661596217965769, View Loss -1.2023331012601166, Reg 0.17321388111784566
+10-Aug-26 00:00:52 - Epoch 280: Train_acc 0.795751633986928 Val_acc 0.6339869281045751 Test_acc 0.5863874345549738 Test_auc 0.6430769230769231
+10-Aug-26 00:01:50 - Epoch 281, Model Loss -0.13660437959471558, View Loss -1.1288077620898975, Reg 0.1815173364932241
+10-Aug-26 00:02:47 - Epoch 282, Model Loss -0.1401618726892409, View Loss -1.131755353578555, Reg 0.17781424795100892
+10-Aug-26 00:03:45 - Epoch 283, Model Loss -0.137006968065025, View Loss -1.0679009186676125, Reg 0.15434928627964717
+10-Aug-26 00:04:42 - Epoch 284, Model Loss -0.13562056363797656, View Loss -1.049583407009349, Reg 0.1639347183548547
+10-Aug-26 00:05:40 - Epoch 285, Model Loss -0.135977214457942, View Loss -1.0584140392689922, Reg 0.17499783644878786
+10-Aug-26 00:05:46 - Epoch 285: Train_acc 0.7990196078431373 Val_acc 0.6339869281045751 Test_acc 0.6020942408376964 Test_auc 0.641098901098901
+10-Aug-26 00:06:44 - Epoch 286, Model Loss -0.13807091681785832, View Loss -1.050907542502958, Reg 0.18544437741142472
+10-Aug-26 00:07:41 - Epoch 287, Model Loss -0.13736617993685155, View Loss -1.0177107979269588, Reg 0.17124083735584433
+10-Aug-26 00:08:39 - Epoch 288, Model Loss -0.13671365243936676, View Loss -1.004742867027233, Reg 0.165602911239356
+10-Aug-26 00:09:37 - Epoch 289, Model Loss -0.136292119041767, View Loss -0.9968926400140999, Reg 0.16700928867642395
+10-Aug-26 00:10:34 - Epoch 290, Model Loss -0.13614947830929475, View Loss -0.9932460083680994, Reg 0.16754696902885935
+10-Aug-26 00:10:41 - Epoch 290: Train_acc 0.7973856209150327 Val_acc 0.6405228758169934 Test_acc 0.6073298429319371 Test_auc 0.648021978021978
+10-Aug-26 00:11:39 - Epoch 291, Model Loss -0.13745316570880367, View Loss -0.9871247749702603, Reg 0.17069562889781653
+10-Aug-26 00:12:36 - Epoch 292, Model Loss -0.13885178051742852, View Loss -0.9795917576434565, Reg 0.17092478762265123
+10-Aug-26 00:13:34 - Epoch 293, Model Loss -0.13924736563676324, View Loss -0.9792738724378199, Reg 0.1704539188177757
+10-Aug-26 00:14:31 - Epoch 294, Model Loss -0.13635932152567345, View Loss -0.9724193390677957, Reg 0.17090949961562563
+10-Aug-26 00:15:29 - Epoch 295, Model Loss -0.13666281630011165, View Loss -0.9696079936682009, Reg 0.16963217227287541
+10-Aug-26 00:15:34 - Epoch 295: Train_acc 0.7908496732026143 Val_acc 0.6339869281045751 Test_acc 0.581151832460733 Test_auc 0.640879120879121
+10-Aug-26 00:16:32 - Epoch 296, Model Loss -0.13962705852159488, View Loss -0.9742795969146529, Reg 0.17082131123231128
+10-Aug-26 00:17:29 - Epoch 297, Model Loss -0.14172088554482054, View Loss -0.9722069984947155, Reg 0.16912737693272384
+10-Aug-26 00:18:27 - Epoch 298, Model Loss -0.13845409287346733, View Loss -0.9742434990951439, Reg 0.16852023097035151
+10-Aug-26 00:19:25 - Epoch 299, Model Loss -0.13917342393226872, View Loss -0.9704169346616159, Reg 0.17011777131386052
+10-Aug-26 00:20:22 - Epoch 300, Model Loss -0.13863536812900717, View Loss -0.971757530386931, Reg 0.169624834863189
+10-Aug-26 00:20:33 - Epoch 300: Train_acc 0.795751633986928 Val_acc 0.6405228758169934 Test_acc 0.612565445026178 Test_auc 0.6432967032967033
+10-Aug-26 00:20:33 - FinishedTraining! BestEpoch (eval-interval index): 31
+10-Aug-26 00:20:33 - Wrote /users/3171356m/muhammad/GraSTIACL/nested_cv/results/combat__emb512_bs128__fold4.json
+10-Aug-26 00:20:33 - {
+  "emb_dim": 512,
+  "batch_size": 128,
+  "fold": 4,
+  "contrastive_mode": "self_supervised",
+  "weight_decay": 0.0,
+  "combat": true,
+  "n_train": 612,
+  "n_val": 153,
+  "n_test": 191,
+  "best_val_epoch_idx": 31,
+  "train_accuracy": 0.7908496732026143,
+  "val_accuracy": 0.6535947712418301,
+  "test_accuracy": 0.6073298429319371,
+  "train_f1": 0.7815699658703071,
+  "val_f1": 0.6442953020134228,
+  "test_f1": 0.585635359116022,
+  "train_sensitivity": 0.7869415780517471,
+  "val_sensitivity": 0.6575342375680242,
+  "test_sensitivity": 0.5824175760173893,
+  "train_specificity": 0.7943925208897429,
+  "val_specificity": 0.6499999918750001,
+  "test_specificity": 0.6299999937,
+  "train_precision": 0.7762711864406779,
+  "val_precision": 0.631578947368421,
+  "test_precision": 0.5888888888888889,
+  "test_auc": 0.6460439560439561,
+  "fin_reg": 0.16988647734028062
+}

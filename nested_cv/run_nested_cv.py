@@ -173,6 +173,19 @@ def run(args):
         "contrastive_mode": args.contrastive_mode,
         "weight_decay": args.weight_decay,
         "combat": args.combat,
+        # Provenance fields added after discovering the output filename didn't
+        # encode these -- two configs differing only in mij_source (or
+        # node_feature_mode/gamma_mode) wrote to the identical path and
+        # silently clobbered each other under concurrent SLURM array
+        # execution, with no way to recover which run produced a given file
+        # after the fact. Every axis that a grid script can vary is now both
+        # in the filename (below) and in the file's own contents, so a
+        # result is self-describing even if it's ever moved or renamed.
+        "node_feature_mode": args.node_feature_mode,
+        "gamma_mode": args.gamma_mode,
+        "mij_source": args.mij_source,
+        "reg_lambda": args.reg_lambda,
+        "epochs": args.epochs,
         "n_train": len(train_dataset),
         "n_val": len(val_dataset),
         "n_test": len(test_dataset),
@@ -198,8 +211,14 @@ def run(args):
 
     os.makedirs(RESULTS_DIR, exist_ok=True)
     combat_tag = "combat" if args.combat else "nocombat"
+    # Filename now encodes every axis a grid script can vary -- previously
+    # only combat/emb_dim/batch_size/fold were in the name, so the
+    # final_grid_*_array.sh sweep (which also varies mij_source at fixed
+    # emb_dim/batch_size) had two configs racing to write the same path.
+    config_tag = f"nf-{args.node_feature_mode}_gm-{args.gamma_mode}_mij-{args.mij_source}_cm-{args.contrastive_mode}"
     out_path = osp.join(
-        RESULTS_DIR, f"{combat_tag}__emb{args.emb_dim}_bs{args.batch_size}__fold{args.fold}.json",
+        RESULTS_DIR,
+        f"{combat_tag}__emb{args.emb_dim}_bs{args.batch_size}__{config_tag}__fold{args.fold}.json",
     )
     with open(out_path, "w") as f:
         json.dump(result, f, indent=2)

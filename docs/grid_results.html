@@ -1,0 +1,650 @@
+<title>GraSTI-ACL Grid Results</title>
+<style>
+  :root {
+    --bg: #f4f6f8;
+    --surface: #ffffff;
+    --surface-2: #eceff2;
+    --text: #171b20;
+    --muted: #5b6570;
+    --border: rgba(20, 24, 30, 0.10);
+    --border-strong: rgba(20, 24, 30, 0.18);
+    --accent: #0f8a7c;
+    --accent-soft: rgba(15, 138, 124, 0.12);
+    --status-done-fg: #146c2e;
+    --status-done-bg: rgba(20, 140, 60, 0.14);
+    --status-running-fg: #8a5a00;
+    --status-running-bg: rgba(220, 150, 20, 0.16);
+    --status-queued-fg: #5b6570;
+    --status-queued-bg: rgba(91, 101, 112, 0.12);
+    --best-glow: rgba(15, 138, 124, 0.16);
+    --shadow: 0 1px 2px rgba(20,24,30,0.04), 0 8px 24px rgba(20,24,30,0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0a0d11;
+      --surface: #12161c;
+      --surface-2: #171c23;
+      --text: #e7ebef;
+      --muted: #8b98a5;
+      --border: rgba(231, 235, 239, 0.09);
+      --border-strong: rgba(231, 235, 239, 0.16);
+      --accent: #4fd8c4;
+      --accent-soft: rgba(79, 216, 196, 0.14);
+      --status-done-fg: #63d98a;
+      --status-done-bg: rgba(99, 217, 138, 0.14);
+      --status-running-fg: #f0b93e;
+      --status-running-bg: rgba(240, 185, 62, 0.14);
+      --status-queued-fg: #8b98a5;
+      --status-queued-bg: rgba(139, 152, 165, 0.14);
+      --best-glow: rgba(79, 216, 196, 0.16);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0a0d11;
+    --surface: #12161c;
+    --surface-2: #171c23;
+    --text: #e7ebef;
+    --muted: #8b98a5;
+    --border: rgba(231, 235, 239, 0.09);
+    --border-strong: rgba(231, 235, 239, 0.16);
+    --accent: #4fd8c4;
+    --accent-soft: rgba(79, 216, 196, 0.14);
+    --status-done-fg: #63d98a;
+    --status-done-bg: rgba(99, 217, 138, 0.14);
+    --status-running-fg: #f0b93e;
+    --status-running-bg: rgba(240, 185, 62, 0.14);
+    --status-queued-fg: #8b98a5;
+    --status-queued-bg: rgba(139, 152, 165, 0.14);
+    --best-glow: rgba(79, 216, 196, 0.16);
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.45;
+    padding: 0 0 4rem;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 1.5rem; }
+
+  header.page {
+    padding: 2.75rem 0 1.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin: 0 0 0.6rem;
+  }
+  h1 {
+    font-size: 1.9rem;
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    font-weight: 700;
+  }
+  .lede {
+    color: var(--muted);
+    max-width: 62ch;
+    margin: 0;
+    font-size: 0.98rem;
+  }
+  .lede code {
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 0.88em;
+    background: var(--surface-2);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 2rem 0 2.5rem;
+  }
+  @media (max-width: 860px) {
+    .summary-grid { grid-template-columns: 1fr; }
+  }
+  .summary-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.35rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .summary-card .name {
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+  .summary-card .desc {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: -0.6rem;
+  }
+  .progress-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .progress-track {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--surface-2);
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+  }
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.82rem;
+  }
+  .stat-row .k { color: var(--muted); }
+  .stat-row .v {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+  }
+
+  section.pipeline {
+    margin: 2.75rem 0;
+  }
+  .pipeline-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.85rem;
+    flex-wrap: wrap;
+  }
+  .pipeline-head h2 {
+    font-size: 1.2rem;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .pipeline-head .meta {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .pipeline-note {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin: 0 0 0.9rem;
+    max-width: 78ch;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 720px;
+    font-size: 0.85rem;
+  }
+  thead th {
+    position: sticky;
+    top: 0;
+    background: var(--surface-2);
+    text-align: left;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    font-weight: 700;
+    padding: 0.6rem 0.8rem;
+    border-bottom: 1px solid var(--border-strong);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  thead th:hover { color: var(--text); }
+  thead th.sorted::after {
+    content: " " attr(data-dir);
+    color: var(--accent);
+  }
+  tbody td {
+    padding: 0.5rem 0.8rem;
+    border-bottom: 1px solid var(--border);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+  }
+  tbody td.cfg { font-family: inherit; font-variant-numeric: normal; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: var(--surface-2); }
+  tbody tr.best td { background: var(--best-glow); }
+  tbody tr.best td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+
+  .badge {
+    display: inline-block;
+    padding: 0.18rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+  }
+  .badge.done { color: var(--status-done-fg); background: var(--status-done-bg); }
+  .badge.running { color: var(--status-running-fg); background: var(--status-running-bg); }
+  .badge.queued { color: var(--status-queued-fg); background: var(--status-queued-bg); }
+
+  .num-null { color: var(--muted); }
+
+  footer.page {
+    max-width: 1180px;
+    margin: 3rem auto 0;
+    padding: 0 1.5rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    padding-top: 1.25rem;
+  }
+</style>
+
+<div class="wrap">
+  <header class="page">
+    <p class="eyebrow">GraSTI-ACL &middot; ABIDE-I &middot; grid sweep</p>
+    <h1>132-task grid results</h1>
+    <p class="lede">
+      All three pipelines from the current grid: single-run, nested&nbsp;CV
+      without ComBat, and nested&nbsp;CV with ComBat harmonization. Config grid is
+      batch size &times; embedding dim &times; <code>mij_source</code>, 5 outer
+      folds for both nested-CV pipelines. Click a column header to sort.
+      Snapshot taken live from SLURM logs and result files.
+    </p>
+  </header>
+
+  <div class="summary-grid" id="summary-grid"></div>
+
+  <section class="pipeline" id="pipeline-single">
+    <div class="pipeline-head">
+      <h2>Single-run</h2>
+      <span class="meta" id="single-meta"></span>
+    </div>
+    <p class="pipeline-note">
+      One encoder trained on the full dataset, then evaluated. Node features
+      use population-wide min-max scaling for <code>alff_pcc</code> (a minor,
+      disclosed transductive leak) — the only pipeline with this property.
+      No outer folds.
+    </p>
+    <div class="table-scroll">
+      <table id="table-single">
+        <thead>
+          <tr>
+            <th data-key="task" data-type="num">Task</th>
+            <th data-key="batch" data-type="num">Batch</th>
+            <th data-key="emb" data-type="num">Emb dim</th>
+            <th data-key="mij" data-type="str">mij source</th>
+            <th data-key="status" data-type="str">Status</th>
+            <th data-key="val" data-type="num">Val acc</th>
+            <th data-key="test" data-type="num">Test acc</th>
+            <th data-key="auc" data-type="num">Test AUC</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="pipeline" id="pipeline-nocombat">
+    <div class="pipeline-head">
+      <h2>Nested CV &mdash; no ComBat</h2>
+      <span class="meta" id="nocombat-meta"></span>
+    </div>
+    <p class="pipeline-note">
+      Encoder retrained from scratch per outer fold, using only that fold's
+      train subjects. Fold-scoped <code>alff_pcc</code> scaling (fit on
+      train_val_idx only — no population-wide leak).
+    </p>
+    <div class="table-scroll">
+      <table id="table-nocombat">
+        <thead>
+          <tr>
+            <th data-key="task" data-type="num">Task</th>
+            <th data-key="batch" data-type="num">Batch</th>
+            <th data-key="emb" data-type="num">Emb dim</th>
+            <th data-key="mij" data-type="str">mij source</th>
+            <th data-key="fold" data-type="num">Fold</th>
+            <th data-key="status" data-type="str">Status</th>
+            <th data-key="val" data-type="num">Val acc</th>
+            <th data-key="test" data-type="num">Test acc</th>
+            <th data-key="auc" data-type="num">Test AUC</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="pipeline" id="pipeline-combat">
+    <div class="pipeline-head">
+      <h2>Nested CV &mdash; ComBat</h2>
+      <span class="meta" id="combat-meta"></span>
+    </div>
+    <p class="pipeline-note">
+      Same nested structure, plus neuroHarmonize ComBat site harmonization
+      fit on train only and applied to test (verified leak-free via an
+      independent train-only refit comparison). 53/60 complete at snapshot
+      time; the remaining 7 rows marked <span class="badge running">running</span>
+      show the latest evaluated epoch, not a final selected result.
+    </p>
+    <div class="table-scroll">
+      <table id="table-combat">
+        <thead>
+          <tr>
+            <th data-key="task" data-type="num">Task</th>
+            <th data-key="batch" data-type="num">Batch</th>
+            <th data-key="emb" data-type="num">Emb dim</th>
+            <th data-key="mij" data-type="str">mij source</th>
+            <th data-key="fold" data-type="num">Fold</th>
+            <th data-key="status" data-type="str">Status</th>
+            <th data-key="val" data-type="num">Val acc</th>
+            <th data-key="test" data-type="num">Test acc</th>
+            <th data-key="auc" data-type="num">Test AUC</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="page">
+    Rows highlighted with a teal rail are the best <em>test accuracy</em>
+    among completed rows in that table. For still-running tasks, the shown
+    value is a mid-run snapshot at the noted epoch, not a validation-selected
+    final result — treat it as a trend, not a result.
+  </footer>
+</div>
+
+<script>
+  // [task, batch, emb, mij, fold(or null), status, val_acc, test_acc, test_auc]
+  const singleRows = [
+    [0,32,512,"alff",null,"done",64.97,60.77,0.6518],
+    [1,32,512,"alff_pcc",null,"done",62.09,59.41,0.6269],
+    [2,32,256,"alff",null,"done",62.35,60.36,0.6312],
+    [3,32,256,"alff_pcc",null,"done",63.79,61.09,0.6324],
+    [4,128,512,"alff",null,"done",66.80,59.52,0.6572],
+    [5,128,512,"alff_pcc",null,"done",61.05,59.10,0.6166],
+    [6,128,256,"alff",null,"done",63.14,58.78,0.6348],
+    [7,128,256,"alff_pcc",null,"done",63.27,59.73,0.6201],
+    [8,256,512,"alff",null,"done",64.71,60.98,0.6681],
+    [9,256,512,"alff_pcc",null,"done",60.92,59.52,0.6105],
+    [10,256,256,"alff",null,"done",65.75,61.61,0.6555],
+    [11,256,256,"alff_pcc",null,"done",60.78,59.52,0.6115]
+  ];
+
+  const nocombatRows = [
+    [0,32,512,"alff",0,"done",64.05,58.33,0.6518],
+    [1,32,512,"alff",1,"done",66.01,60.73,0.6329],
+    [2,32,512,"alff",2,"done",67.32,58.64,0.6009],
+    [3,32,512,"alff",3,"done",67.32,59.16,0.6237],
+    [4,32,512,"alff",4,"done",69.28,58.12,0.6241],
+    [5,32,512,"alff_pcc",0,"done",66.01,61.98,0.6667],
+    [6,32,512,"alff_pcc",1,"done",66.01,56.02,0.6059],
+    [7,32,512,"alff_pcc",2,"done",67.97,57.07,0.5868],
+    [8,32,512,"alff_pcc",3,"done",67.32,51.31,0.5418],
+    [9,32,512,"alff_pcc",4,"done",67.97,60.73,0.6465],
+    [10,32,256,"alff",0,"done",66.01,67.71,0.7252],
+    [11,32,256,"alff",1,"done",66.01,59.69,0.6153],
+    [12,32,256,"alff",2,"done",65.36,60.21,0.6104],
+    [13,32,256,"alff",3,"done",64.05,58.64,0.5814],
+    [14,32,256,"alff",4,"done",70.59,59.69,0.6356],
+    [15,32,256,"alff_pcc",0,"done",64.71,58.85,0.6499],
+    [16,32,256,"alff_pcc",1,"done",64.71,60.21,0.6118],
+    [17,32,256,"alff_pcc",2,"done",68.63,56.02,0.6024],
+    [18,32,256,"alff_pcc",3,"done",64.71,53.93,0.5618],
+    [19,32,256,"alff_pcc",4,"done",65.36,58.64,0.6295],
+    [20,128,512,"alff",0,"done",64.05,60.42,0.6365],
+    [21,128,512,"alff",1,"done",64.71,60.21,0.6109],
+    [22,128,512,"alff",2,"done",64.05,59.16,0.6259],
+    [23,128,512,"alff",3,"done",66.01,57.07,0.6343],
+    [24,128,512,"alff",4,"done",64.71,59.16,0.6380],
+    [25,128,512,"alff_pcc",0,"done",62.75,59.38,0.6478],
+    [26,128,512,"alff_pcc",1,"done",63.40,60.21,0.6204],
+    [27,128,512,"alff_pcc",2,"done",63.40,54.97,0.5553],
+    [28,128,512,"alff_pcc",3,"done",64.71,58.12,0.6141],
+    [29,128,512,"alff_pcc",4,"done",66.67,61.26,0.6235],
+    [30,128,256,"alff",0,"done",66.01,64.58,0.6986],
+    [31,128,256,"alff",1,"done",62.75,60.21,0.6142],
+    [32,128,256,"alff",2,"done",65.36,60.21,0.5991],
+    [33,128,256,"alff",3,"done",65.36,58.12,0.6135],
+    [34,128,256,"alff",4,"done",66.67,60.73,0.6086],
+    [35,128,256,"alff_pcc",0,"done",64.05,61.46,0.6551],
+    [36,128,256,"alff_pcc",1,"done",64.05,60.21,0.6227],
+    [37,128,256,"alff_pcc",2,"done",64.05,59.69,0.5752],
+    [38,128,256,"alff_pcc",3,"done",61.44,54.97,0.5768],
+    [39,128,256,"alff_pcc",4,"done",64.71,58.12,0.6092],
+    [40,256,512,"alff",0,"done",67.32,67.71,0.7282],
+    [41,256,512,"alff",1,"done",62.75,60.21,0.6290],
+    [42,256,512,"alff",2,"done",66.01,60.73,0.6205],
+    [43,256,512,"alff",3,"done",66.01,60.73,0.6540],
+    [44,256,512,"alff",4,"done",65.36,60.21,0.6288],
+    [45,256,512,"alff_pcc",0,"done",61.44,63.02,0.6573],
+    [46,256,512,"alff_pcc",1,"done",62.09,61.78,0.6331],
+    [47,256,512,"alff_pcc",2,"done",61.44,55.50,0.5521],
+    [48,256,512,"alff_pcc",3,"done",66.01,59.69,0.6159],
+    [49,256,512,"alff_pcc",4,"done",64.71,59.69,0.6184],
+    [50,256,256,"alff",0,"done",65.36,62.50,0.6795],
+    [51,256,256,"alff",1,"done",64.71,61.78,0.6603],
+    [52,256,256,"alff",2,"done",65.36,60.73,0.6082],
+    [53,256,256,"alff",3,"done",63.40,62.30,0.6910],
+    [54,256,256,"alff",4,"done",71.90,60.21,0.6415],
+    [55,256,256,"alff_pcc",0,"done",63.40,60.94,0.6592],
+    [56,256,256,"alff_pcc",1,"done",64.05,58.64,0.6185],
+    [57,256,256,"alff_pcc",2,"done",63.40,56.54,0.5733],
+    [58,256,256,"alff_pcc",3,"done",60.13,59.16,0.5970],
+    [59,256,256,"alff_pcc",4,"done",64.05,57.59,0.6202]
+  ];
+
+  const combatRows = [
+    [0, 32, 512, "alff", 0, "done", 66.67, 65.1, 0.6652],
+    [1, 32, 512, "alff", 1, "done", 66.67, 60.73, 0.6357],
+    [2, 32, 512, "alff", 2, "done", 64.71, 56.54, 0.6002],
+    [3, 32, 512, "alff", 3, "done", 64.05, 58.12, 0.6063],
+    [4, 32, 512, "alff", 4, "done", 68.63, 61.26, 0.6458],
+    [5, 32, 512, "alff_pcc", 0, "done", 65.36, 61.46, 0.6348],
+    [6, 32, 512, "alff_pcc", 1, "done", 67.97, 61.26, 0.6243],
+    [7, 32, 512, "alff_pcc", 2, "done", 64.71, 56.54, 0.5947],
+    [8, 32, 512, "alff_pcc", 3, "done", 64.05, 59.69, 0.6333],
+    [9, 32, 512, "alff_pcc", 4, "done", 67.32, 65.45, 0.6671],
+    [10, 32, 256, "alff", 0, "done", 67.32, 61.46, 0.6401],
+    [11, 32, 256, "alff", 1, "done", 66.67, 62.83, 0.6415],
+    [12, 32, 256, "alff", 2, "done", 67.97, 60.21, 0.6234],
+    [13, 32, 256, "alff", 3, "done", 61.44, 59.69, 0.6645],
+    [14, 32, 256, "alff", 4, "done", 68.63, 63.35, 0.6608],
+    [15, 32, 256, "alff_pcc", 0, "done", 64.05, 58.33, 0.6455],
+    [16, 32, 256, "alff_pcc", 1, "done", 68.63, 58.64, 0.6244],
+    [17, 32, 256, "alff_pcc", 2, "done", 69.28, 60.21, 0.6199],
+    [18, 32, 256, "alff_pcc", 3, "done", 63.4, 59.16, 0.6311],
+    [19, 32, 256, "alff_pcc", 4, "done", 67.97, 59.69, 0.6563],
+    [20, 128, 512, "alff", 0, "done", 66.67, 67.19, 0.7021],
+    [21, 128, 512, "alff", 1, "done", 68.63, 61.26, 0.6209],
+    [22, 128, 512, "alff", 2, "done", 66.67, 67.54, 0.7176],
+    [23, 128, 512, "alff", 3, "done", 69.93, 59.69, 0.6322],
+    [24, 128, 512, "alff", 4, "done", 65.36, 56.54, 0.5825],
+    [25, 128, 512, "alff_pcc", 0, "done", 62.09, 61.98, 0.6529],
+    [26, 128, 512, "alff_pcc", 1, "done", 64.05, 61.78, 0.6365],
+    [27, 128, 512, "alff_pcc", 2, "done", 63.4, 55.5, 0.5732],
+    [28, 128, 512, "alff_pcc", 3, "done", 62.75, 59.16, 0.6385],
+    [29, 128, 512, "alff_pcc", 4, "done", 65.36, 60.73, 0.646],
+    [30, 128, 256, "alff", 0, "done", 66.01, 65.1, 0.6964],
+    [31, 128, 256, "alff", 1, "done", 67.32, 63.87, 0.6589],
+    [32, 128, 256, "alff", 2, "done", 67.32, 56.02, 0.6173],
+    [33, 128, 256, "alff", 3, "done", 67.32, 58.12, 0.6552],
+    [34, 128, 256, "alff", 4, "done", 69.28, 63.87, 0.684],
+    [35, 128, 256, "alff_pcc", 0, "done", 62.75, 59.9, 0.6327],
+    [36, 128, 256, "alff_pcc", 1, "done", 64.05, 61.26, 0.6133],
+    [37, 128, 256, "alff_pcc", 2, "done", 63.4, 57.07, 0.5907],
+    [38, 128, 256, "alff_pcc", 3, "done", 62.09, 57.07, 0.6249],
+    [39, 128, 256, "alff_pcc", 4, "done", 66.67, 61.78, 0.6402],
+    [40, 256, 512, "alff", 0, "done", 67.32, 69.27, 0.7387],
+    [41, 256, 512, "alff", 1, "done", 67.97, 63.87, 0.6432],
+    [42, 256, 512, "alff", 2, "done", 64.71, 64.92, 0.6978],
+    [43, 256, 512, "alff", 3, "done", 64.71, 61.26, 0.6712],
+    [44, 256, 512, "alff", 4, "done", 62.75, 61.26, 0.6653],
+    [45, 256, 512, "alff_pcc", 0, "done", 62.75, 61.98, 0.6631],
+    [46, 256, 512, "alff_pcc", 1, "done", 64.05, 61.78, 0.6336],
+    [47, 256, 512, "alff_pcc", 2, "done", 62.75, 58.12, 0.6288],
+    [48, 256, 512, "alff_pcc", 3, "done", 64.05, 58.64, 0.6005],
+    [49, 256, 512, "alff_pcc", 4, "done", 63.4, 60.73, 0.604],
+    [50, 256, 256, "alff", 0, "done", 66.01, 61.46, 0.6739],
+    [51, 256, 256, "alff", 1, "done", 68.63, 63.35, 0.6329],
+    [52, 256, 256, "alff", 2, "running(ep~295)", 64.71, 59.69, 0.6085],
+    [53, 256, 256, "alff", 3, "done", 66.01, 61.26, 0.6507],
+    [54, 256, 256, "alff", 4, "running(ep~290)", 60.78, 62.3, 0.6413],
+    [55, 256, 256, "alff_pcc", 0, "running(ep~240)", 58.82, 59.9, 0.6324],
+    [56, 256, 256, "alff_pcc", 1, "running(ep~220)", 62.09, 62.83, 0.6249],
+    [57, 256, 256, "alff_pcc", 2, "running(ep~185)", 60.13, 57.59, 0.6052],
+    [58, 256, 256, "alff_pcc", 3, "running(ep~185)", 60.78, 55.5, 0.6222],
+    [59, 256, 256, "alff_pcc", 4, "running(ep~180)", 63.4, 61.26, 0.638]
+  ];
+
+  function rowToObj(r, hasFold) {
+    if (hasFold) {
+      const [task, batch, emb, mij, fold, status, val, test, auc] = r;
+      return { task, batch, emb, mij, fold, status, val, test, auc };
+    }
+    const [task, batch, emb, mij, , status, val, test, auc] = r;
+    return { task, batch, emb, mij, fold: null, status, val, test, auc };
+  }
+
+  function statusBadge(status) {
+    if (status === "done") return '<span class="badge done">done</span>';
+    if (status === "queued") return '<span class="badge queued">queued</span>';
+    const m = /running\(ep~(\d+)\)/.exec(status);
+    const label = m ? `running &middot; ep ${m[1]}` : "running";
+    return `<span class="badge running">${label}</span>`;
+  }
+
+  function fmtNum(v, digits) {
+    if (v === null || v === undefined) return '<span class="num-null">&mdash;</span>';
+    return v.toFixed(digits);
+  }
+
+  function renderTable(tbody, objs, hasFold) {
+    const doneVals = objs.filter(o => o.status === "done").map(o => o.test);
+    const bestTest = doneVals.length ? Math.max(...doneVals) : null;
+
+    tbody.innerHTML = objs.map(o => {
+      const isBest = o.status === "done" && bestTest !== null && o.test === bestTest;
+      const foldCell = hasFold ? `<td>${o.fold}</td>` : "";
+      return `<tr class="${isBest ? 'best' : ''}">
+        <td>${o.task}</td>
+        <td>${o.batch}</td>
+        <td>${o.emb}</td>
+        <td class="cfg">${o.mij}</td>
+        ${foldCell}
+        <td>${statusBadge(o.status)}</td>
+        <td>${fmtNum(o.val, 2)}${o.val !== null ? '%' : ''}</td>
+        <td>${fmtNum(o.test, 2)}${o.test !== null ? '%' : ''}</td>
+        <td>${fmtNum(o.auc, 4)}</td>
+      </tr>`;
+    }).join("");
+  }
+
+  function attachSort(table, objs, hasFold, rerender) {
+    const ths = table.querySelectorAll("thead th");
+    let currentKey = null, ascending = true;
+    ths.forEach(th => {
+      th.addEventListener("click", () => {
+        const key = th.dataset.key;
+        const type = th.dataset.type;
+        ascending = (currentKey === key) ? !ascending : true;
+        currentKey = key;
+        ths.forEach(t => { t.classList.remove("sorted"); t.removeAttribute("data-dir"); });
+        th.classList.add("sorted");
+        th.setAttribute("data-dir", ascending ? "↑" : "↓");
+        objs.sort((a, b) => {
+          let av = a[key], bv = b[key];
+          if (av === null) av = type === "num" ? -Infinity : "";
+          if (bv === null) bv = type === "num" ? -Infinity : "";
+          if (type === "num") return ascending ? av - bv : bv - av;
+          return ascending ? String(av).localeCompare(String(bv)) : String(bv).localeCompare(String(av));
+        });
+        rerender();
+      });
+    });
+  }
+
+  function summarize(objs, label, note) {
+    const total = objs.length;
+    const doneObjs = objs.filter(o => o.status === "done");
+    const runningObjs = objs.filter(o => String(o.status).startsWith("running"));
+    const doneCount = doneObjs.length;
+    const testVals = doneObjs.map(o => o.test);
+    const bestTest = testVals.length ? Math.max(...testVals) : null;
+    const meanTest = testVals.length ? testVals.reduce((a, b) => a + b, 0) / testVals.length : null;
+    return { label, note, total, doneCount, runningCount: runningObjs.length, bestTest, meanTest };
+  }
+
+  function renderSummaryCard(s) {
+    const pct = s.total ? Math.round((s.doneCount / s.total) * 100) : 0;
+    return `<div class="summary-card">
+      <div class="name">${s.label}</div>
+      <div class="desc">${s.note}</div>
+      <div class="progress-row">
+        <span>${s.doneCount}/${s.total} done</span>
+        <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+        <span>${pct}%</span>
+      </div>
+      <div class="stat-row"><span class="k">Best test acc (completed)</span><span class="v">${s.bestTest !== null ? s.bestTest.toFixed(2) + '%' : '&mdash;'}</span></div>
+      <div class="stat-row"><span class="k">Mean test acc (completed)</span><span class="v">${s.meanTest !== null ? s.meanTest.toFixed(2) + '%' : '&mdash;'}</span></div>
+      <div class="stat-row"><span class="k">Still running</span><span class="v">${s.runningCount}</span></div>
+    </div>`;
+  }
+
+  const singleObjs = singleRows.map(r => rowToObj(r, false));
+  const nocombatObjs = nocombatRows.map(r => rowToObj(r, true));
+  const combatObjs = combatRows.map(r => rowToObj(r, true));
+
+  const singleTable = document.getElementById("table-single");
+  const nocombatTable = document.getElementById("table-nocombat");
+  const combatTable = document.getElementById("table-combat");
+
+  const singleTbody = singleTable.querySelector("tbody");
+  const nocombatTbody = nocombatTable.querySelector("tbody");
+  const combatTbody = combatTable.querySelector("tbody");
+
+  renderTable(singleTbody, singleObjs, false);
+  renderTable(nocombatTbody, nocombatObjs, true);
+  renderTable(combatTbody, combatObjs, true);
+
+  attachSort(singleTable, singleObjs, false, () => renderTable(singleTbody, singleObjs, false));
+  attachSort(nocombatTable, nocombatObjs, true, () => renderTable(nocombatTbody, nocombatObjs, true));
+  attachSort(combatTable, combatObjs, true, () => renderTable(combatTbody, combatObjs, true));
+
+  document.getElementById("single-meta").textContent = `${singleObjs.length} tasks · no outer folds`;
+  document.getElementById("nocombat-meta").textContent = `${nocombatObjs.length} tasks · 12 configs × 5 folds`;
+  document.getElementById("combat-meta").textContent = `${combatObjs.length} tasks · 12 configs × 5 folds`;
+
+  const summaries = [
+    summarize(singleObjs, "Single-run", "Full-dataset encoder, one shot"),
+    summarize(nocombatObjs, "Nested CV, no ComBat", "5-fold, fold-scoped scaling"),
+    summarize(combatObjs, "Nested CV, ComBat", "5-fold + site harmonization")
+  ];
+  document.getElementById("summary-grid").innerHTML = summaries.map(renderSummaryCard).join("");
+</script>
