@@ -87,7 +87,7 @@ def run(args):
         num_dataset_features=num_dataset_features, emb_dim=args.emb_dim, num_gc_layers=args.num_gc_layers,
         drop_ratio=args.drop_ratio, pooling_type=args.pooling_type, gamma_mode=args.gamma_mode,
         mij_source=args.mij_source, num_dyn_windows=args.num_dyn_windows, vib_hidden_dim=args.vib_hidden_dim,
-        model_lr=args.model_lr, view_lr=args.view_lr, device=device)
+        model_lr=args.model_lr, view_lr=args.view_lr, device=device, weight_decay=args.weight_decay)
 
     if args.downstream_classifier == "linear":
         ee = EmbeddingEvaluation(LinearSVC(dual=False, fit_intercept=True, max_iter=10000), evaluator,
@@ -143,7 +143,19 @@ def run(args):
     aug_edge_weights_asd = []
     aug_edge_weights_nc = []
     test_emb_pic = []
+
+    # --early_stop_patience (default 0 = disabled): stop once val accuracy hasn't
+    # improved for this many evals. 0 reproduces today's exact behavior. Checked
+    # only inside the "if epoch % args.eval_interval == 0" block below, where
+    # val_score is freshly computed -- this file's curve-append calls (unlike
+    # nested_cv/run_nested_cv.py's) run every epoch off a stale val_score in
+    # between evals, so checking improvement every epoch would compare an
+    # unchanged value against itself and could stop prematurely.
+    best_val_so_far = -1.0
+    evals_since_improvement = 0
+
     for epoch in range(1, args.epochs + 1):
+        should_stop = False
         fin_model_loss, fin_view_loss, fin_reg, fin_aug_edge_weight_asd, fin_aug_edge_weight_nc, beta = \
             train_one_epoch(model, view_learner, model_optimizer, view_optimizer, dataloader, device,
                              beta, gamma_orig, args.ce_lambda, args.reg_lambda, args.kld_lambda, args.template)
@@ -159,6 +171,18 @@ def run(args):
         if epoch % args.eval_interval == 0:
             model.eval()
             train_score, val_score, test_score = ee.kf_embedding_evaluation(model.encoder, beta, dataset, flag=True)
+
+            if args.early_stop_patience > 0:
+                if val_score[0] > best_val_so_far:
+                    best_val_so_far = val_score[0]
+                    evals_since_improvement = 0
+                else:
+                    evals_since_improvement += 1
+                if evals_since_improvement >= args.early_stop_patience:
+                    logging.info(
+                        "Early stop at epoch %d: val accuracy hasn't improved for %d evals "
+                        "(best_val=%.4f)" % (epoch, args.early_stop_patience, best_val_so_far))
+                    should_stop = True
 
             logging.info(
                 "Metric: {} Train_mean: {} Val_mean: {} Test_mean: {}".format(evaluator.eval_metric, train_score[0],
@@ -234,6 +258,9 @@ def run(args):
 
         test_auc_curve.append(test_score[10])
         test_auc_std_curve.append(test_score[11])
+
+        if should_stop:
+            break
 
     # Model/epoch selection uses the validation-accuracy curve ONLY -- never the
     # test curve. Every reported metric, for train/val/test alike, is then read
@@ -332,6 +359,17 @@ def arg_parse():
                         help="Downstream classifier is linear or non-linear")
     parser.add_argument('--ce_lambda', type=float, default=2.0,
                         help='Regularization coefficients for loss of cross entrpy')
+    parser.add_argument('--weight_decay', type=float, default=0.0,
+                        help='L2 penalty on both optimizers (model_optimizer and view_optimizer). Default 0.0 '
+                             '(PyTorch Adam default, no change to existing behavior). Not tested/specified by '
+                             'the paper -- same addition already applied and verified in '
+                             'nested_cv/run_nested_cv.py, targeting the overfitting pattern diagnosed this '
+                             'session (train accuracy climbing while val/test stay flat).')
+    parser.add_argument('--early_stop_patience', type=int, default=0,
+                        help='Stop once val accuracy hasn\'t improved for this many evals (eval_interval apart). '
+                             'Default 0 = disabled, reproduces existing behavior exactly (always trains the '
+                             'full --epochs). Same addition already applied and verified in '
+                             'nested_cv/run_nested_cv.py.')
     parser.add_argument('--seed', type=int, default=123)
 
     return parser.parse_args()

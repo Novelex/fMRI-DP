@@ -108,7 +108,14 @@ class ADNIDataset(InMemoryDataset):
             num_nodes = pcc_matrix.shape[0]
 
             if self.node_feature_mode == 'alff_pcc':
-                alff_scaled = (x_alff - alff_min) / (alff_max - alff_min + 1e-12)
+                # Signed [-1,1] rescale, matching pcc_scaled's own treatment one line
+                # below -- not [0,1]. Raw ALFF (node_feature_mode='alff') is already
+                # signed (z-scored per subject per band in Notebook 3); squashing it
+                # to [0,1] here made every ROI-pair dot product v_i.v_j >= 0, so
+                # mij_source='alff''s M_ij = sigmoid(v_i.v_j) (Eq. 4) could only ever
+                # read >= 0.5 -- structurally unable to express "dissimilar" for any
+                # pair, in every run using this feature mode.
+                alff_scaled = 2 * (x_alff - alff_min) / (alff_max - alff_min + 1e-12) - 1
                 pcc_scaled = 2 * (pcc_matrix - pcc_min) / (pcc_max - pcc_min + 1e-12) - 1
                 x = np.concatenate([alff_scaled, pcc_scaled], axis=1)  # [90, 3+90=93]
             else:

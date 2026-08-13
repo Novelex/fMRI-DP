@@ -348,9 +348,7 @@
     <p class="pipeline-note">
       Same nested structure, plus neuroHarmonize ComBat site harmonization
       fit on train only and applied to test (verified leak-free via an
-      independent train-only refit comparison). 53/60 complete at snapshot
-      time; the remaining 7 rows marked <span class="badge running">running</span>
-      show the latest evaluated epoch, not a final selected result.
+      independent train-only refit comparison). All 60/60 tasks complete.
     </p>
     <div class="table-scroll">
       <table id="table-combat">
@@ -374,9 +372,7 @@
 
   <footer class="page">
     Rows highlighted with a teal rail are the best <em>test accuracy</em>
-    among completed rows in that table. For still-running tasks, the shown
-    value is a mid-run snapshot at the noted epoch, not a validation-selected
-    final result — treat it as a trend, not a result.
+    in that table. All 132 tasks across all three pipelines are complete.
   </footer>
 </div>
 
@@ -513,14 +509,14 @@
     [49, 256, 512, "alff_pcc", 4, "done", 63.4, 60.73, 0.604],
     [50, 256, 256, "alff", 0, "done", 66.01, 61.46, 0.6739],
     [51, 256, 256, "alff", 1, "done", 68.63, 63.35, 0.6329],
-    [52, 256, 256, "alff", 2, "running(ep~295)", 64.71, 59.69, 0.6085],
+    [52, 256, 256, "alff", 2, "done", 66.67, 59.69, 0.6232],
     [53, 256, 256, "alff", 3, "done", 66.01, 61.26, 0.6507],
-    [54, 256, 256, "alff", 4, "running(ep~290)", 60.78, 62.3, 0.6413],
-    [55, 256, 256, "alff_pcc", 0, "running(ep~240)", 58.82, 59.9, 0.6324],
-    [56, 256, 256, "alff_pcc", 1, "running(ep~220)", 62.09, 62.83, 0.6249],
-    [57, 256, 256, "alff_pcc", 2, "running(ep~185)", 60.13, 57.59, 0.6052],
-    [58, 256, 256, "alff_pcc", 3, "running(ep~185)", 60.78, 55.5, 0.6222],
-    [59, 256, 256, "alff_pcc", 4, "running(ep~180)", 63.4, 61.26, 0.638]
+    [54, 256, 256, "alff", 4, "done", 69.28, 59.16, 0.6315],
+    [55, 256, 256, "alff_pcc", 0, "done", 63.4, 59.9, 0.6312],
+    [56, 256, 256, "alff_pcc", 1, "done", 66.01, 60.73, 0.6203],
+    [57, 256, 256, "alff_pcc", 2, "done", 64.05, 57.07, 0.6078],
+    [58, 256, 256, "alff_pcc", 3, "done", 62.75, 57.07, 0.6211],
+    [59, 256, 256, "alff_pcc", 4, "done", 64.71, 61.78, 0.6389]
   ];
 
   function rowToObj(r, hasFold) {

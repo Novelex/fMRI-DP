@@ -227,7 +227,10 @@ def build_windowed_data_list(indices, x_all, ew_all, dw_all, y_all, node_feature
     data_list = []
     for i in indices:
         if node_feature_mode == 'alff_pcc':
-            alff_scaled = (x_all[i] - alff_min) / (alff_max - alff_min + 1e-12)
+            # Signed [-1,1] rescale, matching pcc_scaled and datasets/Dataset.py's
+            # identical fix -- [0,1] made every dot product v_i.v_j >= 0, so
+            # mij_source='alff''s M_ij (Eq. 4) could never read below 0.5.
+            alff_scaled = 2 * (x_all[i] - alff_min) / (alff_max - alff_min + 1e-12) - 1
             pcc_scaled = 2 * (ew_all[i] - pcc_min) / (pcc_max - pcc_min + 1e-12) - 1
             x = torch.tensor(np.concatenate([alff_scaled, pcc_scaled], axis=1), dtype=torch.float)
         else:

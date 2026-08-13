@@ -133,6 +133,15 @@ def run(args):
     test_auc_curve = []
     reg_curve = []
 
+    # --early_stop_patience (default 0 = disabled): stop once val_score hasn't
+    # improved for this many evals. 0 reproduces today's exact behavior --
+    # always trains the full args.epochs -- so every existing script's result
+    # is unaffected unless it explicitly opts in. Targets the overfitting
+    # pattern this session's own logs showed: train accuracy still climbing
+    # while val falls, with 100+ epochs left to run past the real peak.
+    best_val_so_far = -1.0
+    evals_since_improvement = 0
+
     for epoch in range(1, args.epochs + 1):
         # beta returned here is the real, adaptive fin_reg-derived value
         # (fixes the previously-disclosed dead-parameter Issue #9 for free --
@@ -162,6 +171,18 @@ def run(args):
             train_pre_curve.append(train_pre); valid_pre_curve.append(val_pre); test_pre_curve.append(test_pre)
             test_auc_curve.append(test_auc)
             reg_curve.append(fin_reg)
+
+            if args.early_stop_patience > 0:
+                if val_score > best_val_so_far:
+                    best_val_so_far = val_score
+                    evals_since_improvement = 0
+                else:
+                    evals_since_improvement += 1
+                if evals_since_improvement >= args.early_stop_patience:
+                    logging.info(
+                        "Early stop at epoch %d: val_score hasn't improved for %d evals "
+                        "(best_val=%.4f)" % (epoch, args.early_stop_patience, best_val_so_far))
+                    break
 
     best_val_epoch = int(np.argmax(np.array(valid_curve)))
     logging.info('FinishedTraining! BestEpoch (eval-interval index): {}'.format(best_val_epoch))
@@ -266,6 +287,10 @@ def arg_parse():
                              '(PyTorch Adam default, no change to existing behavior). Not tested/specified by '
                              'the paper -- our own addition, targeting the overfitting pattern diagnosed this '
                              'session (train accuracy hitting 100%% while val/test stay flat).')
+    parser.add_argument('--early_stop_patience', type=int, default=0,
+                        help='Stop once val_score hasn\'t improved for this many evals (eval_interval apart). '
+                             'Default 0 = disabled, reproduces existing behavior exactly (always trains the '
+                             'full --epochs). Our own addition, same rationale as --weight_decay.')
     parser.add_argument('--contrastive_mode', type=str, default='self_supervised',
                         choices=['self_supervised', 'supervised'],
                         help='self_supervised=current behavior (GInfoMinMax.calc_loss, both phases). '
