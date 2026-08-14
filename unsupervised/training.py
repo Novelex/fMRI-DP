@@ -32,7 +32,8 @@ def init_module_weights(module):
 
 def build_model_and_view_learner(num_dataset_features, emb_dim, num_gc_layers, drop_ratio,
                                   pooling_type, gamma_mode, mij_source, num_dyn_windows,
-                                  vib_hidden_dim, model_lr, view_lr, device, weight_decay=0.0):
+                                  vib_hidden_dim, model_lr, view_lr, device, weight_decay=0.0,
+                                  enable_attention_mix=True):
     # model (Theta) and view_learner (Phi) are two independent networks, each
     # with its own TAEncoder + ToyNet -- not a shared backbone (Issue A).
     beta_convention = "literal" if gamma_mode in ("literal_beta", "paper_literal") else "reversed"
@@ -44,7 +45,8 @@ def build_model_and_view_learner(num_dataset_features, emb_dim, num_gc_layers, d
     model_encoder = TA_encoder.TAEncoder(num_dataset_features=num_dataset_features, beta=beta, emb_dim=emb_dim,
                                          num_gc_layers=num_gc_layers, drop_ratio=drop_ratio,
                                          pooling_type=pooling_type,
-                                         beta_convention=beta_convention, gamma_orig_mode=gamma_orig_mode)
+                                         beta_convention=beta_convention, gamma_orig_mode=gamma_orig_mode,
+                                         enable_attention_mix=enable_attention_mix)
     model_net = GraSTI.ToyNet(input_dim=90 * (1 + num_dyn_windows), hidden_dim=vib_hidden_dim)
     init_module_weights(model_encoder)
     init_module_weights(model_net)
@@ -52,7 +54,8 @@ def build_model_and_view_learner(num_dataset_features, emb_dim, num_gc_layers, d
     view_encoder = TA_encoder.TAEncoder(num_dataset_features=num_dataset_features, beta=beta, emb_dim=emb_dim,
                                         num_gc_layers=num_gc_layers, drop_ratio=drop_ratio,
                                         pooling_type=pooling_type,
-                                        beta_convention=beta_convention, gamma_orig_mode=gamma_orig_mode)
+                                        beta_convention=beta_convention, gamma_orig_mode=gamma_orig_mode,
+                                        enable_attention_mix=enable_attention_mix)
     view_net = GraSTI.ToyNet(input_dim=90 * (1 + num_dyn_windows), hidden_dim=vib_hidden_dim)
     init_module_weights(view_encoder)
     init_module_weights(view_net)
@@ -79,7 +82,19 @@ def build_model_and_view_learner(num_dataset_features, emb_dim, num_gc_layers, d
 
 def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, dataloader, device,
                      beta, gamma_orig, ce_lambda, reg_lambda, kld_lambda, template,
-                     contrastive_mode="self_supervised", supervised_temperature=0.1):
+                     contrastive_mode="self_supervised", supervised_temperature=0.1,
+                     replicate_original_code=False):
+    # replicate_original_code bundles two structural differences found by
+    # reading github.com/BiaoHe2025/GraSTIACL's actual GraSTIACL.py directly:
+    # (1) ce_loss is added to model_loss in Phase 2 there (the model is pushed
+    # to reduce it), not subtracted from view_loss in Phase 1 (the augmenter
+    # pushed to reduce it) as this project does; (2) their augmented edge
+    # weight is the ORIGINAL edge weight scaled by the gate (edge_weight *
+    # sigmoid(gate)), matching Sec. 3.2's "weaken their connections" prose,
+    # not replaced by the gate alone. Their raw-signed-edge-weight-into-GCN
+    # behavior is deliberately NOT replicated here (kept on gcn_w, our
+    # NaN-safe abs().clamp() version) -- that's a separate, already-identified
+    # risk (Final Plan Step 5), not conflated with this comparison.
     model_loss_all = 0
     view_loss_all = 0
     reg_all = 0
@@ -119,9 +134,14 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
         # be on the right device (this is what crashed on GPU before the fix).
         gate_inputs_ = gate_inputs_.to(device)
         gate_inputs = (gate_inputs_ + edge_logits_vl) / temperature
-        # Eq. (12): A = sigmoid(...) -- always positive, never multiplied by
-        # the raw signed PCC.
-        batch_aug_edge_weight = torch.sigmoid(gate_inputs).squeeze()
+        if replicate_original_code:
+            # Original: batch_aug_edge_weight = batch.edge_weight * sigmoid(gate)
+            # -- weakens the existing (sanitized) weight, doesn't replace it.
+            batch_aug_edge_weight = gcn_w * torch.sigmoid(gate_inputs).squeeze()
+        else:
+            # Eq. (12): A = sigmoid(...) -- always positive, never multiplied by
+            # the raw signed PCC.
+            batch_aug_edge_weight = torch.sigmoid(gate_inputs).squeeze()
         # gamma = the gate's own mean -- exact, since edge_weight for this
         # call IS batch_aug_edge_weight itself (Eq. 18's literal definition).
         gamma_aug = batch_aug_edge_weight.mean()
@@ -158,8 +178,13 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
         # reg = mean edge-drop probability -- penalizes high drop rates so
         # the view_learner can't maximize view_loss just by destroying the
         # whole graph (Issue B).
-        view_loss = model.calc_loss(x, x_aug) - ce_lambda * ce_loss \
-                    - reg_lambda * reg - kld_lambda * kld_loss
+        if replicate_original_code:
+            # ce_loss moves to Phase 2/model_loss (see below) -- not part of
+            # view_loss in this mode.
+            view_loss = model.calc_loss(x, x_aug) - reg_lambda * reg - kld_lambda * kld_loss
+        else:
+            view_loss = model.calc_loss(x, x_aug) - ce_lambda * ce_loss \
+                        - reg_lambda * reg - kld_lambda * kld_loss
         view_loss_all += view_loss.item() * batch.num_graphs
         reg_all += reg.item() * num_graph_with_edges
         num_graphs_seen += batch.num_graphs
@@ -181,13 +206,18 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
                     batch.edge_weight, None, gamma=gamma_orig)
         # mu/std/edge_prod discarded here -- ce_loss (Item 4b) moved entirely
         # to Phase 1; only edge_logits_vl (for the gate) is needed here.
-        edge_logits_vl, _, _, _ = view_learner(batch.batch, batch.x, batch.edge_index, beta, None,
+        # (replicate_original_code=True needs edge_prod here too, to compute
+        # ce_loss on the model side, matching the original's Phase 2.)
+        edge_logits_vl, _, _, edge_prod2 = view_learner(batch.batch, batch.x, batch.edge_index, beta, None,
                                              gcn_w, batch.edge_weight, batch.dyn_weight, gamma=gamma_orig)
         eps = (bias - (1 - bias)) * torch.rand(edge_logits_vl.size()) + (1 - bias)
         gate_inputs_ = torch.log(eps) - torch.log(1 - eps)
         gate_inputs_ = gate_inputs_.to(device)
         gate_inputs = (gate_inputs_ + edge_logits_vl) / temperature
-        batch_aug_edge_weight = torch.sigmoid(gate_inputs).squeeze()
+        if replicate_original_code:
+            batch_aug_edge_weight = gcn_w * torch.sigmoid(gate_inputs).squeeze()
+        else:
+            batch_aug_edge_weight = torch.sigmoid(gate_inputs).squeeze()
         gamma_aug = batch_aug_edge_weight.mean()
         x_aug, _ = model(batch.batch, batch.x, batch.edge_index, beta, None, batch_aug_edge_weight,
                         batch.edge_weight, None, gamma=gamma_aug)
@@ -222,6 +252,13 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
             model_loss = calc_loss_supervised(x, x_aug, labels, temperature=supervised_temperature)
         else:
             model_loss = model.calc_loss(x, x_aug)
+        if replicate_original_code:
+            # Original: model_loss = calc_loss(x, x_aug) + ce_lambda * ce_loss
+            # -- the model (not the augmenter) is pushed to reduce ce_loss.
+            edge_prod2_sig = torch.sigmoid(edge_prod2.squeeze()).detach()
+            edge_logits2_sig = torch.sigmoid((edge_logits_vl + gate_inputs_) / temperature)
+            ce_loss2 = F.binary_cross_entropy(edge_logits2_sig, edge_prod2_sig)
+            model_loss = model_loss + ce_lambda * ce_loss2
         model_loss_all += model_loss.item() * batch.num_graphs
 
         model_loss.backward()

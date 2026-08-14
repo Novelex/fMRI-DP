@@ -87,7 +87,8 @@ def run(args):
         num_dataset_features=num_dataset_features, emb_dim=args.emb_dim, num_gc_layers=args.num_gc_layers,
         drop_ratio=args.drop_ratio, pooling_type=args.pooling_type, gamma_mode=args.gamma_mode,
         mij_source=args.mij_source, num_dyn_windows=args.num_dyn_windows, vib_hidden_dim=args.vib_hidden_dim,
-        model_lr=args.model_lr, view_lr=args.view_lr, device=device, weight_decay=args.weight_decay)
+        model_lr=args.model_lr, view_lr=args.view_lr, device=device, weight_decay=args.weight_decay,
+        enable_attention_mix=not args.replicate_original_code)
 
     if args.downstream_classifier == "linear":
         ee = EmbeddingEvaluation(LinearSVC(dual=False, fit_intercept=True, max_iter=10000), evaluator,
@@ -158,7 +159,8 @@ def run(args):
         should_stop = False
         fin_model_loss, fin_view_loss, fin_reg, fin_aug_edge_weight_asd, fin_aug_edge_weight_nc, beta = \
             train_one_epoch(model, view_learner, model_optimizer, view_optimizer, dataloader, device,
-                             beta, gamma_orig, args.ce_lambda, args.reg_lambda, args.kld_lambda, args.template)
+                             beta, gamma_orig, args.ce_lambda, args.reg_lambda, args.kld_lambda, args.template,
+                             replicate_original_code=args.replicate_original_code)
         logging.info(
             'Epoch {}, Model Loss {}, View Loss {}, Reg {}'.format(epoch, fin_model_loss,
                                                                    fin_view_loss,
@@ -371,6 +373,18 @@ def arg_parse():
                              'full --epochs). Same addition already applied and verified in '
                              'nested_cv/run_nested_cv.py.')
     parser.add_argument('--seed', type=int, default=123)
+    parser.add_argument('--replicate_original_code', action='store_true',
+                        help='Match github.com/BiaoHe2025/GraSTIACL\'s actual GraSTIACL.py behavior on the three '
+                             'points verified to differ from this project\'s implementation: (1) the attention-'
+                             'branch mixup (Eq. 19) is computed but never applied there -- pooling runs on the '
+                             'GCN branch alone; (2) ce_loss is added to model_loss in Phase 2 (the model reduces '
+                             'it), not subtracted from view_loss in Phase 1 (the augmenter reduces it); (3) the '
+                             'augmented edge weight is the original weight scaled by the gate '
+                             '(edge_weight * sigmoid(gate)), not replaced by the gate alone. Does NOT replicate '
+                             'their raw-signed-edge-weight-into-GCN behavior -- this project\'s abs().clamp() '
+                             'NaN-safety on the GCN edge weight is kept regardless, to avoid confounding this '
+                             'comparison with a separate, already-identified risk. Default False (this project\'s '
+                             'paper-prose-faithful implementation, unchanged).')
 
     return parser.parse_args()
 

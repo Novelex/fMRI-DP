@@ -223,8 +223,17 @@ class TAEncoder(torch.nn.Module):
                  trans_dropout=0.5,
                  is_infograph=False,
                  beta_convention="reversed",
-                 gamma_orig_mode="one"):
+                 gamma_orig_mode="one",
+                 enable_attention_mix=True):
         super(TAEncoder, self).__init__()
+        # The original authors' released code computes x_trans (attention branch)
+        # and beta (Eq. 18's Beta-Mixup weight), but the line that would actually
+        # mix them into x is commented out (unsupervised/encoder/TA_encoder.py:272-274
+        # in github.com/BiaoHe2025/GraSTIACL) -- x_trans is discarded and only the
+        # GCN branch (x) reaches pooling. enable_attention_mix=False replicates
+        # that literal behavior for a direct comparison; default True keeps this
+        # project's paper-prose-faithful implementation (Eq. 19) unchanged.
+        self.enable_attention_mix = enable_attention_mix
         self.pooling_type = pooling_type
         self.emb_dim = emb_dim
         self.num_gc_layers = num_gc_layers
@@ -307,6 +316,22 @@ class TAEncoder(torch.nn.Module):
         # meaningful (it traces back to ALFF, a literal amplitude measure), and
         # forcing every node to unit length was erasing real, verified variation
         # (up to 37x between real ROIs) before it ever reached the classifier.
+        if not self.enable_attention_mix:
+            # Matches the original released code exactly: x_trans is computed
+            # above (so its parameters still get gradients from wherever else
+            # they're used) but never reaches x -- pooling runs on the GCN
+            # branch alone. Skips the whole gamma/Beta machinery below, so
+            # this path cannot hit the NaN/Beta crash at all.
+            if self.pooling_type == "standard":
+                xpool = global_add_pool(x, batch)
+                return xpool, x
+            elif self.pooling_type == "layerwise":
+                xpool = [global_add_pool(xi, batch) for xi in xs]
+                xpool = torch.cat(xpool, 1)
+                return xpool, (torch.cat(xs, 1) if self.is_infograph else x)
+            else:
+                raise NotImplementedError
+
         x_trans = F.normalize(x_trans, dim=1)
         # Eq. (18): gamma = the true retained-edge ratio, not a proxy inferred from
         # edge_weight's magnitude. edge_weight now carries real connectivity strength
@@ -322,7 +347,15 @@ class TAEncoder(torch.nn.Module):
                 gamma = edge_weight.mean().clamp(eps, 1 - eps)
             else:
                 gamma = torch.tensor(1 - eps, device=x.device)
-        gamma = torch.as_tensor(gamma, device=x.device).clamp(eps, 1 - eps)
+        gamma = torch.as_tensor(gamma, device=x.device)
+        if torch.isnan(gamma).any():
+            # clamp() does not sanitize NaN (NaN comparisons are always False,
+            # so it passes straight through to Beta() and crashes). gamma going
+            # NaN mid-training is a real, observed adversarial-dynamics failure
+            # mode (Stage B, 4/12 jobs, epoch 83-171); 0.5 is a neutral fallback
+            # (evenly split retained/dropped) rather than a guess at the true value.
+            gamma = torch.nan_to_num(gamma, nan=0.5)
+        gamma = gamma.clamp(eps, 1 - eps)
         # Beta(1-gamma, gamma), giving E[lambda] = 1-gamma, not Beta(gamma, 1-gamma):
         # Sec. 3.3's prose is explicit that LESS connectivity (smaller gamma) should
         # mean MORE attention weight ("as the connectivity of the graph diminishes
