@@ -33,7 +33,16 @@ def gcn_norm(edge_index, edge_weight=None, num_nodes=None, improved=False,
 
 
 def gcn_norm(edge_index, edge_weight=None, num_nodes=None, improved=False,
-             add_self_loops=True, dtype=None):
+             add_self_loops=True, dtype=None, signed_safe=False):
+    # signed_safe=False (default): unchanged behavior -- degree computed from
+    # edge_weight directly, so a signed edge_weight can produce negative
+    # degree and NaN in deg.pow(-0.5) (the same landmine present in the
+    # original authors' own gcn_conv.py, confirmed by direct comparison).
+    # signed_safe=True: D_ii = sum(|w_ij|) for the degree/normalization terms
+    # only -- the actual edge_weight multiplied into the final coefficient
+    # (last line of each branch) stays signed, so anticorrelation survives
+    # into the GCN instead of being abs()'d away, while the sqrt argument is
+    # always non-negative. Standard signed-graph-normalization pattern.
     fill_value = 2. if improved else 1.
     if isinstance(edge_index, SparseTensor):
         adj_t = edge_index
@@ -41,7 +50,8 @@ def gcn_norm(edge_index, edge_weight=None, num_nodes=None, improved=False,
             adj_t = adj_t.fill_value(1., dtype=dtype)
         if add_self_loops:
             adj_t = fill_diag(adj_t, fill_value)
-        deg = sparsesum(adj_t, dim=1)
+        deg_source = adj_t.abs() if signed_safe else adj_t
+        deg = sparsesum(deg_source, dim=1)
         deg_inv_sqrt = deg.pow_(-0.5)
         deg_inv_sqrt.masked_fill_(deg_inv_sqrt == float('inf'), 0.)
         adj_t = mul(adj_t, deg_inv_sqrt.view(-1, 1))
@@ -63,7 +73,8 @@ def gcn_norm(edge_index, edge_weight=None, num_nodes=None, improved=False,
 
         row, col = edge_index[0], edge_index[1]
 
-        deg = scatter_add(edge_weight, col, dim=0, dim_size=num_nodes)
+        deg_source = edge_weight.abs() if signed_safe else edge_weight
+        deg = scatter_add(deg_source, col, dim=0, dim_size=num_nodes)
         deg_inv_sqrt = deg.pow_(-0.5)
         deg_inv_sqrt.masked_fill_(deg_inv_sqrt == float('inf'), 0)
         deg_inv_sqrt.masked_fill_(deg_inv_sqrt == float('nan'), 0)
@@ -133,7 +144,7 @@ class GCNConv(MessagePassing):
     def __init__(self, in_channels: int, out_channels: int,
                  improved: bool = False, cached: bool = False,
                  add_self_loops: bool = True, normalize: bool = True,
-                 bias: bool = False, **kwargs):
+                 bias: bool = False, signed_safe: bool = False, **kwargs):
 
         kwargs.setdefault('aggr', 'add')
         super().__init__(**kwargs)
@@ -144,6 +155,7 @@ class GCNConv(MessagePassing):
         self.cached = cached
         self.add_self_loops = add_self_loops
         self.normalize = normalize
+        self.signed_safe = signed_safe
 
         self._cached_edge_index = None
         self._cached_adj_t = None
@@ -174,7 +186,8 @@ class GCNConv(MessagePassing):
                 if cache is None:
                     edge_index, edge_weight = gcn_norm(  # yapf: disable
                         edge_index, edge_weight, x.size(self.node_dim),
-                        self.improved, self.add_self_loops)
+                        self.improved, self.add_self_loops,
+                        signed_safe=self.signed_safe)
                     if self.cached:
                         self._cached_edge_index = (edge_index, edge_weight)
                 else:
@@ -185,7 +198,8 @@ class GCNConv(MessagePassing):
                 if cache is None:
                     edge_index = gcn_norm(  # yapf: disable
                         edge_index, edge_weight, x.size(self.node_dim),
-                        self.improved, self.add_self_loops)
+                        self.improved, self.add_self_loops,
+                        signed_safe=self.signed_safe)
                     if self.cached:
                         self._cached_adj_t = edge_index
                 else:

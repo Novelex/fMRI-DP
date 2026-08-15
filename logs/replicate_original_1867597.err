@@ -1,0 +1,336 @@
+15-Aug-26 00:48:53 - Using Device: cuda
+15-Aug-26 00:48:53 - Seed: 123
+15-Aug-26 00:48:53 - Namespace(name='GraSTIACL_ABIDE_979', path='/users/3171356m/muhammad/GraSTIACL/data/GraSTIACL_ABIDE_979', template=90, num_dyn_windows=3, model_lr=0.0005, view_lr=0.0005, num_gc_layers=2, pooling_type='standard', emb_dim=32, vib_hidden_dim=400, batch_size=32, drop_ratio=0.3, epochs=100, kld_lambda=0.003, reg_lambda=0.2, gamma_mode='paper_literal', node_feature_mode='alff', mij_source='alff', eval_interval=5, downstream_classifier='linear', ce_lambda=2.0, weight_decay=0.0001, early_stop_patience=10, seed=123, replicate_original_code=True)
+/users/3171356m/muhammad/GraSTIACL/datasets/Dataset.py:45: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.data, self.slices = torch.load(path)
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+15-Aug-26 00:49:05 - Before training Embedding Eval Scores: Train: [0.5730630168051946, 0.009323040605005708, 0.49699580035915236, 0.013548502433284178, 0.44398625276980674, 0.023847905860175534, 0.6901421318050904, 0.03063749702348132, 0.5660680595040787, 0.01647487483170956] Val: [0.5333333333333333, 0.03711129298451867, 0.47098202979887044, 0.0663336720107164, 0.4410958843685496, 0.08191734894757635, 0.6174999922812502, 0.04513867464893603, 0.5094857430151548, 0.047751949306951265] Test: [0.5156740837696335, 0.025842168356390884, 0.44210949971696856, 0.027215306431566534, 0.4043955999516967, 0.04135140113290061, 0.6168514789913715, 0.06023755805665781, 0.49123658539474774, 0.029629811642089388, 0.5302920248068762, 0.026486814679557286]
+15-Aug-26 00:50:39 - Epoch 1, Model Loss 5.646292004126385, View Loss -1.6014548515176175, Reg 0.4737569695985467
+15-Aug-26 00:52:15 - Epoch 2, Model Loss 5.314432856428074, View Loss 1.2562393144583601, Reg 0.46157059609640594
+15-Aug-26 00:53:51 - Epoch 3, Model Loss 4.264702457763161, View Loss 1.9067711949847232, Reg 0.44302309382410726
+15-Aug-26 00:55:25 - Epoch 4, Model Loss 4.135260687712346, View Loss 2.5869848229396295, Reg 0.43337963403019447
+15-Aug-26 00:56:58 - Epoch 5, Model Loss 4.092016226078177, View Loss 2.937229569486993, Reg 0.413952114941186
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+15-Aug-26 00:57:09 - Metric: accuracy Train_mean: 0.5982296246376346 Val_mean: 0.522875816993464 Test_mean: 0.5324280104712041
+15-Aug-26 00:57:09 - Metric: accuracy Train_std: 0.017607959564377378 Val_std: 0.023383717411762518 Test_std: 0.03078011150256094
+15-Aug-26 00:57:09 - Metric: f1 Train_mean: 0.5386493104215104 Val_mean: 0.4868452997084788 Test_mean: 0.4680977460105482
+15-Aug-26 00:57:09 - Metric: f1 Train_std: 0.014748738520460018 Val_std: 0.016042908368270426 Test_std: 0.05033600755706245
+15-Aug-26 00:57:09 - Metric: sen Train_mean: 0.49278350346122507 Val_mean: 0.47397259624695076 Test_mean: 0.43516483038280407
+15-Aug-26 00:57:09 - Metric: sen Train_std: 0.00962199309408251 Val_std: 0.013969916284227956 Test_std: 0.062395909497092845
+15-Aug-26 00:57:09 - Metric: spe Train_mean: 0.6938785025099676 Val_mean: 0.5674999929062501 Test_mean: 0.6207326670725478
+15-Aug-26 00:57:09 - Metric: spe Train_std: 0.028163596068588006 Val_std: 0.04227883578473395 Test_std: 0.016025002371346006
+15-Aug-26 00:57:09 - Metric: precision Train_mean: 0.5943078872742463 Val_mean: 0.5010963169051404 Test_mean: 0.50802331002331
+15-Aug-26 00:57:09 - Metric: precision Train_std: 0.025847918856486497 Val_std: 0.025775201478807616 Test_std: 0.03528347098044382
+15-Aug-26 00:58:41 - Epoch 6, Model Loss 4.25324602406394, View Loss 3.0262096456902796, Reg 0.38078304638922467
+15-Aug-26 01:00:13 - Epoch 7, Model Loss 9.265125545996503, View Loss 2.91460147961413, Reg 0.5769630621916081
+15-Aug-26 01:01:45 - Epoch 8, Model Loss 7.573436252242851, View Loss 2.8480039480839814, Reg 0.34418748113400766
+15-Aug-26 01:03:19 - Epoch 9, Model Loss 5.627418833297666, View Loss 3.109341380985212, Reg 0.32309939808925325
+15-Aug-26 01:04:52 - Epoch 10, Model Loss 5.340290360869723, View Loss 3.1461320043108953, Reg 0.3133470727808805
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+15-Aug-26 01:05:03 - Metric: accuracy Train_mean: 0.5943101954366035 Val_mean: 0.5307189542483661 Test_mean: 0.5240401396160559
+15-Aug-26 01:05:03 - Metric: accuracy Train_std: 0.025368777116918078 Val_std: 0.025279842621978722 Test_std: 0.04993996316389447
+15-Aug-26 01:05:03 - Metric: f1 Train_mean: 0.5417878110973977 Val_mean: 0.4945745707988959 Test_mean: 0.4611358147109506
+15-Aug-26 01:05:03 - Metric: f1 Train_std: 0.03288832939565953 Val_std: 0.030146803400439084 Test_std: 0.056502569869839904
+15-Aug-26 01:05:03 - Metric: sen Train_mean: 0.5051546374393312 Val_mean: 0.482191774216551 Test_mean: 0.42857142386185243
+15-Aug-26 01:05:03 - Metric: sen Train_std: 0.039181285951237425 Val_std: 0.040078735994340024 Test_std: 0.05773154018564766
+15-Aug-26 01:05:03 - Metric: spe Train_mean: 0.6751869137831502 Val_mean: 0.5749999928125 Test_mean: 0.6107722711321557
+15-Aug-26 01:05:03 - Metric: spe Train_std: 0.026898088094377957 Val_std: 0.04183300080379126 Test_std: 0.057292107509614484
+15-Aug-26 01:05:03 - Metric: precision Train_mean: 0.584992622774149 Val_mean: 0.5090115768793553 Test_mean: 0.5005269946563479
+15-Aug-26 01:05:03 - Metric: precision Train_std: 0.0290975134106274 Val_std: 0.02707126879883953 Test_std: 0.05937217327293239
+15-Aug-26 01:06:35 - Epoch 11, Model Loss 6.99754801155633, View Loss 3.0492951710353835, Reg 0.2762070712185305
+15-Aug-26 01:08:07 - Epoch 12, Model Loss 7.228106678280372, View Loss 3.0714561330723464, Reg 0.3062234463552052
+15-Aug-26 01:09:37 - Epoch 13, Model Loss 6.000458346251165, View Loss 3.1758737883308443, Reg 0.30914610237756035
+15-Aug-26 01:11:08 - Epoch 14, Model Loss 5.54697300499952, View Loss 3.165667678521767, Reg 0.28105247182826115
+15-Aug-26 01:12:39 - Epoch 15, Model Loss 9.211510211354021, View Loss 2.950736141603861, Reg 0.24797950030370736
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+15-Aug-26 01:12:50 - Metric: accuracy Train_mean: 0.5815677716804125 Val_mean: 0.5228758169934642 Test_mean: 0.517757417102967
+15-Aug-26 01:12:50 - Metric: accuracy Train_std: 0.018915857394192867 Val_std: 0.04071218693437236 Test_std: 0.052919380365463536
+15-Aug-26 01:12:50 - Metric: f1 Train_mean: 0.4885205742071162 Val_mean: 0.40400886394898894 Test_mean: 0.3936852352732557
+15-Aug-26 01:12:50 - Metric: f1 Train_std: 0.09379530525765734 Val_std: 0.09878750675508197 Test_std: 0.046850884379498435
+15-Aug-26 01:12:50 - Metric: sen Train_mean: 0.43848797100175957 Val_mean: 0.3534246526928129 Test_mean: 0.33186812822122935
+15-Aug-26 01:12:50 - Metric: sen Train_std: 0.11931081402368918 Val_std: 0.11040789810186379 Test_std: 0.06270480202604439
+15-Aug-26 01:12:50 - Metric: spe Train_mean: 0.71131035603826 Val_mean: 0.6774999915312502 Test_mean: 0.6867128644327439
+15-Aug-26 01:12:50 - Metric: spe Train_std: 0.07468922865118503 Val_std: 0.09663073924255422 Test_std: 0.1226395053869816
+15-Aug-26 01:12:50 - Metric: precision Train_mean: 0.5781288994903144 Val_mean: 0.4976654699771064 Test_mean: 0.5097185828877006
+15-Aug-26 01:12:50 - Metric: precision Train_std: 0.00977015494468644 Val_std: 0.05172032621414282 Test_std: 0.08660927036319879
+15-Aug-26 01:14:21 - Epoch 16, Model Loss 5.8538645221598475, View Loss 3.1646979852700334, Reg 0.2827105330124061
+15-Aug-26 01:15:51 - Epoch 17, Model Loss 5.601074502059107, View Loss 3.193657073016945, Reg 0.25716822977844145
+15-Aug-26 01:17:22 - Epoch 18, Model Loss 5.478707133975488, View Loss 3.2132024505647157, Reg 0.24641057618242926
+15-Aug-26 01:18:52 - Epoch 19, Model Loss 8.222107683764342, View Loss 3.0909770422899574, Reg 0.21084138090141646
+15-Aug-26 01:20:22 - Epoch 20, Model Loss 6.92971131991143, View Loss 3.174455808296363, Reg 0.2640908745791623
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+15-Aug-26 01:20:34 - Metric: accuracy Train_mean: 0.5518083501813165 Val_mean: 0.5490196078431373 Test_mean: 0.5293302792321116
+15-Aug-26 01:20:34 - Metric: accuracy Train_std: 0.01076571345395591 Val_std: 0.028339193972129157 Test_std: 0.03488983814446083
+15-Aug-26 01:20:34 - Metric: f1 Train_mean: 0.4424160014724016 Val_mean: 0.4315879289792333 Test_mean: 0.4038482883565046
+15-Aug-26 01:20:34 - Metric: f1 Train_std: 0.03326691785199769 Val_std: 0.049620030597588856 Test_std: 0.057560673571916
+15-Aug-26 01:20:34 - Metric: sen Train_mean: 0.3759450158902233 Val_mean: 0.3616438306624133 Test_mean: 0.33846153474218094
+15-Aug-26 01:20:34 - Metric: sen Train_std: 0.044466875777424635 Val_std: 0.05785948436341221 Test_std: 0.06384984126026086
+15-Aug-26 01:20:34 - Metric: spe Train_mean: 0.7113415086860406 Val_mean: 0.7199999910000001 Test_mean: 0.7026732603131359
+15-Aug-26 01:20:34 - Metric: spe Train_std: 0.029967989344692417 Val_std: 0.04513867464893605 Test_std: 0.06694220350025532
+15-Aug-26 01:20:34 - Metric: precision Train_mean: 0.5412005322579873 Val_mean: 0.5409318988228485 Test_mean: 0.5093009313477459
+15-Aug-26 01:20:34 - Metric: precision Train_std: 0.014104951585113419 Val_std: 0.044120417395764604 Test_std: 0.0546432456889742
+15-Aug-26 01:22:04 - Epoch 21, Model Loss 6.063375732389953, View Loss 3.236859306630729, Reg 0.2360197609313861
+15-Aug-26 01:23:34 - Epoch 22, Model Loss 5.726730795584962, View Loss 3.1971312706440562, Reg 0.2237585902712834
+15-Aug-26 01:25:04 - Epoch 23, Model Loss 10.223641976153003, View Loss 3.005175603483511, Reg 0.1966998393814933
+15-Aug-26 01:26:35 - Epoch 24, Model Loss 5.881837613413024, View Loss 3.2203391595864397, Reg 0.20818810551485756
+15-Aug-26 01:28:04 - Epoch 25, Model Loss 5.679539273473508, View Loss 3.2513497953135597, Reg 0.19247270515773088
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+15-Aug-26 01:28:15 - Metric: accuracy Train_mean: 0.5661901094316614 Val_mean: 0.5437908496732027 Test_mean: 0.5303555846422339
+15-Aug-26 01:28:15 - Metric: accuracy Train_std: 0.03325273277570114 Val_std: 0.050862944989133935 Test_std: 0.02616536380090913
+15-Aug-26 01:28:15 - Metric: f1 Train_mean: 0.44979856687848085 Val_mean: 0.42540792540792544 Test_mean: 0.40282267901343866
+15-Aug-26 01:28:15 - Metric: f1 Train_std: 0.08895244006649956 Val_std: 0.06881937473386962 Test_std: 0.0756664436089854
+15-Aug-26 01:28:15 - Metric: sen Train_mean: 0.38487972376329993 Val_mean: 0.35616437868267975 Test_mean: 0.342857139089482
+15-Aug-26 01:28:15 - Metric: sen Train_std: 0.10842999893053827 Val_std: 0.06766624036198832 Test_std: 0.09045765011478045
+15-Aug-26 01:28:15 - Metric: spe Train_mean: 0.730671726694309 Val_mean: 0.7149999910625 Test_mean: 0.7007128642927439
+15-Aug-26 01:28:15 - Metric: spe Train_std: 0.039395116323431546 Val_std: 0.07348469136493668 Test_std: 0.09141382837867724
+15-Aug-26 01:28:15 - Metric: precision Train_mean: 0.5568451111147665 Val_mean: 0.5354534255515522 Test_mean: 0.5117540129079642
+15-Aug-26 01:28:15 - Metric: precision Train_std: 0.03616830879389801 Val_std: 0.0856613745335664 Test_std: 0.04695213863209739
+15-Aug-26 01:29:52 - Epoch 26, Model Loss 5.632779143345406, View Loss 3.24961041606121, Reg 0.18806713763390626
+15-Aug-26 01:31:27 - Epoch 27, Model Loss 5.636524136595147, View Loss 3.2530084015435254, Reg 0.18005105073731315
+15-Aug-26 01:32:58 - Epoch 28, Model Loss 9.71858716509831, View Loss 3.0967017197708704, Reg 0.1598970419629847
+15-Aug-26 01:34:31 - Epoch 29, Model Loss 10.017919965368934, View Loss 2.951208250293173, Reg 0.1775886158314709
+15-Aug-26 01:36:04 - Epoch 30, Model Loss 6.036349601825411, View Loss 3.2605486025870096, Reg 0.17171547109861254
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+15-Aug-26 01:36:15 - Metric: accuracy Train_mean: 0.592014056031578 Val_mean: 0.5307189542483661 Test_mean: 0.5261834642233857
+15-Aug-26 01:36:15 - Metric: accuracy Train_std: 0.022952252885553644 Val_std: 0.03185897413582728 Test_std: 0.030968710014790776
+15-Aug-26 01:36:15 - Metric: f1 Train_mean: 0.5193138461144897 Val_mean: 0.4564045319752489 Test_mean: 0.458845042866447
+15-Aug-26 01:36:15 - Metric: f1 Train_std: 0.0482983740227488 Val_std: 0.028243058381959663 Test_std: 0.02831008656681963
+15-Aug-26 01:36:15 - Metric: sen Train_mean: 0.46735395028400706 Val_mean: 0.4136986244698818 Test_mean: 0.4219780173409009
+15-Aug-26 01:36:15 - Metric: sen Train_std: 0.06358781287410582 Val_std: 0.04190974885268386 Test_std: 0.02997402537827634
+15-Aug-26 01:36:15 - Metric: spe Train_mean: 0.7051109791104349 Val_mean: 0.6374999920312501 Test_mean: 0.6207920730119596
+15-Aug-26 01:36:15 - Metric: spe Train_std: 0.023040663813272497 Val_std: 0.07458216851860439 Test_std: 0.05631009079863503
+15-Aug-26 01:36:15 - Metric: precision Train_mean: 0.5879522309844218 Val_mean: 0.5140737146350677 Test_mean: 0.5049672326545673
+15-Aug-26 01:36:15 - Metric: precision Train_std: 0.023860823763425285 Val_std: 0.043349699853886176 Test_std: 0.04206737977619072
+15-Aug-26 01:37:45 - Epoch 31, Model Loss 5.831941506852664, View Loss 3.267310993441977, Reg 0.16688762997982393
+15-Aug-26 01:39:16 - Epoch 32, Model Loss 5.911215766204451, View Loss 3.262939340399898, Reg 0.1594652129516442
+15-Aug-26 01:40:49 - Epoch 33, Model Loss 5.835872698029713, View Loss 3.261046389655588, Reg 0.1556302424379971
+15-Aug-26 01:42:22 - Epoch 34, Model Loss 13.938375193703623, View Loss 2.947738992619215, Reg 0.13192580347280622
+15-Aug-26 01:43:51 - Epoch 35, Model Loss 6.226560171677977, View Loss 3.220987825712898, Reg 0.1462124883505091
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+15-Aug-26 01:44:02 - Metric: accuracy Train_mean: 0.5521410309895918 Val_mean: 0.5058823529411764 Test_mean: 0.5324171029668412
+15-Aug-26 01:44:02 - Metric: accuracy Train_std: 0.018945243557094565 Val_std: 0.028817526385684463 Test_std: 0.024406149753052418
+15-Aug-26 01:44:02 - Metric: f1 Train_mean: 0.39839365415323647 Val_mean: 0.3353834475689261 Test_mean: 0.35611088507724414
+15-Aug-26 01:44:02 - Metric: f1 Train_std: 0.05119537729907529 Val_std: 0.08424576158525773 Test_std: 0.08245143113256159
+15-Aug-26 01:44:02 - Metric: sen Train_mean: 0.31546391644170474 Val_mean: 0.2684931470069432 Test_mean: 0.2813186782272673
+15-Aug-26 01:44:02 - Metric: sen Train_std: 0.05821269307242292 Val_std: 0.08602914111251905 Test_std: 0.09288152253587531
+15-Aug-26 01:44:02 - Metric: spe Train_mean: 0.7667912748684461 Val_mean: 0.7224999909687501 Test_mean: 0.7606930617129399
+15-Aug-26 01:44:02 - Metric: spe Train_std: 0.04526452936517334 Val_std: 0.028939591895230654 Test_std: 0.07409079578576633
+15-Aug-26 01:44:02 - Metric: precision Train_mean: 0.5510869872580381 Val_mean: 0.45771782126229565 Test_mean: 0.5143121396787553
+15-Aug-26 01:44:02 - Metric: precision Train_std: 0.0368178079040065 Val_std: 0.05834721101950891 Test_std: 0.0646143188600892
+15-Aug-26 01:45:31 - Epoch 36, Model Loss 5.973839817685562, View Loss 3.277027884287814, Reg 0.14358583379490106
+15-Aug-26 01:47:01 - Epoch 37, Model Loss 5.973329149030741, View Loss 3.2864958222441096, Reg 0.13918362458131303
+15-Aug-26 01:48:29 - Epoch 38, Model Loss 6.055083833478983, View Loss 3.292711278883483, Reg 0.1351784290628952
+15-Aug-26 01:49:58 - Epoch 39, Model Loss 6.067410026135305, View Loss 3.2885538683775577, Reg 0.13074713243974304
+15-Aug-26 01:51:27 - Epoch 40, Model Loss 6.543972981025983, View Loss 3.2594785241402344, Reg 0.12505948456261448
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+15-Aug-26 01:51:38 - Metric: accuracy Train_mean: 0.5491939710963492 Val_mean: 0.5359477124183006 Test_mean: 0.5177737783595113
+15-Aug-26 01:51:38 - Metric: accuracy Train_std: 0.016656358319135877 Val_std: 0.034337060226310306 Test_std: 0.027317323685861428
+15-Aug-26 01:51:38 - Metric: f1 Train_mean: 0.4353781704828822 Val_mean: 0.41664282839104166 Test_mean: 0.39172125887357667
+15-Aug-26 01:51:38 - Metric: f1 Train_std: 0.040851659068521486 Val_std: 0.07669212071699501 Test_std: 0.03306265372895583
+15-Aug-26 01:51:38 - Metric: sen Train_mean: 0.3683848784591585 Val_mean: 0.35616437868267975 Test_mean: 0.32967032604757884
+15-Aug-26 01:51:38 - Metric: sen Train_std: 0.05387193917505293 Val_std: 0.09530151722012219 Test_std: 0.05688869873988148
+15-Aug-26 01:51:38 - Metric: spe Train_mean: 0.7132320850040716 Val_mean: 0.6999999912500001 Test_mean: 0.6885544485743124
+15-Aug-26 01:51:38 - Metric: spe Train_std: 0.04013387597871195 Val_std: 0.06471089471883772 Test_std: 0.09514575477552534
+15-Aug-26 01:51:38 - Metric: precision Train_mean: 0.5381108241267778 Val_mean: 0.517266911340148 Test_mean: 0.49611245362449213
+15-Aug-26 01:51:38 - Metric: precision Train_std: 0.024604735324825364 Val_std: 0.044319553013820547 Test_std: 0.032644920114518014
+15-Aug-26 01:53:07 - Epoch 41, Model Loss 17.468381335047, View Loss 2.9733448906423656, Reg 0.10830277347913846
+15-Aug-26 01:54:35 - Epoch 42, Model Loss 6.346653686906503, View Loss 3.277310126994943, Reg 0.12263404973880018
+15-Aug-26 01:56:04 - Epoch 43, Model Loss 6.1775135016341585, View Loss 3.248978557945794, Reg 0.1244715720913899
+15-Aug-26 01:57:33 - Epoch 44, Model Loss 6.182638002738793, View Loss 3.294441973315123, Reg 0.1193295204115712
+15-Aug-26 01:59:02 - Epoch 45, Model Loss 6.24891453906582, View Loss 3.2954493506682967, Reg 0.1183030711619425
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+15-Aug-26 01:59:14 - Metric: accuracy Train_mean: 0.5518136987473659 Val_mean: 0.5372549019607843 Test_mean: 0.5188263525305411
+15-Aug-26 01:59:14 - Metric: accuracy Train_std: 0.016071026741250657 Val_std: 0.040162853583626694 Test_std: 0.016586810599928014
+15-Aug-26 01:59:14 - Metric: f1 Train_mean: 0.4342512664282635 Val_mean: 0.42262974509444345 Test_mean: 0.3814184326944877
+15-Aug-26 01:59:14 - Metric: f1 Train_std: 0.06421388873950722 Val_std: 0.054369283653643005 Test_std: 0.052639662146789536
+15-Aug-26 01:59:14 - Metric: sen Train_mean: 0.36838487845915846 Val_mean: 0.35616437868267975 Test_mean: 0.31868131517932624
+15-Aug-26 01:59:14 - Metric: sen Train_std: 0.07583219968990552 Val_std: 0.05269968163882996 Test_std: 0.07289285173426316
+15-Aug-26 01:59:14 - Metric: spe Train_mean: 0.7181834089762893 Val_mean: 0.7024999912187502 Test_mean: 0.7006930623129399
+15-Aug-26 01:59:14 - Metric: spe Train_std: 0.04307569672043892 Val_std: 0.05326818871580394 Test_std: 0.09193810025930074
+15-Aug-26 01:59:14 - Metric: precision Train_mean: 0.5391139910596447 Val_mean: 0.522845513413506 Test_mean: 0.49676589218618206
+15-Aug-26 01:59:14 - Metric: precision Train_std: 0.024638300582226665 Val_std: 0.0650394543108879 Test_std: 0.022232353783039345
+15-Aug-26 02:00:42 - Epoch 46, Model Loss 6.231338229638263, View Loss 3.3024670040258304, Reg 0.11481691497888526
+15-Aug-26 02:02:09 - Epoch 47, Model Loss 16.353114203927905, View Loss 3.166291391500369, Reg 0.09068064920011923
+15-Aug-26 02:03:37 - Epoch 48, Model Loss 14.836102238260054, View Loss 2.979230968523225, Reg 0.1125223144701834
+15-Aug-26 02:05:06 - Epoch 49, Model Loss 6.273301784962291, View Loss 3.265675675420083, Reg 0.12132919439461441
+15-Aug-26 02:06:34 - Epoch 50, Model Loss 6.191557991953575, View Loss 3.2919723837944255, Reg 0.10930014551309362
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+15-Aug-26 02:06:45 - Metric: accuracy Train_mean: 0.5596605799985024 Val_mean: 0.5019607843137255 Test_mean: 0.5041939354275742
+15-Aug-26 02:06:45 - Metric: accuracy Train_std: 0.013437012060554686 Val_std: 0.012673672829846617 Test_std: 0.010147151120697894
+15-Aug-26 02:06:45 - Metric: f1 Train_mean: 0.41503442948150726 Val_mean: 0.34159273731266604 Test_mean: 0.3418321686623059
+15-Aug-26 02:06:45 - Metric: f1 Train_std: 0.07602015640128267 Val_std: 0.09156294552514042 Test_std: 0.07389990965464609
+15-Aug-26 02:06:45 - Metric: sen Train_mean: 0.3388316139559051 Val_mean: 0.28493150294614383 Test_mean: 0.2813186782272673
+15-Aug-26 02:06:45 - Metric: sen Train_std: 0.09140118272802612 Val_std: 0.10589670041285446 Test_std: 0.08970695124259856
+15-Aug-26 02:06:45 - Metric: spe Train_mean: 0.759978580185492 Val_mean: 0.6999999912500001 Test_mean: 0.7065544483943124
+15-Aug-26 02:06:45 - Metric: spe Train_std: 0.0642546520047337 Val_std: 0.09778803485568927 Test_std: 0.09592056219752243
+15-Aug-26 02:06:45 - Metric: precision Train_mean: 0.5623789066317337 Val_mean: 0.456987767022765 Test_mean: 0.4668460038986354
+15-Aug-26 02:06:45 - Metric: precision Train_std: 0.015477888469382228 Val_std: 0.03489735565091707 Test_std: 0.015341283675743706
+15-Aug-26 02:08:13 - Epoch 51, Model Loss 6.266324286680342, View Loss 3.2598072544800187, Reg 0.10834494663332296
+15-Aug-26 02:09:40 - Epoch 52, Model Loss 6.235179400344274, View Loss 3.310895419021032, Reg 0.1065001648589657
+15-Aug-26 02:11:08 - Epoch 53, Model Loss 6.299255337176462, View Loss 3.308946585555456, Reg 0.10442639257618573
+15-Aug-26 02:12:36 - Epoch 54, Model Loss 6.213780395156669, View Loss 3.3133519414079737, Reg 0.1030257580856399
+15-Aug-26 02:14:04 - Epoch 55, Model Loss 6.182458961359128, View Loss 3.2947417482671377, Reg 0.1033276716971996
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+15-Aug-26 02:14:15 - Metric: accuracy Train_mean: 0.5832060374613566 Val_mean: 0.530718954248366 Test_mean: 0.5187990837696335
+15-Aug-26 02:14:15 - Metric: accuracy Train_std: 0.022005837130460466 Val_std: 0.019996154955265848 Test_std: 0.030048479948926368
+15-Aug-26 02:14:15 - Metric: f1 Train_mean: 0.5206585586572771 Val_mean: 0.4910556871699729 Test_mean: 0.46186954197264285
+15-Aug-26 02:14:15 - Metric: f1 Train_std: 0.04732074775042337 Val_std: 0.026676559537617325 Test_std: 0.05053414169511505
+15-Aug-26 02:14:15 - Metric: sen Train_mean: 0.48041236948311894 Val_mean: 0.47671232223681753 Test_mean: 0.43956043473010514
+15-Aug-26 02:14:15 - Metric: sen Train_std: 0.06675517536696134 Val_std: 0.04854806822994249 Test_std: 0.07517640082877391
+15-Aug-26 02:14:15 - Metric: spe Train_mean: 0.6764291256172987 Val_mean: 0.5799999927500001 Test_mean: 0.5908118752917636
+15-Aug-26 02:14:15 - Metric: spe Train_std: 0.036232157560098927 Val_std: 0.0645174386963517 Test_std: 0.08696342020112915
+15-Aug-26 02:14:15 - Metric: precision Train_mean: 0.5728722453688754 Val_mean: 0.5107038907038907 Test_mean: 0.49539164971819477
+15-Aug-26 02:14:15 - Metric: precision Train_std: 0.02278356879921984 Val_std: 0.023451231277914347 Test_std: 0.03309290987241908
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [64,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [65,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [66,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [67,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [68,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [69,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [70,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [71,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [72,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [73,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [74,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [75,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [76,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [77,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [78,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [79,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [80,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [81,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [82,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [83,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [84,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [85,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [86,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [87,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [88,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [89,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [90,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [91,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [92,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [93,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [94,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [95,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [96,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [97,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [98,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [99,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [100,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [101,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [102,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [103,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [104,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [105,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [106,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [107,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [108,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [109,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [110,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [111,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [112,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [113,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [114,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [115,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [116,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [117,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [118,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [119,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [120,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [121,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [122,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [123,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [124,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [125,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [126,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [246,0,0], thread: [127,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [0,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [1,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [2,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [3,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [4,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [5,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [6,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [7,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [8,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [9,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [10,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [11,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [12,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [13,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [14,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [15,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [16,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [17,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [18,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [19,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [20,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [21,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [22,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [23,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [24,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [25,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [26,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [27,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [28,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [29,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [30,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [405,0,0], thread: [31,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [64,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [65,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [66,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [67,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [68,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [69,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [70,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [71,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [72,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [73,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [74,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [75,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [76,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [77,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [78,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [79,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [80,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [81,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [82,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [83,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [84,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [85,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [86,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [87,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [88,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [89,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [90,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [91,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [92,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [93,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [94,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [290,0,0], thread: [95,0,0] Assertion `input_val >= zero && input_val <= one` failed.
+Traceback (most recent call last):
+  File "/users/3171356m/muhammad/GraSTIACL/GraSTIACL.py", line 394, in <module>
+    run(args)
+  File "/users/3171356m/muhammad/GraSTIACL/GraSTIACL.py", line 161, in run
+    train_one_epoch(model, view_learner, model_optimizer, view_optimizer, dataloader, device,
+  File "/users/3171356m/muhammad/GraSTIACL/unsupervised/training.py", line 262, in train_one_epoch
+    model_loss_all += model_loss.item() * batch.num_graphs
+                      ^^^^^^^^^^^^^^^^^
+RuntimeError: CUDA error: device-side assert triggered
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
