@@ -399,8 +399,13 @@ def arg_parse():
                              'paper_literal=both together, literal Beta AND gamma_orig=mean(|W|) -- the '
                              'combination actually specified verbatim by the paper\'s own text.')
     parser.add_argument('--node_feature_mode', type=str, default='alff',
-                        choices=['alff', 'alff_pcc', 'alff_raw'],
-                        help='alff=x is raw ALFF only, [90,3] (default, current behavior). '
+                        choices=['alff', 'alff_pcc', 'alff_raw', 'alff_paper'],
+                        help='alff=LEGACY old node-feature cache: DPARSF voxelwise mALFF -> ROI averaging -> '
+                             'per-subject per-band z-scoring, [90,3] (default, kept for backward '
+                             'compatibility with recorded results -- NOT raw ALFF despite the name). '
+                             'alff_raw=raw ROI-first 3-band ALFF from alff_new.npz, un-normalised, [90,3]. '
+                             'alff_paper=Stage-1 validated ROI-first raw 3-band ALFF followed by ONE shared '
+                             'per-subject [0,1] min-max over the whole [90,3] (A-GCL Sec 2.1 exact). '
                              'alff_pcc=x is [min-max ALFF ->[0,1] ; min-max own PCC row ->[-1,1]], [90,93] -- '
                              'each node also gets its own connectivity profile as input content, not just as '
                              'an edge weight (BrainGNN\'s established practice). Population-wide min/max, '

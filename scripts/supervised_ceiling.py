@@ -73,7 +73,7 @@ def evaluate(model, loader, device):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--node_feature_mode', choices=['alff', 'alff_pcc', 'alff_raw'], default='alff')
+    ap.add_argument('--node_feature_mode', choices=['alff', 'alff_pcc', 'alff_raw', 'alff_paper'], default='alff')
     ap.add_argument('--shuffle_labels', action='store_true')
     ap.add_argument('--epochs', type=int, default=100)
     ap.add_argument('--eval_interval', type=int, default=5)
