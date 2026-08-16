@@ -29,6 +29,10 @@ cd "${PROJECT_ROOT}"
 ARM=$1
 EPOCHS=$2
 EVAL_INT=$3
+# Any further args are appended AFTER the fixed flags -- argparse takes the
+# last occurrence, so e.g. "--emb_dim 64 --seed 456" overrides the defaults.
+EXTRA="${@:4}"
+
 
 case $ARM in
   A) FLAGS="--replicate_original_code --reg_lambda 0";;
@@ -53,4 +57,4 @@ echo "ARM=$ARM EPOCHS=$EPOCHS EVAL_INTERVAL=$EVAL_INT FLAGS=$FLAGS"
   --gamma_mode paper_literal \
   --mij_source alff \
   --seed 123 \
-  $FLAGS
+  $FLAGS $EXTRA
