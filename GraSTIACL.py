@@ -452,17 +452,12 @@ def arg_parse():
                              'on the 80 percent side only; the 20 percent is scored once per eval and never '
                              'influences any choice. Replaces the transductive kf evaluation entirely.')
     parser.add_argument('--replicate_original_code', action='store_true',
-                        help='Match github.com/BiaoHe2025/GraSTIACL\'s actual GraSTIACL.py behavior on the three '
-                             'points verified to differ from this project\'s implementation: (1) the attention-'
-                             'branch mixup (Eq. 19) is computed but never applied there -- pooling runs on the '
-                             'GCN branch alone; (2) ce_loss is added to model_loss in Phase 2 (the model reduces '
-                             'it), not subtracted from view_loss in Phase 1 (the augmenter reduces it); (3) the '
-                             'augmented edge weight is the original weight scaled by the gate '
-                             '(edge_weight * sigmoid(gate)), not replaced by the gate alone. Does NOT replicate '
-                             'their raw-signed-edge-weight-into-GCN behavior -- this project\'s abs().clamp() '
-                             'NaN-safety on the GCN edge weight is kept regardless, to avoid confounding this '
-                             'comparison with a separate, already-identified risk. Default False (this project\'s '
-                             'paper-prose-faithful implementation, unchanged).')
+                        help='Match the authors\' released code on the remaining verified differences: (1) the '
+                             'attention-branch mixup (Eq. 19) is computed but never applied there -- pooling runs '
+                             'on the GCN branch alone; (2) ce_loss is added to model_loss in Phase 2 (the model '
+                             'reduces it), not subtracted from view_loss in Phase 1. NOTE: the multiplicative '
+                             'augmented edge weight (weight * gate) is now UNIVERSAL semantics (Stage 2 Fix A), '
+                             'no longer controlled by this flag. Default False.')
 
     return parser.parse_args()
 

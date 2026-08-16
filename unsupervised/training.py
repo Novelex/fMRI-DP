@@ -111,17 +111,13 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
     # Only valid when the encoders were built with signed_safe=True (degree
     # normalization from |w|, signed weight kept in message passing) --
     # otherwise negative degrees produce NaN under sqrt.
-    # replicate_original_code bundles two structural differences found by
-    # reading github.com/BiaoHe2025/GraSTIACL's actual GraSTIACL.py directly:
-    # (1) ce_loss is added to model_loss in Phase 2 there (the model is pushed
-    # to reduce it), not subtracted from view_loss in Phase 1 (the augmenter
-    # pushed to reduce it) as this project does; (2) their augmented edge
-    # weight is the ORIGINAL edge weight scaled by the gate (edge_weight *
-    # sigmoid(gate)), matching Sec. 3.2's "weaken their connections" prose,
-    # not replaced by the gate alone. Their raw-signed-edge-weight-into-GCN
-    # behavior is deliberately NOT replicated here (kept on gcn_w, our
-    # NaN-safe abs().clamp() version) -- that's a separate, already-identified
-    # risk (Final Plan Step 5), not conflated with this comparison.
+    # replicate_original_code now controls ONE remaining author-code
+    # difference: ce_loss is added to model_loss in Phase 2 there (the model
+    # is pushed to reduce it), not subtracted from view_loss in Phase 1.
+    # The multiplicative augmented edge weight (weight * gate) that this flag
+    # previously also controlled is now UNIVERSAL graph semantics (Stage 2
+    # Fix A) -- matching both Sec. 3.2's "weaken their connections" prose and
+    # the authors' released code.
     model_loss_all = 0
     view_loss_all = 0
     reg_all = 0
@@ -176,27 +172,29 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
         # be on the right device (this is what crashed on GPU before the fix).
         gate_inputs_ = gate_inputs_.to(device)
         gate_inputs = (gate_inputs_ + edge_logits_vl) / temperature
-        if replicate_original_code:
-            # Original: batch_aug_edge_weight = batch.edge_weight * sigmoid(gate)
-            # -- weakens the existing (sanitized) weight, doesn't replace it.
-            batch_aug_edge_weight = gcn_w * torch.sigmoid(gate_inputs).squeeze()
-        else:
-            # Eq. (12): A = sigmoid(...) -- always positive, never multiplied by
-            # the raw signed PCC.
-            batch_aug_edge_weight = torch.sigmoid(gate_inputs).squeeze()
-        # gamma = the gate's own mean, PER SUBJECT -- not one shared number
-        # for the whole batch (measured effect of the batch-wide version: an
-        # 85.5% of a typical between-subject-distance shift, confirmed
-        # gamma-mediated). edge_weight for this call IS batch_aug_edge_weight
-        # itself (Eq. 18's literal "retained-edge adjacency" definition -- the
-        # correct matrix for the augmented view, unlike the unaugmented view's
-        # fallback which uses |PCC| as a documented Option-B deviation).
-        gamma_aug = batch_aug_edge_weight.view(batch.num_graphs, -1).mean(dim=1)
+        # Eq. (12) produces the RETENTION GATE A in [0,1]. The gate is a mask,
+        # not an edge weight: the augmented GCN edge weight is the original
+        # connectivity WEAKENED by the gate (Sec. 3.2: "instead of discarding
+        # certain edges, we weaken their connections"), i.e. gcn_w * gate --
+        # universal semantics for every profile, matching the authors' released
+        # code (no longer controlled by replicate_original_code).
+        gate = torch.sigmoid(gate_inputs).squeeze()
+        batch_aug_edge_weight = gcn_w * gate
+        # gamma = PER-SUBJECT mean of the GATE (retention information), NOT
+        # mean(gcn_w * gate) -- after multiplication that product is
+        # connectivity-strength x retention, a different quantity from Eq. 18's
+        # retained-edge ratio. Per-subject, never batch-wide (measured effect
+        # of the batch-wide version: 85.5% of a typical between-subject
+        # distance, confirmed gamma-mediated).
+        gamma_aug = gate.view(batch.num_graphs, -1).mean(dim=1)
         x_aug, _ = model(batch.batch, batch.x, batch.edge_index, beta, None, batch_aug_edge_weight,
                         batch.edge_weight, None, gamma=gamma_aug)
         row, col = batch.edge_index
         edge_batch = batch.batch[row]
-        edge_drop_out_prob = 1 - torch.sigmoid(gate_inputs).squeeze()
+        # gate = retention probability; 1-gate = drop probability. fin_reg
+        # (its mean) keeps its historical meaning exactly -- this is a reuse of
+        # the already-computed gate, not a semantic change.
+        edge_drop_out_prob = 1 - gate
 
         uni, edge_batch_num = edge_batch.unique(return_counts=True)
         sum_pe = scatter(edge_drop_out_prob, edge_batch, reduce="sum")
@@ -263,11 +261,9 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
         gate_inputs_ = torch.log(eps) - torch.log(1 - eps)
         gate_inputs_ = gate_inputs_.to(device)
         gate_inputs = (gate_inputs_ + edge_logits_vl) / temperature
-        if replicate_original_code:
-            batch_aug_edge_weight = gcn_w * torch.sigmoid(gate_inputs).squeeze()
-        else:
-            batch_aug_edge_weight = torch.sigmoid(gate_inputs).squeeze()
-        gamma_aug = batch_aug_edge_weight.view(batch.num_graphs, -1).mean(dim=1)  # per subject, see Phase 1's comment
+        gate = torch.sigmoid(gate_inputs).squeeze()
+        batch_aug_edge_weight = gcn_w * gate      # universal: weight x retention (see Phase 1)
+        gamma_aug = gate.view(batch.num_graphs, -1).mean(dim=1)  # per-subject mean of the GATE
         x_aug, _ = model(batch.batch, batch.x, batch.edge_index, beta, None, batch_aug_edge_weight,
                         batch.edge_weight, None, gamma=gamma_aug)
 
