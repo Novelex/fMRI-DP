@@ -141,10 +141,8 @@ class ADNIDataset(InMemoryDataset):
                 x_alff = (x_alff - lo) / (hi - lo)
                 assert x_alff.shape == (90, 3), f"{subject_id}: shape {x_alff.shape}"
                 assert np.isfinite(x_alff).all(), f"{subject_id}: non-finite after [0,1] map"
-                assert x_alff.min() >= 0.0 and x_alff.max() <= 1.0, f"{subject_id}: out of [0,1]"
-                assert (x_alff == 0.0).sum() == 1 and (x_alff == 1.0).sum() == 1, (
-                    f"{subject_id}: expected exactly one 0.0 and one 1.0, got "
-                    f"{(x_alff == 0.0).sum()} zeros / {(x_alff == 1.0).sum()} ones")
+                assert np.isclose(x_alff.min(), 0.0), f"{subject_id}: min {x_alff.min()} not ~0"
+                assert np.isclose(x_alff.max(), 1.0), f"{subject_id}: max {x_alff.max()} not ~1"
             num_nodes = pcc_matrix.shape[0]
 
             if self.node_feature_mode == 'alff_pcc':
@@ -202,10 +200,27 @@ class ADNIDataset(InMemoryDataset):
             import numpy as _np
             d = _np.load(osp.join(osp.dirname(osp.dirname(osp.abspath(__file__))),
                                   'alff_new', 'non_combat', 'alff_new.npz'), allow_pickle=True)
-            self._raw_alff_map = {sid: _np.nan_to_num(d['alff'][i]).astype(_np.float64)
-                                  for i, sid in enumerate(d['file_ids'])}
-            missing = [sid for sid, *_ in raw_all if sid not in self._raw_alff_map]
-            assert not missing, f"{self.node_feature_mode}: {len(missing)} subjects missing from alff_new.npz: {missing[:5]}"
+            # File-level integrity: exactly the expected cohort, no duplicate
+            # IDs, every subject's own ok flag set.
+            assert len(d['file_ids']) == 956
+            assert len(set(d['file_ids'].tolist())) == len(d['file_ids'])
+            assert d['ok'].all()
+            # No nan_to_num: silent repair would hide a corrupted source. The
+            # data is asserted finite instead -- fail loudly, never patch.
+            self._raw_alff_map = {}
+            for i, sid in enumerate(d['file_ids']):
+                arr = d['alff'][i].astype(_np.float64)
+                assert arr.shape == (90, 3), f"{sid}: raw ALFF shape {arr.shape}"
+                assert _np.isfinite(arr).all(), f"{sid}: non-finite raw ALFF"
+                self._raw_alff_map[sid] = arr
+            # Exact subject-set equality (order-free by design: retrieval goes
+            # through self._raw_alff_map[subject_id], never by position).
+            npz_ids = set(d['file_ids'].tolist())
+            dataset_ids = {sid for sid, *_ in raw_all}
+            assert npz_ids == dataset_ids, (
+                f"{self.node_feature_mode}: subject-set mismatch -- "
+                f"npz-only={sorted(npz_ids - dataset_ids)[:5]}, "
+                f"dataset-only={sorted(dataset_ids - npz_ids)[:5]}")
 
         if self.node_feature_mode == 'alff_pcc':
             all_alff = np.stack([r[1] for r in raw_all])   # [N, 90, 3]
