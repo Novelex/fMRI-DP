@@ -29,7 +29,11 @@ class ADNIDataset(InMemoryDataset):
         self.num_tasks = 1
         self.task_type = 'classification'
         self.eval_metric = 'accuracy'
-        # "alff": x = raw ALFF, [90,3] (current/default behavior, unchanged).
+        # "alff": x = the old norm_matrix, [90,3] -- NOT raw ALFF: it is
+        # DPARSF voxelwise mALFF, averaged into AAL ROIs, then z-scored per
+        # subject per band (Notebook 3). Name kept for backward compatibility
+        # with every recorded result; the comment previously calling it "raw"
+        # was wrong and is corrected here.
         # "alff_pcc": x = [min-max ALFF -> [0,1] ; min-max own PCC row -> [-1,1]],
         # [90,93] -- each node's connectivity profile becomes part of its own
         # input feature (BrainGNN's own established practice, one of this
@@ -43,7 +47,14 @@ class ADNIDataset(InMemoryDataset):
         # norm_matrix erases by construction (measured: sum-pooled probe 54.9%
         # vs 50.8% for z-scored). Everything else (PCC, dyn windows, labels)
         # identical to 'alff' mode.
-        assert node_feature_mode in ('alff', 'alff_pcc', 'alff_raw')
+        # "alff_paper": A-GCL Sec 2.1's exact node features -- raw ROI-first
+        # ALFF (alff_new.npz 'alff' key, same source alff_raw loads) mapped to
+        # [0,1] per subject with ONE shared min/max over the whole (90,3):
+        # x = (x - x.min()) / (x.max() - x.min()). The shared scalar (never
+        # per-band axis=0) preserves the amplitude relationship BETWEEN bands,
+        # which per-band normalisation would destroy. Per subject only; no
+        # cohort statistic is ever computed.
+        assert node_feature_mode in ('alff', 'alff_pcc', 'alff_raw', 'alff_paper')
         self.node_feature_mode = node_feature_mode
 
         super(ADNIDataset, self).__init__(root, transform, pre_transform)
@@ -68,7 +79,8 @@ class ADNIDataset(InMemoryDataset):
         # rebuild when switching modes.
         return {'alff': 'data.pt',
                 'alff_pcc': 'data_alff_pcc93.pt',
-                'alff_raw': 'data_alff_raw.pt'}[self.node_feature_mode]
+                'alff_raw': 'data_alff_raw.pt',
+                'alff_paper': 'data_alff_paper.pt'}[self.node_feature_mode]
 
     def download(self):
         # Download to `self.raw_dir`.
@@ -113,9 +125,26 @@ class ADNIDataset(InMemoryDataset):
     def _build_data_list(self, raw, alff_min=None, alff_max=None, pcc_min=None, pcc_max=None):
         data_list = []
         for subject_id, x_alff, pcc_matrix, dyn_weight, y in raw:
-            if self.node_feature_mode == 'alff_raw':
+            if self.node_feature_mode in ('alff_raw', 'alff_paper'):
                 # Substitute raw ALFF by subject ID (never by position).
                 x_alff = self._raw_alff_map[subject_id]
+            if self.node_feature_mode == 'alff_paper':
+                # A-GCL Sec 2.1: ONE scalar min and ONE scalar max over the
+                # whole (90,3) -- shared across all three bands, per subject.
+                lo = x_alff.min()
+                hi = x_alff.max()
+                assert hi > lo, f"{subject_id}: degenerate ALFF (max==min)"
+                # exact division (no epsilon): the epsilon variant would make
+                # the maximum land at 1 - ~2e-14 instead of exactly 1.0,
+                # breaking the exact-endpoint asserts below; hi > lo is
+                # guaranteed by the assert above, so the division is safe.
+                x_alff = (x_alff - lo) / (hi - lo)
+                assert x_alff.shape == (90, 3), f"{subject_id}: shape {x_alff.shape}"
+                assert np.isfinite(x_alff).all(), f"{subject_id}: non-finite after [0,1] map"
+                assert x_alff.min() >= 0.0 and x_alff.max() <= 1.0, f"{subject_id}: out of [0,1]"
+                assert (x_alff == 0.0).sum() == 1 and (x_alff == 1.0).sum() == 1, (
+                    f"{subject_id}: expected exactly one 0.0 and one 1.0, got "
+                    f"{(x_alff == 0.0).sum()} zeros / {(x_alff == 1.0).sum()} ones")
             num_nodes = pcc_matrix.shape[0]
 
             if self.node_feature_mode == 'alff_pcc':
@@ -169,14 +198,14 @@ class ADNIDataset(InMemoryDataset):
         )
         raw_all = raw_asd + raw_nc
 
-        if self.node_feature_mode == 'alff_raw':
+        if self.node_feature_mode in ('alff_raw', 'alff_paper'):
             import numpy as _np
             d = _np.load(osp.join(osp.dirname(osp.dirname(osp.abspath(__file__))),
                                   'alff_new', 'non_combat', 'alff_new.npz'), allow_pickle=True)
             self._raw_alff_map = {sid: _np.nan_to_num(d['alff'][i]).astype(_np.float64)
                                   for i, sid in enumerate(d['file_ids'])}
             missing = [sid for sid, *_ in raw_all if sid not in self._raw_alff_map]
-            assert not missing, f"alff_raw: {len(missing)} subjects missing from alff_new.npz: {missing[:5]}"
+            assert not missing, f"{self.node_feature_mode}: {len(missing)} subjects missing from alff_new.npz: {missing[:5]}"
 
         if self.node_feature_mode == 'alff_pcc':
             all_alff = np.stack([r[1] for r in raw_all])   # [N, 90, 3]
