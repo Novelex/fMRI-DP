@@ -65,6 +65,44 @@ Train original view and `get_embeddings` both feed RAW signed PCC under the sign
 - **OUR CORRECTED signed-safe**: degree from `Σ_j |W_ij|` (always positive) while messages keep the signed weight. All finite, sign preserved.
 - Also distinguish: `abs()` for **degree normalization** (corrected profile, keeps signed messages) vs `abs(PCC)` as the **actual edge weight** (default legacy profile, destroys sign). The corrected profile does the former, never the latter.
 
+## MAIN/NESTED-CV INTEGRATION (2026-08-17)
+
+Findings before edits: the nested parser exposed neither `alff_paper` nor
+`--signed_edges`; its `build_model_and_view_learner` and `train_one_epoch`
+calls passed no `signed_edges` (encoders always `signed_safe=False`, gcn_w
+always `abs().clamp`); nested x came only from the legacy `norm_matrix`.
+
+Changes (nested_cv only; core math untouched): `load_alff_paper_features()`
+added to `nested_cv/data.py` mirroring the Stage-1 hardened recipe exactly
+(strict npz asserts, no nan_to_num, two-way ID-set equality, shared per-subject
+[0,1] min-max), substituted in `run_nested_cv.py` immediately after loading --
+BEFORE any ComBat/fold transformation. Parser gained both flags;
+`signed_edges` threaded into build + training (with `epoch_num` for the
+guard); provenance: `signed_edges` recorded in result JSON and `_signed`
+appended to the result filename tag.
+
+Test results (16/16):
+
+- B. parser accepts `--node_feature_mode alff_paper` and `--signed_edges` — PASS
+- C. nested alff_paper == ADNIDataset alff_paper, ALL 956 subjects,
+  max |diff| = 2.98e-08 (float32 tensor round-trip) — PASS
+- D. `encoder.signed_safe == True` for BOTH encoders under `--signed_edges` — PASS
+- E. nested training receives `signed_edges=True` (call-site verified) — PASS
+- F. two-subject nested forward: gcn_w == raw signed PCC; negatives stay
+  negative; W_aug == PCC*gate; gamma_aug == mean(gate); all finite — PASS
+- G. main vs nested, same two subjects: edge_weight/edge_index/x/dyn_weight
+  identical (edge_weight bitwise); gcn_w built by the SAME shared
+  `train_one_epoch` code path — PASS
+
+```
+MAIN_ALFF_PAPER                  = PASS
+NESTED_ALFF_PAPER                = PASS
+ALFF_MAIN_NESTED_EQUAL           = PASS
+MAIN_SIGNED_PROFILE              = PASS
+NESTED_SIGNED_PROFILE            = PASS
+MAIN_NESTED_EDGE_SEMANTICS_EQUAL = PASS
+```
+
 ## Final summary
 
 ```

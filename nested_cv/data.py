@@ -22,6 +22,7 @@ from neuroHarmonize import harmonizationLearn, harmonizationApply
 from datasets.Dataset import WindowedData
 
 DATA_ROOT = "/users/3171356m/muhammad/GraSTIACL/data/GraSTIACL_ABIDE_979/raw"
+ALFF_NEW_NPZ = "/users/3171356m/muhammad/GraSTIACL/alff_new/non_combat/alff_new.npz"
 PHENOTYPE_CSV = "/users/3171356m/muhammad/GraSTIACL/data/raw/phenotypic_filtered_v2.csv"
 SEED = 123
 
@@ -56,6 +57,38 @@ def _load_group(adj_dir, nf_dir, dw_dir, y):
 
     y_arr = np.full(len(subject_ids), y, dtype=np.int64)
     return subject_ids, x_list, ew_list, dw_list, y_arr
+
+
+def load_alff_paper_features(subject_ids):
+    """Stage-2 integration: the SAME alff_paper recipe as ADNIDataset
+    (datasets/Dataset.py), applied to the nested pipeline's subject order.
+    Raw ROI-first 3-band ALFF from alff_new.npz matched by FILE_ID, then ONE
+    shared per-subject [0,1] min-max over the whole (90,3). Strict loading:
+    no nan_to_num, fail loudly (identical asserts to the Stage-1 path)."""
+    d = np.load(ALFF_NEW_NPZ, allow_pickle=True)
+    assert len(d['file_ids']) == 956
+    assert len(set(d['file_ids'].tolist())) == len(d['file_ids'])
+    assert d['ok'].all()
+    raw_map = {}
+    for i, sid in enumerate(d['file_ids']):
+        arr = d['alff'][i].astype(np.float64)
+        assert arr.shape == (90, 3), f"{sid}: raw ALFF shape {arr.shape}"
+        assert np.isfinite(arr).all(), f"{sid}: non-finite raw ALFF"
+        raw_map[sid] = arr
+    npz_ids = set(d['file_ids'].tolist())
+    want = set(subject_ids)
+    assert npz_ids == want, (f"alff_paper(nested): subject-set mismatch -- "
+                             f"npz-only={sorted(npz_ids - want)[:5]}, "
+                             f"loader-only={sorted(want - npz_ids)[:5]}")
+    out = []
+    for sid in subject_ids:
+        a = raw_map[sid]
+        lo, hi = a.min(), a.max()
+        assert hi > lo, f"{sid}: degenerate ALFF (max==min)"
+        x = (a - lo) / (hi - lo)
+        assert np.isclose(x.min(), 0.0) and np.isclose(x.max(), 1.0), sid
+        out.append(x)
+    return np.stack(out)
 
 
 def load_all_subjects():
@@ -217,7 +250,11 @@ def build_windowed_data_list(indices, x_all, ew_all, dw_all, y_all, node_feature
     row, col = np.meshgrid(np.arange(n_roi), np.arange(n_roi), indexing='ij')
     edge_index = torch.tensor(np.stack([row.flatten(), col.flatten()]), dtype=torch.long)
 
-    assert node_feature_mode in ('alff', 'alff_pcc')
+    # 'alff_paper' arrives here with x_all ALREADY substituted+normalised by
+    # load_alff_paper_features (run_nested_cv.py does it right after loading,
+    # BEFORE any ComBat/fold transformation) -- so it is treated like 'alff':
+    # x used as-is, no further scaling.
+    assert node_feature_mode in ('alff', 'alff_pcc', 'alff_paper')
     if node_feature_mode == 'alff_pcc':
         assert None not in (alff_min, alff_max, pcc_min, pcc_max), (
             "alff_pcc mode requires scale stats from compute_alff_pcc_scale_stats "

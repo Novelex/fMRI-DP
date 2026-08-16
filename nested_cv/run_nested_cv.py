@@ -34,7 +34,8 @@ from unsupervised.embedding_evaluation import EmbeddingEvaluation
 from unsupervised.training import build_model_and_view_learner, train_one_epoch
 from supervised.sampler import ClassBalancedBatchSampler
 
-from nested_cv.data import load_all_subjects, harmonize_fold, build_windowed_data_list, compute_alff_pcc_scale_stats
+from nested_cv.data import (load_all_subjects, harmonize_fold, build_windowed_data_list,
+                             compute_alff_pcc_scale_stats, load_alff_paper_features)
 
 RESULTS_DIR = osp.join(osp.dirname(__file__), "results")
 
@@ -59,6 +60,11 @@ def run(args):
 
     logging.info("Loading raw subject data...")
     subject_ids, x_all, ew_all, dw_all, y_all, covars = load_all_subjects()
+    if args.node_feature_mode == 'alff_paper':
+        # Substitute the Stage-1-validated alff_paper features BEFORE any
+        # ComBat/fold transformation -- identical recipe to ADNIDataset.
+        x_all = load_alff_paper_features(subject_ids)
+        logging.info("alff_paper: substituted raw ROI-first ALFF with per-subject shared [0,1] min-max")
     logging.info("Loaded %d subjects (%d ASD, %d NC)" % (len(subject_ids), int((y_all == 1).sum()), int((y_all == 0).sum())))
 
     outer_cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=args.seed)
@@ -117,7 +123,8 @@ def run(args):
         num_dataset_features=num_dataset_features, emb_dim=args.emb_dim, num_gc_layers=args.num_gc_layers,
         drop_ratio=args.drop_ratio, pooling_type=args.pooling_type, gamma_mode=args.gamma_mode,
         mij_source=args.mij_source, num_dyn_windows=args.num_dyn_windows, vib_hidden_dim=args.vib_hidden_dim,
-        model_lr=args.model_lr, view_lr=args.view_lr, device=device, weight_decay=args.weight_decay)
+        model_lr=args.model_lr, view_lr=args.view_lr, device=device, weight_decay=args.weight_decay,
+        signed_edges=args.signed_edges)
 
     if args.downstream_classifier == "linear":
         ee = EmbeddingEvaluation(LinearSVC(dual=False, fit_intercept=True, max_iter=10000), evaluator,
@@ -150,7 +157,8 @@ def run(args):
         fin_model_loss, fin_view_loss, fin_reg, _, _, beta = train_one_epoch(
             model, view_learner, model_optimizer, view_optimizer, dataloader, device,
             beta, gamma_orig, args.ce_lambda, args.reg_lambda, args.kld_lambda, args.template,
-            contrastive_mode=args.contrastive_mode, supervised_temperature=args.supervised_temperature)
+            contrastive_mode=args.contrastive_mode, supervised_temperature=args.supervised_temperature,
+            epoch_num=epoch, signed_edges=args.signed_edges)
         logging.info('Epoch {}, Model Loss {}, View Loss {}, Reg {}'.format(
             epoch, fin_model_loss, fin_view_loss, fin_reg))
 
@@ -203,6 +211,7 @@ def run(args):
         # in the filename (below) and in the file's own contents, so a
         # result is self-describing even if it's ever moved or renamed.
         "node_feature_mode": args.node_feature_mode,
+        "signed_edges": args.signed_edges,
         "gamma_mode": args.gamma_mode,
         "mij_source": args.mij_source,
         "reg_lambda": args.reg_lambda,
@@ -237,6 +246,8 @@ def run(args):
     # final_grid_*_array.sh sweep (which also varies mij_source at fixed
     # emb_dim/batch_size) had two configs racing to write the same path.
     config_tag = f"nf-{args.node_feature_mode}_gm-{args.gamma_mode}_mij-{args.mij_source}_cm-{args.contrastive_mode}"
+    if args.signed_edges:
+        config_tag += "_signed"
     out_path = osp.join(
         RESULTS_DIR,
         f"{combat_tag}__emb{args.emb_dim}_bs{args.batch_size}__{config_tag}__fold{args.fold}.json",
@@ -271,9 +282,15 @@ def arg_parse():
                         choices=['baseline', 'literal_beta', 'signal_strength', 'paper_literal'],
                         help='Same four arms as GraSTIACL.py --gamma_mode (Issue D).')
     parser.add_argument('--node_feature_mode', type=str, default='alff',
-                        choices=['alff', 'alff_pcc'],
-                        help='Same as GraSTIACL.py --node_feature_mode. alff_pcc scale stats are fit on this '
+                        choices=['alff', 'alff_pcc', 'alff_paper'],
+                        help='Same as GraSTIACL.py --node_feature_mode (alff_paper = Stage-1 validated '
+                             'ROI-first raw ALFF + per-subject shared [0,1] min-max, substituted before '
+                             'ComBat/fold transforms). alff_pcc scale stats are fit on this '
                              'fold\'s train_val_idx only, never test_idx (see compute_alff_pcc_scale_stats).')
+    parser.add_argument('--signed_edges', action='store_true',
+                        help='Feed RAW SIGNED PCC to the GCN via the signed_safe normalization '
+                             '(degree from |w|, signed weight kept in message passing). Same '
+                             'semantics as GraSTIACL.py --signed_edges.')
     parser.add_argument('--mij_source', type=str, default='alff',
                         choices=['alff', 'alff_pcc'],
                         help='Same as GraSTIACL.py --mij_source.')
