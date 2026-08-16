@@ -1,0 +1,42 @@
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+device: cuda, REPLICATE(multiplicative gate)=True
+epoch   1: model_loss=3.4286 view_loss=-8.4550 reg=0.4991
+epoch  10: model_loss=3.7712 view_loss=-2.6180 reg=0.4895
+epoch  20: model_loss=3.9815 view_loss=1.9118 reg=0.4953
+epoch  30: model_loss=5.6737 view_loss=2.1127 reg=0.5042
+epoch  40: model_loss=5.5835 view_loss=2.5013 reg=0.5033
+epoch  50: model_loss=5.2808 view_loss=2.5013 reg=0.4922
+epoch  60: model_loss=5.1810 view_loss=2.7041 reg=0.4881
+epoch  70: model_loss=5.4315 view_loss=2.6147 reg=0.4954
+epoch  80: model_loss=4.8837 view_loss=2.7039 reg=0.4473
+epoch  90: model_loss=5.3133 view_loss=3.0151 reg=0.4389
+epoch 100: model_loss=5.4790 view_loss=3.0273 reg=0.4696
+
+loss early(mean of first 5)=4.0563  late(mean of last 5)=5.3354  fall=-31.5%
+alignment: 1/16 originals find their own augmented version as nearest neighbour
+
+============================================================
+Criterion 1 (loss fall >= 30%):        FAIL (-31.5%)
+Criterion 2 (alignment >= 15/16):      FAIL (1/16)
+Criterion 3 (no NaN-guard fires): check log above -- any 'NaN detected' line = FAIL
+OVERFIT-16: FAIL

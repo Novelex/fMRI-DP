@@ -1,0 +1,43 @@
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+device: cuda, REPLICATE=True, num_gc_layers=1, pooling=layerwise
+epoch   1: model_loss=5.1534 view_loss=-8.1105 reg=0.5081
+epoch  10: model_loss=5.9468 view_loss=-4.3485 reg=0.4860
+epoch  20: model_loss=5.4311 view_loss=1.0533 reg=0.4960
+epoch  30: model_loss=5.6415 view_loss=1.4221 reg=0.4938
+epoch  40: model_loss=5.4949 view_loss=2.0483 reg=0.5152
+epoch  50: model_loss=5.1793 view_loss=2.0984 reg=0.4540
+epoch  60: model_loss=5.1929 view_loss=2.2646 reg=0.5049
+epoch  70: model_loss=5.0170 view_loss=2.3212 reg=0.4829
+epoch  80: model_loss=5.1555 view_loss=2.3232 reg=0.4642
+epoch  90: model_loss=5.3749 view_loss=2.3972 reg=0.4881
+epoch 100: model_loss=5.0523 view_loss=2.5282 reg=0.4620
+
+loss early(mean of first 5)=5.8256  late(mean of last 5)=5.0563  fall=13.2%
+alignment: 1/16 originals find their own augmented version as nearest neighbour
+eval-mode pure contrastive loss (uncontaminated by ce): 2.7135
+
+============================================================
+Criterion 1 (loss fall >= 30%):        FAIL (13.2%)
+Criterion 2 (alignment >= 15/16):      FAIL (1/16)
+Criterion 3 (no NaN-guard fires): check log above -- any 'NaN detected' line = FAIL
+OVERFIT-16: FAIL

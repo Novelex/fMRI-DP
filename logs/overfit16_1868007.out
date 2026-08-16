@@ -1,0 +1,43 @@
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+device: cuda, REPLICATE=True, layers=2, pooling=standard, FROZEN_ADVERSARY=False, REBALANCE=True (view_lr=5e-05, reg_lambda=1.0)
+epoch   1: model_loss=2.8483 view_loss=-8.8427 reg=0.4991
+epoch  10: model_loss=2.3874 view_loss=-8.4210 reg=0.4722
+epoch  20: model_loss=1.9912 view_loss=-8.1712 reg=0.4339
+epoch  30: model_loss=2.0197 view_loss=-8.0876 reg=0.3925
+epoch  40: model_loss=3.9406 view_loss=-7.2370 reg=0.3780
+epoch  50: model_loss=5.8087 view_loss=-6.1968 reg=0.3489
+epoch  60: model_loss=5.9316 view_loss=-4.8543 reg=0.3126
+epoch  70: model_loss=5.2593 view_loss=-2.8541 reg=0.2816
+epoch  80: model_loss=5.1015 view_loss=-0.1970 reg=0.2761
+epoch  90: model_loss=6.0454 view_loss=0.6603 reg=0.2942
+epoch 100: model_loss=5.4684 view_loss=1.2918 reg=0.3333
+
+loss early(mean of first 5)=2.9721  late(mean of last 5)=5.1749  fall=-74.1%
+alignment: 4/16 originals find their own augmented version as nearest neighbour
+eval-mode pure contrastive loss (uncontaminated by ce): 2.2727
+
+============================================================
+Criterion 1 (loss fall >= 30%):        FAIL (-74.1%)
+Criterion 2 (alignment >= 15/16):      FAIL (4/16)
+Criterion 3 (no NaN-guard fires): check log above -- any 'NaN detected' line = FAIL
+OVERFIT-16: FAIL

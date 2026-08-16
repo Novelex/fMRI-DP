@@ -6,10 +6,30 @@ Item 4a/4b's L_CE placement, the dyn_weight=None speedup, gradient clipping)
 lives in exactly one place instead of being duplicated -- and drifting -- across
 two copies of the same loop.
 """
+import logging
+
 import numpy as np
 import torch
 import torch.nn.functional as F
 from torch_scatter import scatter
+
+
+def _guard_nan(tensor, name, epoch_hint=""):
+    # ToyNet's edge_logits going NaN after ~70-95 epochs of adversarial ascent
+    # is a real, observed failure mode (crashed jobs 1867590, 1867597 via a
+    # CUDA assertion inside binary_cross_entropy -- sigmoid(NaN) is NaN, and
+    # NaN fails BCE's [0,1] range check). Detect + log loudly, then sanitize
+    # to a neutral value, rather than silently continuing or crashing. 0.0 is
+    # a neutral logit (sigmoid(0)=0.5, "50/50 keep or drop" -- not a guess at
+    # the true value, same philosophy as gamma's NaN guard).
+    n_nan = torch.isnan(tensor).sum().item()
+    if n_nan > 0:
+        logging.warning(
+            "%sNaN detected in %s: %d of %d values -- sanitizing to 0.0 (neutral logit). "
+            "This event should be reported alongside any result derived from this run.",
+            epoch_hint, name, n_nan, tensor.numel())
+        tensor = torch.nan_to_num(tensor, nan=0.0)
+    return tensor
 
 from unsupervised.encoder import TA_encoder
 from unsupervised.learning import GInfoMinMax
@@ -109,6 +129,16 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
 
     for batch in dataloader:
         batch = batch.to(device)
+        # The contrastive loss (calc_loss) normalizes each positive pair
+        # against the OTHER batch members (sum - pos_sim); with a single-graph
+        # batch that denominator is exactly 0 -> division by zero -> inf/NaN
+        # loss with no error raised. DataLoader(drop_last=True) usually
+        # prevents this, but nothing enforced it structurally until now.
+        assert batch.num_graphs >= 2, (
+            f"train_one_epoch got a batch with {batch.num_graphs} graph(s); "
+            "the in-batch contrastive loss needs >= 2 (its denominator is the "
+            "other batch members). Use drop_last=True or a batch size that "
+            "divides the dataset accordingly.")
         gcn_w = batch.edge_weight.abs().clamp(1e-6, 1.0)
 
         # ---- Phase 1: train view_learner to maximize contrastive loss ----
@@ -126,6 +156,8 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
         # produces must come from its own forward pass.
         edge_logits_vl, mu, std, edge_prod = view_learner(batch.batch, batch.x, batch.edge_index, beta, None,
                                              gcn_w, batch.edge_weight, batch.dyn_weight, gamma=gamma_orig)
+        edge_logits_vl = _guard_nan(edge_logits_vl, "edge_logits_vl (Phase 1)")
+        edge_prod = _guard_nan(edge_prod, "edge_prod (Phase 1)")
         temperature = 1
         bias = 0.0 + 0.0001
         eps = (bias - (1 - bias)) * torch.rand(edge_logits_vl.size()) + (1 - bias)
@@ -142,9 +174,14 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
             # Eq. (12): A = sigmoid(...) -- always positive, never multiplied by
             # the raw signed PCC.
             batch_aug_edge_weight = torch.sigmoid(gate_inputs).squeeze()
-        # gamma = the gate's own mean -- exact, since edge_weight for this
-        # call IS batch_aug_edge_weight itself (Eq. 18's literal definition).
-        gamma_aug = batch_aug_edge_weight.mean()
+        # gamma = the gate's own mean, PER SUBJECT -- not one shared number
+        # for the whole batch (measured effect of the batch-wide version: an
+        # 85.5% of a typical between-subject-distance shift, confirmed
+        # gamma-mediated). edge_weight for this call IS batch_aug_edge_weight
+        # itself (Eq. 18's literal "retained-edge adjacency" definition -- the
+        # correct matrix for the augmented view, unlike the unaugmented view's
+        # fallback which uses |PCC| as a documented Option-B deviation).
+        gamma_aug = batch_aug_edge_weight.view(batch.num_graphs, -1).mean(dim=1)
         x_aug, _ = model(batch.batch, batch.x, batch.edge_index, beta, None, batch_aug_edge_weight,
                         batch.edge_weight, None, gamma=gamma_aug)
         row, col = batch.edge_index
@@ -210,6 +247,8 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
         # ce_loss on the model side, matching the original's Phase 2.)
         edge_logits_vl, _, _, edge_prod2 = view_learner(batch.batch, batch.x, batch.edge_index, beta, None,
                                              gcn_w, batch.edge_weight, batch.dyn_weight, gamma=gamma_orig)
+        edge_logits_vl = _guard_nan(edge_logits_vl, "edge_logits_vl (Phase 2)")
+        edge_prod2 = _guard_nan(edge_prod2, "edge_prod2 (Phase 2)")
         eps = (bias - (1 - bias)) * torch.rand(edge_logits_vl.size()) + (1 - bias)
         gate_inputs_ = torch.log(eps) - torch.log(1 - eps)
         gate_inputs_ = gate_inputs_.to(device)
@@ -218,7 +257,7 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
             batch_aug_edge_weight = gcn_w * torch.sigmoid(gate_inputs).squeeze()
         else:
             batch_aug_edge_weight = torch.sigmoid(gate_inputs).squeeze()
-        gamma_aug = batch_aug_edge_weight.mean()
+        gamma_aug = batch_aug_edge_weight.view(batch.num_graphs, -1).mean(dim=1)  # per subject, see Phase 1's comment
         x_aug, _ = model(batch.batch, batch.x, batch.edge_index, beta, None, batch_aug_edge_weight,
                         batch.edge_weight, None, gamma=gamma_aug)
 

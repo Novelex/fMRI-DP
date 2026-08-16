@@ -1,0 +1,43 @@
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+device: cuda, REPLICATE(multiplicative gate)=True
+epoch   1: model_loss=3.4590 view_loss=-8.4434 reg=0.4991
+epoch  10: model_loss=3.8078 view_loss=-2.6939 reg=0.4706
+epoch  20: model_loss=3.6258 view_loss=1.9142 reg=0.4887
+epoch  30: model_loss=6.2131 view_loss=2.0653 reg=0.5269
+epoch  40: model_loss=6.1375 view_loss=1.0799 reg=0.3746
+epoch  50: model_loss=3.8393 view_loss=2.1620 reg=0.4581
+epoch  60: model_loss=3.6064 view_loss=2.2381 reg=0.4852
+epoch  70: model_loss=3.4187 view_loss=2.3877 reg=0.4429
+epoch  80: model_loss=3.1329 view_loss=2.4585 reg=0.4303
+epoch  90: model_loss=2.8660 view_loss=2.5146 reg=0.4471
+epoch 100: model_loss=2.7190 view_loss=2.5510 reg=0.4382
+
+loss early(mean of first 5)=4.0308  late(mean of last 5)=2.6662  fall=33.9%
+alignment: 3/16 originals find their own augmented version as nearest neighbour
+eval-mode pure contrastive loss (uncontaminated by ce): 2.7080
+
+============================================================
+Criterion 1 (loss fall >= 30%):        PASS (33.9%)
+Criterion 2 (alignment >= 15/16):      FAIL (3/16)
+Criterion 3 (no NaN-guard fires): check log above -- any 'NaN detected' line = FAIL
+OVERFIT-16: FAIL

@@ -341,13 +341,29 @@ class TAEncoder(torch.nn.Module):
         # unaugmented pass (nothing was dropped, so nothing to compensate for),
         # or the real gate's own mean for the augmented view specifically.
         eps = 1e-4
+        num_graphs = int(batch.max().item()) + 1
         if gamma is None:
             # Fallback only, for any call site not yet passing gamma explicitly.
+            # PER-SUBJECT, not batch-wide: measured directly (batch-gamma test,
+            # this session) that a batch-wide mean makes one subject's embedding
+            # depend on whichever strangers share its batch -- a shift as large
+            # as 85.5% of a typical between-subject distance, confirmed
+            # gamma-mediated via a pinned-gamma control arm (0.0 difference).
+            # Every subject owns exactly 8100 contiguous edges (the fixed 90x90
+            # fully-connected structure, certified in Stage 1), so a plain
+            # reshape recovers each subject's own edges safely.
             if edge_weight is not None:
-                gamma = edge_weight.mean().clamp(eps, 1 - eps)
+                edges_per_subject = edge_weight.shape[0] // num_graphs
+                gamma = edge_weight.view(num_graphs, edges_per_subject).mean(dim=1).clamp(eps, 1 - eps)
             else:
-                gamma = torch.tensor(1 - eps, device=x.device)
+                gamma = torch.full((num_graphs,), 1 - eps, device=x.device)
         gamma = torch.as_tensor(gamma, device=x.device)
+        if gamma.dim() == 0:
+            # A caller passed a single scalar explicitly (e.g. a fixed override
+            # for evaluation or a control test) -- broadcast it identically to
+            # every subject. This is deliberately NOT batch-composition-dependent:
+            # a true constant applied the same way to everyone is not the bug.
+            gamma = gamma.expand(num_graphs).clone()
         if torch.isnan(gamma).any():
             # clamp() does not sanitize NaN (NaN comparisons are always False,
             # so it passes straight through to Beta() and crashes). gamma going
@@ -392,7 +408,14 @@ class TAEncoder(torch.nn.Module):
         # norm well-behaved even if x approaches the zero vector for some node --
         # clamping the output alone wouldn't fix the backward pass through sqrt.
         x_norm = torch.sqrt(torch.sum(x ** 2, dim=1, keepdim=True) + 1e-12)
-        x = x + lambda_ * x_norm * x_trans
+        # lambda_ is now per-subject [num_graphs] (one Beta sample per subject,
+        # not one shared sample for the whole batch -- see the gamma fix above).
+        # Expand to per-node [B*90, 1] via the batch-assignment vector so each
+        # subject's own lambda_ only ever multiplies that subject's own rows --
+        # NOT averaging lambda_ back to a scalar here, which would silently
+        # recreate the same batch-dependence bug under a different name.
+        lambda_per_node = lambda_[batch].unsqueeze(1)
+        x = x + lambda_per_node * x_norm * x_trans
         # compute graph embedding using pooling
         if self.pooling_type == "standard":
             xpool = global_add_pool(x, batch)
