@@ -42,8 +42,9 @@ class ViewLearner(torch.nn.Module):
                     m.bias.data.fill_(0.0)
 
     def forward(self, batch, x, edge_index, beta, edge_attr, gcn_edge_weight, pcc_weight, dyn_weight, gamma=None):
-        # See GInfoMinMax.forward for why gcn_edge_weight and pcc_weight are
-        # separate: the GCN must never receive the raw signed PCC as its weight.
+        # See GInfoMinMax.forward: gcn_edge_weight is the GCN's edge weight
+        # for this view (|PCC| default, RAW SIGNED PCC under signed_safe);
+        # pcc_weight is always the raw signed PCC for ToyNet's VIB input.
         _, node_emb = self.encoder(batch, x, edge_index, beta, gcn_edge_weight, gamma)
         src, dst = edge_index[0], edge_index[1]
 

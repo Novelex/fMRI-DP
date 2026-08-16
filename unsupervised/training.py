@@ -107,10 +107,14 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
                      beta, gamma_orig, ce_lambda, reg_lambda, kld_lambda, template,
                      contrastive_mode="self_supervised", supervised_temperature=0.1,
                      replicate_original_code=False, epoch_num=None, signed_edges=False):
-    # signed_edges: feed the RAW SIGNED PCC to the GCN instead of abs().clamp().
-    # Only valid when the encoders were built with signed_safe=True (degree
-    # normalization from |w|, signed weight kept in message passing) --
-    # otherwise negative degrees produce NaN under sqrt.
+    # signed_edges: feed the RAW SIGNED PCC to the GCN. Only valid when the
+    # encoders were built with signed_safe=True: DEGREE normalization uses
+    # |w| (D_i = sum_j |W_ij|) while message passing retains the SIGNED W_ij
+    # (+0.8 -> positive message, -0.8 -> negative message). Without
+    # signed_safe, literal signed normalization produces NaN degrees on 246
+    # of 956 subjects (measured). Note the distinction: abs() here is for
+    # DEGREE normalization only -- it is NOT abs(PCC)-as-edge-weight, which
+    # is the default profile's separate, documented choice.
     # replicate_original_code now controls ONE remaining author-code
     # difference: ce_loss is added to model_loss in Phase 2 there (the model
     # is pushed to reduce it), not subtracted from view_loss in Phase 1.
@@ -143,7 +147,10 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
             "other batch members). Use drop_last=True or a batch size that "
             "divides the dataset accordingly.")
         if signed_edges:
-            gcn_w = batch.edge_weight.clamp(-1.0, 1.0)
+            # RAW signed PCC, unclamped: range certified within [-1,1] at the
+            # dataset layer (956-subject diagnostic: min -0.760, max 1.000);
+            # silent clamping would hide a corrupted source instead of failing.
+            gcn_w = batch.edge_weight
         else:
             gcn_w = batch.edge_weight.abs().clamp(1e-6, 1.0)
 
@@ -267,9 +274,13 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
         x_aug, _ = model(batch.batch, batch.x, batch.edge_index, beta, None, batch_aug_edge_weight,
                         batch.edge_weight, None, gamma=gamma_aug)
 
-        # Fig. 3/4 interpretability: learned adjacency summed separately per
-        # diagnostic group (y=1 ASD, y=0 NC), normalized by subject count at
-        # epoch end.
+        # Fig. 3/4 interpretability: batch_aug_edge_weight is the EFFECTIVE
+        # AUGMENTED FC (original weight * gate), NOT the learned retention
+        # gate A itself. This matches the authors' released code, which
+        # accumulates exactly the same product for its figures, and the
+        # paper's Fig. 3/4 ("strengthened and weakened connectivities" -- an
+        # FC-like quantity). Summed separately per diagnostic group,
+        # normalized by subject count at epoch end.
         per_subject_aug = batch_aug_edge_weight.detach().reshape(
             batch.num_graphs, template, template).cpu()
         y_flat = batch.y.view(-1)

@@ -453,9 +453,10 @@ class TAEncoder(torch.nn.Module):
                 # there's a real connection to weaken -- A is the (non-negative)
                 # connectivity itself, not a permanently unweighted placeholder.
                 if self.signed_safe:
-                    # Signed-edges arm: eval must feed the same raw signed PCC
-                    # the training loop feeds (train/eval consistency).
-                    edge_weight = data.edge_weight.clamp(-1.0, 1.0)
+                    # Signed-edges arm: eval must feed the same RAW signed PCC
+                    # the training loop feeds (train/eval consistency; range
+                    # certified within [-1,1] at the dataset layer, unclamped).
+                    edge_weight = data.edge_weight
                 else:
                     edge_weight = data.edge_weight.abs().clamp(1e-6, 1.0)
 

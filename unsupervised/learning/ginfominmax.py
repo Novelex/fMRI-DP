@@ -27,10 +27,12 @@ class GInfoMinMax(torch.nn.Module):
                     m.bias.data.fill_(0.0)
 
     def forward(self, batch, x, edge_index, beta, edge_attr, gcn_edge_weight, pcc_weight, dyn_weight, gamma=None):
-        # gcn_edge_weight: None (unweighted A, Eq. 17) for the original view, or the
-        # sigmoid-gated augmentation weight for the augmented view -- never the raw
-        # signed PCC, which would break GCNConv's weighted-degree normalization.
-        # pcc_weight: always the raw signed PCC, used only as ToyNet's VIB input.
+        # gcn_edge_weight: the GCN's edge weight for this view -- |PCC| in the
+        # default profile, or RAW SIGNED PCC in the signed_safe profile (where
+        # the conv normalizes degree by |w| but keeps the signed weight in
+        # message passing, so signed input is valid there). Augmented views
+        # pass weight * gate.
+        # pcc_weight: always the raw signed PCC, used as ToyNet's VIB input.
         # gamma: the true retained-edge ratio for this specific call (1.0 for the
         # unaugmented view, the real gate's own mean for the augmented view) --
         # see TAEncoder.forward's gamma docstring for why this can't be inferred
