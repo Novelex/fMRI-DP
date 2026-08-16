@@ -1,0 +1,19 @@
+2026-08-16 16:10:52,245 INFO T1 supervised ceiling: mode=alff shuffle=False device=cuda args={'node_feature_mode': 'alff', 'shuffle_labels': False, 'epochs': 2, 'eval_interval': 1, 'emb_dim': 32, 'num_gc_layers': 2, 'batch_size': 32, 'lr': 0.0005, 'seed': 123}
+/users/3171356m/muhammad/GraSTIACL/datasets/Dataset.py:51: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.data, self.slices = torch.load(path)
+2026-08-16 16:10:53,410 INFO fold 0 epoch 1: train=0.4763 val=0.4771 test=0.4740
+2026-08-16 16:10:53,642 INFO fold 0 epoch 2: train=0.4779 val=0.4771 test=0.4740
+2026-08-16 16:10:53,642 INFO FOLD 0 RESULT: best_ep=1 train=0.4763 val=0.4771 test=0.4740
+2026-08-16 16:10:53,882 INFO fold 1 epoch 1: train=0.4755 val=0.4771 test=0.4764
+2026-08-16 16:10:54,115 INFO fold 1 epoch 2: train=0.4755 val=0.4771 test=0.4764
+2026-08-16 16:10:54,115 INFO FOLD 1 RESULT: best_ep=1 train=0.4755 val=0.4771 test=0.4764
+2026-08-16 16:10:54,352 INFO fold 2 epoch 1: train=0.4755 val=0.4771 test=0.4764
+2026-08-16 16:10:54,589 INFO fold 2 epoch 2: train=0.4755 val=0.4771 test=0.4764
+2026-08-16 16:10:54,589 INFO FOLD 2 RESULT: best_ep=1 train=0.4755 val=0.4771 test=0.4764
+2026-08-16 16:10:54,829 INFO fold 3 epoch 1: train=0.5294 val=0.5294 test=0.4921
+2026-08-16 16:10:55,065 INFO fold 3 epoch 2: train=0.4804 val=0.4837 test=0.4817
+2026-08-16 16:10:55,065 INFO FOLD 3 RESULT: best_ep=1 train=0.5294 val=0.5294 test=0.4921
+2026-08-16 16:10:55,304 INFO fold 4 epoch 1: train=0.4755 val=0.4771 test=0.4764
+2026-08-16 16:10:55,541 INFO fold 4 epoch 2: train=0.4755 val=0.4771 test=0.4764
+2026-08-16 16:10:55,541 INFO FOLD 4 RESULT: best_ep=1 train=0.4755 val=0.4771 test=0.4764
+2026-08-16 16:10:55,541 INFO T1SUMMARY mode=alff shuffle=False train=0.4864+-0.0215 val=0.4876+-0.0209 test=0.4791+-0.0066 best_eps=[1, 1, 1, 1, 1]
