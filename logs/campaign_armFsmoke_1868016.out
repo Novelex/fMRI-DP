@@ -1,0 +1,43 @@
+ARM=F EPOCHS=2 EVAL_INTERVAL=1 FLAGS=--replicate_original_code --freeze_adversary --node_feature_mode alff_raw
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+validation time cost : 0.16904 sec
+validation time cost : 0.07146 sec
+validation time cost : 0.07186 sec
+validation time cost : 0.07338 sec
+validation time cost : 0.07132 sec
+mean validation time 0.09141:
+
+validation time cost : 0.07949 sec
+validation time cost : 0.07690 sec
+validation time cost : 0.07752 sec
+validation time cost : 0.07730 sec
+validation time cost : 0.07888 sec
+mean validation time 0.07802:
+
+validation time cost : 0.08850 sec
+validation time cost : 0.07744 sec
+validation time cost : 0.07846 sec
+validation time cost : 0.07864 sec
+validation time cost : 0.07924 sec
+mean validation time 0.08046:
+

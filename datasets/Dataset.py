@@ -37,7 +37,13 @@ class ADNIDataset(InMemoryDataset):
         # fit once, population-wide across all subjects, not per-subject --
         # per-subject min-max would erase genuine between-subject amplitude
         # differences that Issue #7 established are real, meaningful signal.
-        assert node_feature_mode in ('alff', 'alff_pcc')
+        # "alff_raw": x = raw (non-z-scored, non-mALFF-normalized) ALFF from
+        # alff_new/non_combat/alff_new.npz, matched by subject ID. Preserves
+        # between-subject global amplitude differences that the z-scored
+        # norm_matrix erases by construction (measured: sum-pooled probe 54.9%
+        # vs 50.8% for z-scored). Everything else (PCC, dyn windows, labels)
+        # identical to 'alff' mode.
+        assert node_feature_mode in ('alff', 'alff_pcc', 'alff_raw')
         self.node_feature_mode = node_feature_mode
 
         super(ADNIDataset, self).__init__(root, transform, pre_transform)
@@ -60,7 +66,9 @@ class ADNIDataset(InMemoryDataset):
         # Different filename per mode -- both can be cached side by side in
         # the same processed/ directory without colliding or forcing a
         # rebuild when switching modes.
-        return 'data.pt' if self.node_feature_mode == 'alff' else 'data_alff_pcc93.pt'
+        return {'alff': 'data.pt',
+                'alff_pcc': 'data_alff_pcc93.pt',
+                'alff_raw': 'data_alff_raw.pt'}[self.node_feature_mode]
 
     def download(self):
         # Download to `self.raw_dir`.
@@ -98,13 +106,16 @@ class ADNIDataset(InMemoryDataset):
             dyn_weight_np = [dw_array[j, 0] for j in range(dw_array.shape[0])]
             dyn_weight = torch.stack([torch.tensor(m) for m in dyn_weight_np]).float()
 
-            raw.append((x_alff, pcc_matrix, dyn_weight, y))
+            raw.append((subject_id, x_alff, pcc_matrix, dyn_weight, y))
 
         return raw
 
     def _build_data_list(self, raw, alff_min=None, alff_max=None, pcc_min=None, pcc_max=None):
         data_list = []
-        for x_alff, pcc_matrix, dyn_weight, y in raw:
+        for subject_id, x_alff, pcc_matrix, dyn_weight, y in raw:
+            if self.node_feature_mode == 'alff_raw':
+                # Substitute raw ALFF by subject ID (never by position).
+                x_alff = self._raw_alff_map[subject_id]
             num_nodes = pcc_matrix.shape[0]
 
             if self.node_feature_mode == 'alff_pcc':
@@ -158,9 +169,18 @@ class ADNIDataset(InMemoryDataset):
         )
         raw_all = raw_asd + raw_nc
 
+        if self.node_feature_mode == 'alff_raw':
+            import numpy as _np
+            d = _np.load(osp.join(osp.dirname(osp.dirname(osp.abspath(__file__))),
+                                  'alff_new', 'non_combat', 'alff_new.npz'), allow_pickle=True)
+            self._raw_alff_map = {sid: _np.nan_to_num(d['alff'][i]).astype(_np.float64)
+                                  for i, sid in enumerate(d['file_ids'])}
+            missing = [sid for sid, *_ in raw_all if sid not in self._raw_alff_map]
+            assert not missing, f"alff_raw: {len(missing)} subjects missing from alff_new.npz: {missing[:5]}"
+
         if self.node_feature_mode == 'alff_pcc':
-            all_alff = np.stack([r[0] for r in raw_all])   # [N, 90, 3]
-            all_pcc = np.stack([r[1] for r in raw_all])     # [N, 90, 90]
+            all_alff = np.stack([r[1] for r in raw_all])   # [N, 90, 3]
+            all_pcc = np.stack([r[2] for r in raw_all])     # [N, 90, 90]
             alff_min, alff_max = float(all_alff.min()), float(all_alff.max())
             pcc_min, pcc_max = float(all_pcc.min()), float(all_pcc.max())
             data_list = self._build_data_list(raw_all, alff_min, alff_max, pcc_min, pcc_max)

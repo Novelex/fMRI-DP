@@ -88,7 +88,9 @@ def run(args):
         drop_ratio=args.drop_ratio, pooling_type=args.pooling_type, gamma_mode=args.gamma_mode,
         mij_source=args.mij_source, num_dyn_windows=args.num_dyn_windows, vib_hidden_dim=args.vib_hidden_dim,
         model_lr=args.model_lr, view_lr=args.view_lr, device=device, weight_decay=args.weight_decay,
-        enable_attention_mix=not args.replicate_original_code)
+        enable_attention_mix=not args.replicate_original_code, signed_edges=args.signed_edges)
+    if args.freeze_adversary:
+        view_optimizer = torch.optim.Adam(view_learner.parameters(), lr=0.0)
 
     if args.downstream_classifier == "linear":
         ee = EmbeddingEvaluation(LinearSVC(dual=False, fit_intercept=True, max_iter=10000), evaluator,
@@ -104,6 +106,60 @@ def run(args):
     train_score, val_score, test_score = ee.kf_embedding_evaluation(model.encoder, beta, dataset)
     logging.info(
         "Before training Embedding Eval Scores: Train: {} Val: {} Test: {}".format(train_score, val_score, test_score))
+
+    if args.supervised_holdout:
+        # Arm E: honest 80/20 supervised-contrastive protocol. The encoder
+        # trains ONLY on the 80% (labels used by calc_loss_supervised); epoch
+        # selection uses 5-fold CV on the 80% side's embeddings only; the 20%
+        # is scored once per eval and never influences any decision.
+        from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold
+        from sklearn.preprocessing import StandardScaler
+        from sklearn.pipeline import make_pipeline
+        y_all = dataset.data.y.cpu().numpy()
+        idx_all = np.arange(len(dataset))
+        train_idx, test_idx = train_test_split(idx_all, test_size=0.2, stratify=y_all,
+                                               random_state=args.seed)
+        logging.info("SupervisedHoldout: encoder trains on %d subjects (labels used); "
+                     "%d held out untouched", len(train_idx), len(test_idx))
+        holdout_loader = DataLoader(torch.utils.data.Subset(dataset, train_idx.tolist()),
+                                    batch_size=args.batch_size, shuffle=True, drop_last=True)
+        emb_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=False)
+
+        val_curve_h, test_curve_h, epochs_h = [], [], []
+        for epoch in range(1, args.epochs + 1):
+            fin_model_loss, fin_view_loss, fin_reg, _, _, beta = train_one_epoch(
+                model, view_learner, model_optimizer, view_optimizer, holdout_loader, device,
+                beta, gamma_orig, args.ce_lambda, args.reg_lambda, args.kld_lambda, args.template,
+                contrastive_mode="supervised",
+                replicate_original_code=args.replicate_original_code,
+                epoch_num=epoch, signed_edges=args.signed_edges)
+            logging.info('Epoch {}, Model Loss {}, View Loss {}, Reg {}'.format(
+                epoch, fin_model_loss, fin_view_loss, fin_reg))
+            if epoch % args.eval_interval == 0:
+                model.eval()
+                emb, emb_y = model.encoder.get_embeddings(emb_loader, beta, device)
+                cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=args.seed)
+                clf = make_pipeline(StandardScaler(),
+                                    LinearSVC(dual=False, fit_intercept=True, max_iter=10000))
+                val_acc = cross_val_score(clf, emb[train_idx], emb_y[train_idx],
+                                          cv=cv, scoring='accuracy').mean()
+                clf2 = make_pipeline(StandardScaler(),
+                                     LinearSVC(dual=False, fit_intercept=True, max_iter=10000))
+                clf2.fit(emb[train_idx], emb_y[train_idx])
+                test_acc = clf2.score(emb[test_idx], emb_y[test_idx])
+                val_curve_h.append(val_acc)
+                test_curve_h.append(test_acc)
+                epochs_h.append(epoch)
+                logging.info("HOLDOUT epoch %d: val(5-fold on train80)=%.4f "
+                             "test(held-out 20)=%.4f", epoch, val_acc, test_acc)
+        best_i = int(np.argmax(np.array(val_curve_h)))
+        logging.info('FinishedTraining!')
+        logging.info('HOLDOUT BestEpoch: {}'.format(epochs_h[best_i]))
+        logging.info('BestValidationScore: acc_mean: {} (holdout protocol, train80 5-fold CV)'.format(
+            val_curve_h[best_i]))
+        logging.info('BestTestScore: acc_mean: {} (held-out 20 percent, selected by train-side val only)'.format(
+            test_curve_h[best_i]))
+        return val_curve_h[best_i]
 
     model_losses = []
     view_losses = []
@@ -160,7 +216,8 @@ def run(args):
         fin_model_loss, fin_view_loss, fin_reg, fin_aug_edge_weight_asd, fin_aug_edge_weight_nc, beta = \
             train_one_epoch(model, view_learner, model_optimizer, view_optimizer, dataloader, device,
                              beta, gamma_orig, args.ce_lambda, args.reg_lambda, args.kld_lambda, args.template,
-                             replicate_original_code=args.replicate_original_code)
+                             replicate_original_code=args.replicate_original_code,
+                             epoch_num=epoch, signed_edges=args.signed_edges)
         logging.info(
             'Epoch {}, Model Loss {}, View Loss {}, Reg {}'.format(epoch, fin_model_loss,
                                                                    fin_view_loss,
@@ -342,7 +399,7 @@ def arg_parse():
                              'paper_literal=both together, literal Beta AND gamma_orig=mean(|W|) -- the '
                              'combination actually specified verbatim by the paper\'s own text.')
     parser.add_argument('--node_feature_mode', type=str, default='alff',
-                        choices=['alff', 'alff_pcc'],
+                        choices=['alff', 'alff_pcc', 'alff_raw'],
                         help='alff=x is raw ALFF only, [90,3] (default, current behavior). '
                              'alff_pcc=x is [min-max ALFF ->[0,1] ; min-max own PCC row ->[-1,1]], [90,93] -- '
                              'each node also gets its own connectivity profile as input content, not just as '
@@ -373,6 +430,22 @@ def arg_parse():
                              'full --epochs). Same addition already applied and verified in '
                              'nested_cv/run_nested_cv.py.')
     parser.add_argument('--seed', type=int, default=123)
+    parser.add_argument('--freeze_adversary', action='store_true',
+                        help='Pin the view_learner at its initialization (optimizer lr=0.0; every other '
+                             'computation identical). Named deviation from the paper -- equivalent to '
+                             'random-augmentation contrastive learning. Motivated by the overfit-16 campaign: '
+                             'live-adversary arms peak at epoch 0 and decay to uniformity (eval contrastive '
+                             '= ln(batch-1) exactly); the frozen arm is the only configuration that learns '
+                             '(alignment 11-12/16, still improving at epoch 100).')
+    parser.add_argument('--signed_edges', action='store_true',
+                        help='Feed the RAW SIGNED PCC to the GCN (anticorrelation preserved) using the '
+                             'signed_safe normalization (degree from |w|, signed weight kept in message '
+                             'passing). Without signed_safe this would NaN on negative degrees.')
+    parser.add_argument('--supervised_holdout', action='store_true',
+                        help='Arm E protocol: stratified 80/20 split; encoder trains with the supervised '
+                             'contrastive loss on the 80 percent (labels used); epoch selection by 5-fold CV '
+                             'on the 80 percent side only; the 20 percent is scored once per eval and never '
+                             'influences any choice. Replaces the transductive kf evaluation entirely.')
     parser.add_argument('--replicate_original_code', action='store_true',
                         help='Match github.com/BiaoHe2025/GraSTIACL\'s actual GraSTIACL.py behavior on the three '
                              'points verified to differ from this project\'s implementation: (1) the attention-'

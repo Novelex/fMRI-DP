@@ -1,0 +1,43 @@
+16-Aug-26 02:42:40 - Using Device: cuda
+16-Aug-26 02:42:40 - Seed: 123
+16-Aug-26 02:42:40 - Namespace(name='GraSTIACL_ABIDE_979', path='/users/3171356m/muhammad/GraSTIACL/data/GraSTIACL_ABIDE_979', template=90, num_dyn_windows=3, model_lr=0.0005, view_lr=0.0005, num_gc_layers=2, pooling_type='standard', emb_dim=32, vib_hidden_dim=400, batch_size=32, drop_ratio=0.3, epochs=2, kld_lambda=0.003, reg_lambda=1.0, gamma_mode='paper_literal', node_feature_mode='alff', mij_source='alff', eval_interval=1, downstream_classifier='linear', ce_lambda=2.0, weight_decay=0.0, early_stop_patience=0, seed=123, freeze_adversary=True, signed_edges=False, supervised_holdout=True, replicate_original_code=True)
+/users/3171356m/muhammad/GraSTIACL/datasets/Dataset.py:51: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.data, self.slices = torch.load(path)
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+16-Aug-26 02:43:21 - Before training Embedding Eval Scores: Train: [0.5720826246483318, 0.008211089438357555, 0.4989072822872559, 0.011459602706526625, 0.4481099640958421, 0.017057970588791653, 0.6845346551870451, 0.019605964559500626, 0.5633240694648104, 0.012196349161554751] Val: [0.5398692810457517, 0.028519508796433266, 0.4780630683511914, 0.054368095567106395, 0.44657533634828306, 0.07279632917038685, 0.6249999921875001, 0.05062114119552719, 0.5192112332112332, 0.03375220135122429] Test: [0.5135798429319373, 0.025540754713039345, 0.43810357094238217, 0.030340176293433375, 0.3999999956043957, 0.04536212574448279, 0.6168514789913715, 0.06023755805665781, 0.48820628236444474, 0.02935208817272385, 0.5315227940376456, 0.026500815359689643]
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+16-Aug-26 02:43:21 - SupervisedHoldout: encoder trains on 764 subjects (labels used); 192 held out untouched
+16-Aug-26 02:44:33 - Epoch 1, Model Loss 7.041876088018003, View Loss -8.002964351488197, Reg 0.498930925908296
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/sklearn/utils/validation.py:1365: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+  y = column_or_1d(y, warn=True)
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/sklearn/utils/validation.py:1365: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+  y = column_or_1d(y, warn=True)
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/sklearn/utils/validation.py:1365: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+  y = column_or_1d(y, warn=True)
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/sklearn/utils/validation.py:1365: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+  y = column_or_1d(y, warn=True)
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/sklearn/utils/validation.py:1365: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+  y = column_or_1d(y, warn=True)
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/sklearn/utils/validation.py:1365: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+  y = column_or_1d(y, warn=True)
+16-Aug-26 02:44:33 - HOLDOUT epoch 1: val(5-fold on train80)=0.5498 test(held-out 20)=0.4792
+16-Aug-26 02:45:45 - Epoch 2, Model Loss 6.09893798828125, View Loss -8.478691225466521, Reg 0.49877808145854785
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/sklearn/utils/validation.py:1365: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+  y = column_or_1d(y, warn=True)
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/sklearn/utils/validation.py:1365: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+  y = column_or_1d(y, warn=True)
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/sklearn/utils/validation.py:1365: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+  y = column_or_1d(y, warn=True)
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/sklearn/utils/validation.py:1365: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+  y = column_or_1d(y, warn=True)
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/sklearn/utils/validation.py:1365: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+  y = column_or_1d(y, warn=True)
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/sklearn/utils/validation.py:1365: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+  y = column_or_1d(y, warn=True)
+16-Aug-26 02:45:45 - HOLDOUT epoch 2: val(5-fold on train80)=0.5511 test(held-out 20)=0.4948
+16-Aug-26 02:45:45 - FinishedTraining!
+16-Aug-26 02:45:45 - HOLDOUT BestEpoch: 2
+16-Aug-26 02:45:45 - BestValidationScore: acc_mean: 0.5511007911936704 (holdout protocol, train80 5-fold CV)
+16-Aug-26 02:45:45 - BestTestScore: acc_mean: 0.4947916666666667 (held-out 20 percent, selected by train-side val only)

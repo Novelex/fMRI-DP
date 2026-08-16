@@ -224,7 +224,8 @@ class TAEncoder(torch.nn.Module):
                  is_infograph=False,
                  beta_convention="reversed",
                  gamma_orig_mode="one",
-                 enable_attention_mix=True):
+                 enable_attention_mix=True,
+                 signed_safe=False):
         super(TAEncoder, self).__init__()
         # The original authors' released code computes x_trans (attention branch)
         # and beta (Eq. 18's Beta-Mixup weight), but the line that would actually
@@ -234,6 +235,11 @@ class TAEncoder(torch.nn.Module):
         # that literal behavior for a direct comparison; default True keeps this
         # project's paper-prose-faithful implementation (Eq. 19) unchanged.
         self.enable_attention_mix = enable_attention_mix
+        # signed_safe: this encoder expects RAW SIGNED PCC edge weights; its
+        # GCNConv layers normalize degree by |w| while keeping the signed
+        # weight in message passing (gcn_conv.py's signed_safe path), so
+        # anticorrelation survives without the negative-degree NaN.
+        self.signed_safe = signed_safe
         self.pooling_type = pooling_type
         self.emb_dim = emb_dim
         self.num_gc_layers = num_gc_layers
@@ -278,12 +284,12 @@ class TAEncoder(torch.nn.Module):
                 # nn = Linear(emb_dims[i-1], emb_dims[i])
                 # add_self_loops=False: edge_index is already fully connected with
                 # explicit self-loops (Dataset.py), so GCNConv shouldn't add more.
-                conv = GCNConv(emb_dim, emb_dim, add_self_loops=False)
+                conv = GCNConv(emb_dim, emb_dim, add_self_loops=False, signed_safe=signed_safe)
             else:
                 # nn = Sequential(Linear(num_dataset_features, emb_dim), ReLU(), Linear(emb_dim, emb_dim))
 
                 # nn = Linear(num_dataset_features, emb_dims[i])
-                conv = GCNConv(num_dataset_features, emb_dim, add_self_loops=False)
+                conv = GCNConv(num_dataset_features, emb_dim, add_self_loops=False, signed_safe=signed_safe)
             # conv = WGINConv(nn)
             # 通过全连接层构造卷积层
             # bn = torch.nn.BatchNorm1d(emb_dims[i])
@@ -446,7 +452,12 @@ class TAEncoder(torch.nn.Module):
                 # certain edges, we weaken their connections" only makes sense if
                 # there's a real connection to weaken -- A is the (non-negative)
                 # connectivity itself, not a permanently unweighted placeholder.
-                edge_weight = data.edge_weight.abs().clamp(1e-6, 1.0)
+                if self.signed_safe:
+                    # Signed-edges arm: eval must feed the same raw signed PCC
+                    # the training loop feeds (train/eval consistency).
+                    edge_weight = data.edge_weight.clamp(-1.0, 1.0)
+                else:
+                    edge_weight = data.edge_weight.abs().clamp(1e-6, 1.0)
 
                 if x is None:
                     x = torch.ones((batch.shape[0], 1)).to(device)

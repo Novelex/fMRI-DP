@@ -1,0 +1,41 @@
+16-Aug-26 02:43:10 - Using Device: cuda
+16-Aug-26 02:43:10 - Seed: 123
+16-Aug-26 02:43:10 - Namespace(name='GraSTIACL_ABIDE_979', path='/users/3171356m/muhammad/GraSTIACL/data/GraSTIACL_ABIDE_979', template=90, num_dyn_windows=3, model_lr=0.0005, view_lr=0.0005, num_gc_layers=2, pooling_type='standard', emb_dim=32, vib_hidden_dim=400, batch_size=32, drop_ratio=0.3, epochs=2, kld_lambda=0.003, reg_lambda=1.0, gamma_mode='paper_literal', node_feature_mode='alff_raw', mij_source='alff', eval_interval=1, downstream_classifier='linear', ce_lambda=2.0, weight_decay=0.0, early_stop_patience=0, seed=123, freeze_adversary=True, signed_edges=False, supervised_holdout=False, replicate_original_code=True)
+Processing...
+Done!
+/users/3171356m/muhammad/GraSTIACL/datasets/Dataset.py:51: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.data, self.slices = torch.load(path)
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+16-Aug-26 02:44:36 - Before training Embedding Eval Scores: Train: [0.5550800680337602, 0.008836939673669298, 0.4022614551128779, 0.02009272212854156, 0.31546391644170474, 0.025102381175249096, 0.7724493745391351, 0.026387075464644777, 0.5579594484166448, 0.019835389126970443] Val: [0.5294117647058824, 0.01982451096484065, 0.36827353240672894, 0.011602448140496607, 0.2876712289360106, 0.01732754858547675, 0.7499999906250001, 0.04873397111487017, 0.5170154830436055, 0.04292041999480172] Test: [0.5397360383944154, 0.019014993260318105, 0.3880148075143328, 0.02836978564605754, 0.3076923043110736, 0.03333132026691538, 0.7504356360754887, 0.045900955479895984, 0.5308390022675737, 0.0329365372081003, 0.5288673702535089, 0.03241027942466369]
+16-Aug-26 02:46:07 - Epoch 1, Model Loss 3.1811530999059956, View Loss -9.698832942850919, Reg 0.49884770081133023
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+16-Aug-26 02:46:09 - Metric: accuracy Train_mean: 0.5560583207642031 Val_mean: 0.5450980392156863 Test_mean: 0.5481402705061083
+16-Aug-26 02:46:09 - Metric: accuracy Train_std: 0.012550262359343008 Val_std: 0.03999230991053163 Test_std: 0.028582675528978155
+16-Aug-26 02:46:09 - Metric: f1 Train_mean: 0.39591623911514456 Val_mean: 0.3722540670087503 Test_mean: 0.3764897049818419
+16-Aug-26 02:46:09 - Metric: f1 Train_std: 0.04079696497751458 Val_std: 0.04376476422455141 Test_std: 0.04231987103575787
+16-Aug-26 02:46:09 - Metric: sen Train_mean: 0.3085910642316458 Val_mean: 0.28219177695627706 Test_mean: 0.28791208474821883
+16-Aug-26 02:46:09 - Metric: sen Train_std: 0.04653281325538073 Val_std: 0.031950420903941075 Test_std: 0.04016630039926496
+16-Aug-26 02:46:09 - Metric: spe Train_mean: 0.7805393277849912 Val_mean: 0.7849999901875001 Test_mean: 0.7844950416749006
+16-Aug-26 02:46:09 - Metric: spe Train_std: 0.040984388392320346 Val_std: 0.062449979203359235 Test_std: 0.05245299680411228
+16-Aug-26 02:46:09 - Metric: precision Train_mean: 0.5625236842916299 Val_mean: 0.5529333807225232 Test_mean: 0.5521714925611902
+16-Aug-26 02:46:09 - Metric: precision Train_std: 0.02620744167942342 Val_std: 0.09294017251961328 Test_std: 0.05612892716400384
+16-Aug-26 02:47:41 - Epoch 2, Model Loss 2.67123821689494, View Loss -10.756780357041619, Reg 0.4989642767726627
+/users/3171356m/miniconda3/envs/grastiacl/lib/python3.12/site-packages/torch_geometric/data/in_memory_dataset.py:300: UserWarning: It is not recommended to directly access the internal storage format `data` of an 'InMemoryDataset'. The data of the dataset is already cached, so any modifications to `data` will not be reflected when accessing its elements. Clearing the cache now by removing all elements in `dataset._data_list`. If you are absolutely certain what you are doing, access the internal storage via `InMemoryDataset._data` instead to suppress this warning. Alternatively, you can access stacked individual attributes of every graph via `dataset.{attr_name}`.
+  warnings.warn(msg)
+16-Aug-26 02:47:42 - Metric: accuracy Train_mean: 0.5567113806788401 Val_mean: 0.5450980392156863 Test_mean: 0.5408049738219894
+16-Aug-26 02:47:42 - Metric: accuracy Train_std: 0.014466138698027027 Val_std: 0.03270587190378249 Test_std: 0.02932996080751502
+16-Aug-26 02:47:42 - Metric: f1 Train_mean: 0.3928190391360039 Val_mean: 0.3693681893372296 Test_mean: 0.36477528849239
+16-Aug-26 02:47:42 - Metric: f1 Train_std: 0.03708446566530225 Val_std: 0.03540753127337014 Test_std: 0.04403136910598005
+16-Aug-26 02:47:42 - Metric: sen Train_mean: 0.3037800676846046 Val_mean: 0.2794520509664103 Test_mean: 0.27912087605361674
+16-Aug-26 02:47:42 - Metric: sen Train_std: 0.043173329816007563 Val_std: 0.030753347963164604 Test_std: 0.044826544681842675
+16-Aug-26 02:47:42 - Metric: spe Train_mean: 0.7861487514435227 Val_mean: 0.7874999901562502 Test_mean: 0.7784752397550967
+16-Aug-26 02:47:42 - Metric: spe Train_std: 0.04543889554366311 Val_std: 0.061745444404324286 Test_std: 0.06572514315744075
+16-Aug-26 02:47:42 - Metric: precision Train_mean: 0.5662189760594016 Val_mean: 0.553120572100384 Test_mean: 0.5419725902056729
+16-Aug-26 02:47:42 - Metric: precision Train_std: 0.03253842595521611 Val_std: 0.07360751645735997 Test_std: 0.061947132279703734
+16-Aug-26 02:47:42 - FinishedTraining!
+16-Aug-26 02:47:42 - BestEpoch: 0
+16-Aug-26 02:47:42 - BestTrainScore: acc_mean: 0.5560583207642031 acc_std: 0.012550262359343008 f1_mean: 0.39591623911514456 f1_std: 0.04079696497751458 sen_mean: 0.3085910642316458 sen_std: 0.04653281325538073 spe_mean: 0.7805393277849912 spe_std: 0.040984388392320346 pre_mean: 0.5625236842916299 pre_std: 0.02620744167942342
+16-Aug-26 02:47:42 - BestValidationScore: acc_mean: 0.5450980392156863 acc_std: 0.03999230991053163 f1_mean: 0.3722540670087503 f1_std: 0.04376476422455141 sen_mean: 0.28219177695627706 sen_std: 0.031950420903941075 spe_mean: 0.7849999901875001 spe_std: 0.062449979203359235 pre_mean: 0.5529333807225232 pre_std: 0.09294017251961328
+16-Aug-26 02:47:42 - BestTestScore: acc_mean: 0.5481402705061083 acc_std: 0.028582675528978155 f1_mean: 0.3764897049818419 f1_std: 0.04231987103575787 sen_mean: 0.28791208474821883 sen_std: 0.04016630039926496 spe_mean: 0.7844950416749006 spe_std: 0.05245299680411228 pre_mean: 0.5521714925611902 pre_std: 0.05612892716400384 auc_mean:0.5223483842889782 auc_std:0.018154739061264892
