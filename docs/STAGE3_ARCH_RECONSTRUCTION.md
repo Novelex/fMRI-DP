@@ -66,6 +66,23 @@ current-vs-per-ROI-KL ratios on two real subjects: **1.000** and **1.001**.
   (would softmax logits); bare `.squeeze()` no-op; `softplus(var−5)` small-init documented.
 - Full decision table and 30/30 internal-consistency results: `docs/STAGE3_VIB_AUDIT.md`.
 
+## CAPACITY LIMITATION
+
+```
+CURRENT_TOYNET_PARAM_COUNT      = 1,018,490
+AUTHORS_LAYER_PARAM_COUNT       = 415,292
+CURRENT_TOYNET_VS_AUTHORS_RATIO = 2.452x
+```
+
+The current ToyNet has substantially greater absolute capacity than the
+paper-accounted layer configuration; paper-tuned optimization/regularization
+hyperparameters may therefore not transfer quantitatively. Note carefully:
+this is NOT a claim that the adversarial Phi network alone is 2.45x larger
+relative to Theta — current `training.py` constructs equally enlarged,
+INDEPENDENT ToyNets for BOTH the model and the view learner, so the
+Theta/Phi balance is unchanged. No underfitting/overfitting inference is
+drawn from this parameter count.
+
 ## FINAL STAGE-3 BLOCK
 
 ```
