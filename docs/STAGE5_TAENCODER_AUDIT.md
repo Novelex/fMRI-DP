@@ -351,3 +351,33 @@ ALL_STAGE5_PROFILE_TESTS =
 SAFE_TO_FREEZE_STAGE5 =
     YES
 ```
+
+---
+
+# STAGE 5 — FREEZE (2026-08-17, final defensive guard)
+
+One guard added, nothing else: `paper_printed`/`paper_intent` gamma now enforces the
+exact shape contract — scalar (expanded to [num_graphs]) or 1-D [num_graphs]; any
+other shape ([B,1], [1,B], wrong length) RAISES before it could silently broadcast
+into `lambda_[batch]` and corrupt per-subject fusion. All previous checks retained
+(finite, [0,1] range, eps Beta-boundary clamp, layerwise guard, get_attentions guard,
+all four profiles).
+
+Tests: 6 shape tests per paper profile (scalar 1.0 PASS, [2] PASS, [2,1]/[1,2]/[1]/[3]
+RAISE) = 12/12 · full profile battery 63/63 (2-subject paper_intent step losses
+identical: −3.3279/−12.9785) · hardening battery 28/28 (incl. standard-pooling
+BITWISE regression vs pre-hardening capture) — **103/103**.
+
+```
+PAPER_GAMMA_SHAPE_VALIDATION =
+    PASS
+
+STAGE5_FINAL_TESTS =
+    PASS  (103/103)
+
+SAFE_TO_FREEZE_STAGE5 =
+    YES
+
+STAGE5_STATUS =
+    FROZEN
+```
