@@ -405,6 +405,15 @@ class TAEncoder(torch.nn.Module):
             gamma = torch.as_tensor(gamma, dtype=x.dtype, device=x.device)
             if gamma.dim() == 0:
                 gamma = gamma.expand(num_graphs).clone()
+            if gamma.dim() != 1 or gamma.numel() != num_graphs:
+                # Exact shape contract: scalar (expanded above) or 1-D
+                # [num_graphs], one retention ratio per subject. Anything else
+                # ([B,1], [1,B], wrong length) would silently broadcast into
+                # lambda_[batch] indexing and corrupt the per-subject fusion.
+                raise ValueError(
+                    f"tae_profile='{self.tae_profile}': gamma must be a scalar "
+                    f"or 1-D [num_graphs]=[{num_graphs}]; got shape "
+                    f"{tuple(gamma.shape)}.")
             if not torch.isfinite(gamma).all():
                 raise ValueError(
                     f"tae_profile='{self.tae_profile}': non-finite gamma "
