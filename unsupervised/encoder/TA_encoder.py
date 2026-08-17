@@ -225,8 +225,39 @@ class TAEncoder(torch.nn.Module):
                  beta_convention="reversed",
                  gamma_orig_mode="one",
                  enable_attention_mix=True,
-                 signed_safe=False):
+                 signed_safe=False,
+                 tae_profile="abide_stable_legacy"):
         super(TAEncoder, self).__init__()
+        # Stage 5 profile separation. One explicit switch, four certified behaviors:
+        #   "paper_printed"      -- gamma = retention (orig 1.0 / aug mean(gate)),
+        #                           lambda ~ Beta(gamma, 1-gamma) (the paper's PRINTED
+        #                           parameter order; Eq. 18 literally prints the Beta
+        #                           FUNCTION integral -- sampling a Beta DISTRIBUTION is
+        #                           an implementation inference supported by the Mixup
+        #                           prose and the authors' np.random.beta call),
+        #                           fusion EXACTLY Eq. 19: X_topo + lambda * X_atte.
+        #   "paper_intent"       -- same, but lambda ~ Beta(1-gamma, gamma): the prose
+        #                           reading (less connectivity -> more attention), also
+        #                           matching the authors' unused np.random.beta(fin_reg,
+        #                           1-fin_reg) which puts the DROP rate first.
+        #   "authors_release"    -- the released TA_encoder.py executable, matched
+        #                           exactly: normalize BOTH branches, fusion commented
+        #                           out, x_trans DISCARDED, pool normalized X_topo.
+        #                           (NOT the old enable_attention_mix=False path, which
+        #                           returned RAW X_topo -- documented Stage-5 correction.)
+        #   "abide_stable_legacy"-- the pre-Stage5 behavior EXACTLY (bitwise-reproduced
+        #                           against 46940f5): beta_convention/gamma_orig_mode
+        #                           flags, signal-strength fallback, nan_to_num guard,
+        #                           normalize(x_trans) and ||x_topo|| stabilized fusion.
+        # In paper profiles gamma MUST be explicit and finite (fail loudly); the
+        # signal-strength fallback and the nan_to_num repair are legacy-only.
+        assert tae_profile in ("paper_printed", "paper_intent", "authors_release",
+                               "abide_stable_legacy"), tae_profile
+        self.tae_profile = tae_profile
+        if tae_profile in ("paper_printed", "paper_intent") and not enable_attention_mix:
+            raise ValueError(
+                "paper_printed/paper_intent fuse the attention branch by definition "
+                "(Eq. 19); enable_attention_mix=False only applies to abide_stable_legacy")
         # The original authors' released code computes x_trans (attention branch)
         # and beta (Eq. 18's Beta-Mixup weight), but the line that would actually
         # mix them into x is commented out (unsupervised/encoder/TA_encoder.py:272-274
@@ -253,11 +284,14 @@ class TAEncoder(torch.nn.Module):
         # contradicting the prose but keeping attention alive for the original view.
         assert beta_convention in ("reversed", "literal")
         self.beta_convention = beta_convention
-        # "one": gamma_orig=1.0 (current default -- retention-ratio reading).
-        # "signal_strength": gamma_orig falls back to mean(|W|), the real
-        # weighted-adjacency mean, instead of the hardcoded 1.0 -- Option B's
-        # fix, keeping lambda_ non-trivial for the original/eval view even
-        # under the "reversed" Beta convention.
+        # "one": gamma_orig=1.0 (retention-ratio reading).
+        # "signal_strength": gamma_orig falls back to the per-subject mean of the
+        # edge weight AS PASSED -- i.e. mean(W), the SIGNED mean under the signed
+        # profile (Stage-5 measured: mean(W)=0.3387 vs mean(|W|)=0.3592 cohort-wide;
+        # earlier comments claiming mean(|W|) were wrong) -- instead of the
+        # hardcoded 1.0, keeping lambda_ non-trivial for the original/eval view
+        # even under the "reversed" Beta convention. LEGACY-ONLY: paper profiles
+        # never use this fallback (classified PROJECT_ABLATION in Stage 5).
         assert gamma_orig_mode in ("one", "signal_strength")
         self.gamma_orig_mode = gamma_orig_mode
         self.trans_conv = TransConv(num_dataset_features, emb_dim, num_trans_layers, num_trans_heads, alpha,
@@ -316,6 +350,76 @@ class TAEncoder(torch.nn.Module):
             else:
                 x = F.dropout(F.relu(x), self.drop_ratio, training=self.training)
             xs.append(x)
+
+        if self.tae_profile == "authors_release":
+            # Released executable, matched exactly: both branches normalized, the
+            # fusion line commented out in the released file, so x_trans is
+            # computed and then DISCARDED -- the final node representation is the
+            # NORMALIZED GCN branch. gamma/Beta/lambda never affect this output.
+            x_trans = F.normalize(x_trans, dim=1)  # as released; then discarded
+            x = F.normalize(x, dim=1)
+            # x = (1 - beta) * x + beta * x_trans   <- commented out in the release
+            if self.pooling_type == "standard":
+                xpool = global_add_pool(x, batch)
+                return xpool, x
+            elif self.pooling_type == "layerwise":
+                xpool = [global_add_pool(xi, batch) for xi in xs]
+                xpool = torch.cat(xpool, 1)
+                return xpool, (torch.cat(xs, 1) if self.is_infograph else x)
+            else:
+                raise NotImplementedError
+
+        if self.tae_profile in ("paper_printed", "paper_intent"):
+            # Strict gamma contract: retention ratio, EXPLICIT at every call site
+            # (1.0 for any unaugmented view, per-subject mean(gate) for the
+            # augmented view). No signal-strength fallback, no silent NaN repair.
+            eps = 1e-4
+            num_graphs = int(batch.max().item()) + 1
+            if gamma is None:
+                raise ValueError(
+                    f"tae_profile='{self.tae_profile}' requires an EXPLICIT gamma "
+                    "(1.0 for the original view, per-subject mean(gate) for the "
+                    "augmented view); the signal-strength fallback is legacy-only.")
+            gamma = torch.as_tensor(gamma, dtype=x.dtype, device=x.device)
+            if gamma.dim() == 0:
+                gamma = gamma.expand(num_graphs).clone()
+            if not torch.isfinite(gamma).all():
+                raise ValueError(
+                    f"tae_profile='{self.tae_profile}': non-finite gamma "
+                    f"{gamma.tolist()} -- failing loudly (no nan_to_num in paper "
+                    "profiles).")
+            # epsilon ONLY to make the Beta shape parameters valid (Beta(0,1) /
+            # Beta(1,0) are undefined); gamma itself is reported un-mutated.
+            gamma_safe = gamma.clamp(eps, 1 - eps)
+            if self.tae_profile == "paper_printed":
+                # PRINTED parameter order: lambda ~ Beta(gamma, 1-gamma), E = gamma.
+                if self.training:
+                    lambda_ = torch.distributions.Beta(gamma_safe, 1 - gamma_safe).sample()
+                else:
+                    lambda_ = gamma_safe  # deterministic expectation (project
+                    # reproducibility correction; the paper does not specify
+                    # evaluation-time sampling)
+            else:
+                # Prose / drop-rate order: lambda ~ Beta(1-gamma, gamma), E = 1-gamma.
+                if self.training:
+                    lambda_ = torch.distributions.Beta(1 - gamma_safe, gamma_safe).sample()
+                else:
+                    lambda_ = 1 - gamma_safe
+            # Eq. 19 EXACTLY as printed: X_update = X_topo + lambda * X_atte.
+            # NO normalize(x_trans), NO ||x_topo|| multiplier, NO normalize(x).
+            lambda_per_node = lambda_[batch].unsqueeze(1)
+            x = x + lambda_per_node * x_trans
+            if self.pooling_type == "standard":
+                xpool = global_add_pool(x, batch)
+                return xpool, x
+            elif self.pooling_type == "layerwise":
+                xpool = [global_add_pool(xi, batch) for xi in xs]
+                xpool = torch.cat(xpool, 1)
+                return xpool, (torch.cat(xs, 1) if self.is_infograph else x)
+            else:
+                raise NotImplementedError
+
+        # ---- abide_stable_legacy: pre-Stage5 behavior, byte-for-byte below ----
         # x_trans gets reduced to pure direction (its own raw magnitude is an
         # arbitrary artifact of the Q/K/V weights, not a meaningful quantity).
         # x is deliberately NOT normalized -- unlike x_trans, its magnitude IS
@@ -462,12 +566,24 @@ class TAEncoder(torch.nn.Module):
 
                 if x is None:
                     x = torch.ones((batch.shape[0], 1)).to(device)
-                # No augmentation happens at evaluation time. gamma_orig_mode
-                # decides what "no augmentation" means for lambda_: "one" ->
-                # gamma=1.0 exactly (retention-ratio reading); "signal_strength"
-                # -> gamma=None, which forward()'s own fallback resolves to
-                # mean(|W|) (Option B) -- must match whatever mode training used.
-                gamma_eval = None if self.gamma_orig_mode == "signal_strength" else 1.0
+                # No augmentation happens at evaluation time.
+                if self.tae_profile in ("paper_printed", "paper_intent"):
+                    # Paper profiles: retention reading, EXPLICIT -- never the
+                    # gamma=None fallback (which would raise in forward anyway).
+                    gamma_eval = 1.0
+                elif self.tae_profile == "authors_release":
+                    # forward()'s authors_release branch returns before any gamma
+                    # machinery -- the value is never read.
+                    gamma_eval = None
+                else:
+                    # Legacy: gamma_orig_mode decides what "no augmentation" means
+                    # for lambda_: "one" -> gamma=1.0 exactly (retention-ratio
+                    # reading); "signal_strength" -> gamma=None, which forward()'s
+                    # own fallback resolves to the per-subject mean of the SIGNED
+                    # edge weight (mean(W), not mean(|W|) -- Stage-5 measured
+                    # divergence, 0.0205 cohort-wide under signed edges) -- must
+                    # match whatever mode training used.
+                    gamma_eval = None if self.gamma_orig_mode == "signal_strength" else 1.0
                 x, _ = self.forward(batch, x, edge_index, beta, edge_weight, gamma=gamma_eval)
 
                 ret.append(x.cpu().numpy())

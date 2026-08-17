@@ -31,7 +31,7 @@ echo "Task ${SLURM_ARRAY_TASK_ID}: fold=${FOLD}, contrastive_mode=supervised, we
   --num_gc_layers 2 \
   --reg_lambda 0.2 \
   --node_feature_mode alff_pcc \
-  --gamma_mode paper_literal \
+  --gamma_mode legacy_signal_literal \
   --mij_source alff \
   --contrastive_mode supervised \
   --weight_decay 1e-4 \

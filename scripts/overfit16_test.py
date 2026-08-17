@@ -71,7 +71,7 @@ loader = DataLoader(subset, batch_size=16, shuffle=True, drop_last=True)
 # authors' released code runs GCN-branch-only (mix line commented out).
 model, view_learner, model_opt, view_opt, gamma_orig, beta = build_model_and_view_learner(
     num_dataset_features=3, emb_dim=32, num_gc_layers=NUM_LAYERS, drop_ratio=0.0,
-    pooling_type=POOLING, gamma_mode='paper_literal', mij_source='alff', num_dyn_windows=3,
+    pooling_type=POOLING, gamma_mode='legacy_signal_literal', mij_source='alff', num_dyn_windows=3,
     vib_hidden_dim=400, model_lr=0.0005, view_lr=VIEW_LR, device=device,
     enable_attention_mix=not REPLICATE)
 if FREEZE_ADVERSARY:

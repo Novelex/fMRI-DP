@@ -56,12 +56,28 @@ def init_module_weights(module):
 def build_model_and_view_learner(num_dataset_features, emb_dim, num_gc_layers, drop_ratio,
                                   pooling_type, gamma_mode, mij_source, num_dyn_windows,
                                   vib_hidden_dim, model_lr, view_lr, device, weight_decay=0.0,
-                                  enable_attention_mix=True, signed_edges=False):
+                                  enable_attention_mix=True, signed_edges=False,
+                                  tae_profile="abide_stable_legacy"):
     # model (Theta) and view_learner (Phi) are two independent networks, each
     # with its own TAEncoder + ToyNet -- not a shared backbone (Issue A).
-    beta_convention = "literal" if gamma_mode in ("literal_beta", "paper_literal") else "reversed"
-    gamma_orig_mode = "signal_strength" if gamma_mode in ("signal_strength", "paper_literal") else "one"
+    if gamma_mode == "paper_literal":
+        # Stage-5 rename, fail-loud (never silent): the old name overstated paper
+        # fidelity -- it was printed-Beta-parameter-order only, with a
+        # signal-strength gamma_orig. Identical behavior lives under the new name.
+        raise ValueError("--gamma_mode paper_literal was renamed to "
+                         "'legacy_signal_literal' in Stage 5 (identical behavior); "
+                         "for actual paper mechanisms use --tae_profile "
+                         "paper_printed / paper_intent.")
+    beta_convention = "literal" if gamma_mode in ("literal_beta", "legacy_signal_literal") else "reversed"
+    gamma_orig_mode = "signal_strength" if gamma_mode in ("signal_strength", "legacy_signal_literal") else "one"
     gamma_orig = None if gamma_orig_mode == "signal_strength" else 1.0
+    if tae_profile in ("paper_printed", "paper_intent", "authors_release"):
+        # Paper profiles: retention gamma -- the original view is EXPLICITLY 1.0
+        # (nothing dropped), NEVER the gamma=None signal-strength fallback (the
+        # encoder raises on gamma=None in these profiles). The augmented view's
+        # per-subject mean(gate) is computed in train_one_epoch as before.
+        # authors_release ignores gamma entirely; 1.0 is inert there.
+        gamma_orig = 1.0
 
     beta = 0.5  # TransConv's own weighting scalar -- unrelated to beta_convention's Beta distribution.
 
@@ -69,7 +85,8 @@ def build_model_and_view_learner(num_dataset_features, emb_dim, num_gc_layers, d
                                          num_gc_layers=num_gc_layers, drop_ratio=drop_ratio,
                                          pooling_type=pooling_type,
                                          beta_convention=beta_convention, gamma_orig_mode=gamma_orig_mode,
-                                         enable_attention_mix=enable_attention_mix, signed_safe=signed_edges)
+                                         enable_attention_mix=enable_attention_mix, signed_safe=signed_edges,
+                                         tae_profile=tae_profile)
     model_net = GraSTI.ToyNet(input_dim=90 * (1 + num_dyn_windows), hidden_dim=vib_hidden_dim)
     init_module_weights(model_encoder)
     init_module_weights(model_net)
@@ -78,7 +95,8 @@ def build_model_and_view_learner(num_dataset_features, emb_dim, num_gc_layers, d
                                         num_gc_layers=num_gc_layers, drop_ratio=drop_ratio,
                                         pooling_type=pooling_type,
                                         beta_convention=beta_convention, gamma_orig_mode=gamma_orig_mode,
-                                        enable_attention_mix=enable_attention_mix, signed_safe=signed_edges)
+                                        enable_attention_mix=enable_attention_mix, signed_safe=signed_edges,
+                                        tae_profile=tae_profile)
     view_net = GraSTI.ToyNet(input_dim=90 * (1 + num_dyn_windows), hidden_dim=vib_hidden_dim)
     init_module_weights(view_encoder)
     init_module_weights(view_net)

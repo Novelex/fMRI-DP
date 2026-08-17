@@ -14,7 +14,7 @@ PROJECT_ROOT=/users/3171356m/muhammad/GraSTIACL
 PYTHON=/users/3171356m/miniconda3/envs/grastiacl/bin/python3
 cd "${PROJECT_ROOT}"
 
-# 4 configs = {gamma_mode: baseline, paper_literal} x {emb_dim: 128, 256}.
+# 4 configs = {gamma_mode: baseline, legacy_signal_literal} x {emb_dim: 128, 256}.
 # All 4 combine, for the first time together: node_feature_mode=alff_pcc
 # (d=93, PCC-as-content), num_gc_layers=2 (Item 1 fix -- restores ReLU on the
 # GCN branch, breaking the rank-3 embedding collapse), and the corrected
@@ -22,7 +22,7 @@ cd "${PROJECT_ROOT}"
 # Phase 1's view_loss, no cross-contaminating view_optimizer.step() in
 # Phase 2). data_alff_pcc93.pt cache already exists from earlier verification
 # runs, so no race risk across the 4 parallel tasks.
-GAMMA_MODES=(baseline paper_literal baseline paper_literal)
+GAMMA_MODES=(baseline legacy_signal_literal baseline legacy_signal_literal)
 EMB_DIMS=(128 128 256 256)
 GAMMA_MODE=${GAMMA_MODES[$SLURM_ARRAY_TASK_ID]}
 EMB_DIM=${EMB_DIMS[$SLURM_ARRAY_TASK_ID]}

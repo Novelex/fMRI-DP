@@ -16,7 +16,7 @@ PYTHON=/users/3171356m/miniconda3/envs/grastiacl/bin/python3
 cd "${PROJECT_ROOT}"
 
 # 5 folds, one fixed config (decided across this session's discussion):
-# batch=128, emb=512, mij_source=alff, num_gc_layers=2, gamma_mode=paper_literal,
+# batch=128, emb=512, mij_source=alff, num_gc_layers=2, gamma_mode=legacy_signal_literal,
 # node_feature_mode=alff_pcc, 300 epochs -- PLUS the two new additions:
 # contrastive_mode=supervised (Khosla et al. 2020 SupCon, L^sup_out, Phase 2
 # only -- see supervised/loss.py) and weight_decay=1e-4 (both optimizers --
@@ -36,7 +36,7 @@ echo "Task ${SLURM_ARRAY_TASK_ID}: fold=${FOLD}, contrastive_mode=supervised, we
   --num_gc_layers 2 \
   --reg_lambda 0.2 \
   --node_feature_mode alff_pcc \
-  --gamma_mode paper_literal \
+  --gamma_mode legacy_signal_literal \
   --mij_source alff \
   --contrastive_mode supervised \
   --weight_decay 1e-4 \

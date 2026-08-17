@@ -88,7 +88,8 @@ def run(args):
         drop_ratio=args.drop_ratio, pooling_type=args.pooling_type, gamma_mode=args.gamma_mode,
         mij_source=args.mij_source, num_dyn_windows=args.num_dyn_windows, vib_hidden_dim=args.vib_hidden_dim,
         model_lr=args.model_lr, view_lr=args.view_lr, device=device, weight_decay=args.weight_decay,
-        enable_attention_mix=not args.replicate_original_code, signed_edges=args.signed_edges)
+        enable_attention_mix=not args.replicate_original_code, signed_edges=args.signed_edges,
+        tae_profile=args.tae_profile)
     if args.freeze_adversary:
         view_optimizer = torch.optim.Adam(view_learner.parameters(), lr=0.0)
 
@@ -391,13 +392,25 @@ def arg_parse():
     parser.add_argument('--reg_lambda', default=1.0, type=float,
                         help='Penalty on mean edge-drop rate in view_loss (prevents the view_learner from maximizing loss by destroying the whole graph)')
     parser.add_argument('--gamma_mode', type=str, default='baseline',
-                        choices=['baseline', 'literal_beta', 'signal_strength', 'paper_literal'],
-                        help='Issue D: how lambda_ behaves for the original/eval view. baseline=gamma_orig=1.0 '
-                             'with reversed Beta (attention~dead for this view). literal_beta=Option A, Eq.18 '
-                             'literal symbol order (attention alive, contradicts Sec 3.3 prose). '
-                             'signal_strength=Option B, keep reversed Beta but gamma_orig=mean(|W|). '
-                             'paper_literal=both together, literal Beta AND gamma_orig=mean(|W|) -- the '
-                             'combination actually specified verbatim by the paper\'s own text.')
+                        choices=['baseline', 'literal_beta', 'signal_strength', 'legacy_signal_literal'],
+                        help='LEGACY-ONLY (applies to --tae_profile abide_stable_legacy): how lambda_ '
+                             'behaves for the original/eval view. baseline=gamma_orig=1.0 with reversed '
+                             'Beta (attention~dead for this view). literal_beta=printed Beta parameter '
+                             'order (gamma,1-gamma) (attention alive, contradicts Sec 3.3 prose). '
+                             'signal_strength=reversed Beta with gamma_orig=per-subject mean(W) fallback. '
+                             'legacy_signal_literal=both together (printed order AND signal-strength '
+                             'gamma_orig) -- Stage-5 rename of the retired "paper_literal", which '
+                             'overstated paper fidelity; behavior is identical to the old name.')
+    parser.add_argument('--tae_profile', type=str, default='abide_stable_legacy',
+                        choices=['paper_printed', 'paper_intent', 'authors_release', 'abide_stable_legacy'],
+                        help='Stage-5 TAEncoder profile. paper_printed=retention gamma (orig 1.0, aug '
+                             'mean(gate)), lambda~Beta(gamma,1-gamma) (printed parameter order), fusion '
+                             'EXACTLY Eq.19 X_topo+lambda*X_atte. paper_intent=same but '
+                             'Beta(1-gamma,gamma) (prose + authors\' drop-rate-first np.random.beta) -- '
+                             'the primary corrected-mechanism profile. authors_release=released '
+                             'executable: normalize both branches, attention DISCARDED. '
+                             'abide_stable_legacy=pre-Stage5 behavior exactly (default; gamma_mode / '
+                             'replicate_original_code keep their old meaning here only).')
     parser.add_argument('--node_feature_mode', type=str, default='alff',
                         choices=['alff', 'alff_pcc', 'alff_raw', 'alff_paper'],
                         help='alff=LEGACY old node-feature cache: DPARSF voxelwise mALFF -> ROI averaging -> '

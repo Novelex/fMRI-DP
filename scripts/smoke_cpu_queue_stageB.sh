@@ -34,7 +34,7 @@ cd "${PROJECT_ROOT}"
   --num_gc_layers 2 \
   --reg_lambda 0.2 \
   --node_feature_mode alff \
-  --gamma_mode paper_literal \
+  --gamma_mode legacy_signal_literal \
   --mij_source alff \
   --weight_decay 1e-4 \
   --early_stop_patience 1 \

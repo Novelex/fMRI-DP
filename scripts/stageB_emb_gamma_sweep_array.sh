@@ -16,7 +16,7 @@ PYTHON=/users/3171356m/miniconda3/envs/grastiacl/bin/python3
 cd "${PROJECT_ROOT}"
 
 # Final plan v5, Stage B: 12 configs = {emb_dim: 16,32,64,128,256,512} x
-# {gamma_mode: paper_literal,signal_strength}. Transductive (GraSTIACL.py),
+# {gamma_mode: legacy_signal_literal,signal_strength}. Transductive (GraSTIACL.py),
 # matching both papers' evaluation protocol (encoder trained once, 5-fold CV
 # on the embeddings via kf_embedding_evaluation).
 #
@@ -39,7 +39,7 @@ cd "${PROJECT_ROOT}"
 # BestTestScore across the 12 jobs -- that reintroduces test-set selection
 # bias one level above the already-fixed epoch-selection bug.
 EMB_DIMS=(16 32 64 128 256 512)
-GAMMA_MODES=(paper_literal signal_strength)
+GAMMA_MODES=(legacy_signal_literal signal_strength)
 
 EMB_IDX=$(( SLURM_ARRAY_TASK_ID / 2 ))
 GAMMA_IDX=$(( SLURM_ARRAY_TASK_ID % 2 ))

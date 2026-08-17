@@ -124,7 +124,7 @@ def run(args):
         drop_ratio=args.drop_ratio, pooling_type=args.pooling_type, gamma_mode=args.gamma_mode,
         mij_source=args.mij_source, num_dyn_windows=args.num_dyn_windows, vib_hidden_dim=args.vib_hidden_dim,
         model_lr=args.model_lr, view_lr=args.view_lr, device=device, weight_decay=args.weight_decay,
-        signed_edges=args.signed_edges)
+        signed_edges=args.signed_edges, tae_profile=args.tae_profile)
 
     if args.downstream_classifier == "linear":
         ee = EmbeddingEvaluation(LinearSVC(dual=False, fit_intercept=True, max_iter=10000), evaluator,
@@ -213,6 +213,7 @@ def run(args):
         "node_feature_mode": args.node_feature_mode,
         "signed_edges": args.signed_edges,
         "gamma_mode": args.gamma_mode,
+        "tae_profile": args.tae_profile,
         "mij_source": args.mij_source,
         "reg_lambda": args.reg_lambda,
         "epochs": args.epochs,
@@ -248,6 +249,9 @@ def run(args):
     config_tag = f"nf-{args.node_feature_mode}_gm-{args.gamma_mode}_mij-{args.mij_source}_cm-{args.contrastive_mode}"
     if args.signed_edges:
         config_tag += "_signed"
+    if args.tae_profile != "abide_stable_legacy":
+        # Old saved-run filenames (all abide_stable_legacy behavior) stay unchanged.
+        config_tag += f"_tae-{args.tae_profile}"
     out_path = osp.join(
         RESULTS_DIR,
         f"{combat_tag}__emb{args.emb_dim}_bs{args.batch_size}__{config_tag}__fold{args.fold}.json",
@@ -279,8 +283,14 @@ def arg_parse():
     parser.add_argument('--reg_lambda', default=0.2, type=float,
                         help='Penalty on mean edge-drop rate in view_loss -- same role as in GraSTIACL.py.')
     parser.add_argument('--gamma_mode', type=str, default='baseline',
-                        choices=['baseline', 'literal_beta', 'signal_strength', 'paper_literal'],
-                        help='Same four arms as GraSTIACL.py --gamma_mode (Issue D).')
+                        choices=['baseline', 'literal_beta', 'signal_strength', 'legacy_signal_literal'],
+                        help='Same four LEGACY arms as GraSTIACL.py --gamma_mode (Issue D); '
+                             'legacy_signal_literal is the Stage-5 rename of the retired '
+                             '"paper_literal" (identical behavior).')
+    parser.add_argument('--tae_profile', type=str, default='abide_stable_legacy',
+                        choices=['paper_printed', 'paper_intent', 'authors_release', 'abide_stable_legacy'],
+                        help='Same Stage-5 TAEncoder profiles as GraSTIACL.py --tae_profile; '
+                             'threaded into the SAME shared build_model_and_view_learner.')
     parser.add_argument('--node_feature_mode', type=str, default='alff',
                         choices=['alff', 'alff_pcc', 'alff_paper'],
                         help='Same as GraSTIACL.py --node_feature_mode (alff_paper = Stage-1 validated '

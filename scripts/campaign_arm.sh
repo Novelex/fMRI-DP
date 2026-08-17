@@ -54,7 +54,7 @@ echo "ARM=$ARM EPOCHS=$EPOCHS EVAL_INTERVAL=$EVAL_INT FLAGS=$FLAGS"
   --batch_size 32 \
   --emb_dim 32 \
   --num_gc_layers 2 \
-  --gamma_mode paper_literal \
+  --gamma_mode legacy_signal_literal \
   --mij_source alff \
   --seed 123 \
   $FLAGS $EXTRA

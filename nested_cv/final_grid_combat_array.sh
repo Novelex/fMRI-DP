@@ -17,7 +17,7 @@ cd "${PROJECT_ROOT}"
 
 # 12 configs (same grid as final_grid_single_run.sh) x 5 outer folds = 60 tasks.
 # Nested CV + ComBat (fit on train, apply to test -- verified leak-free).
-# Same fixed settings: gamma_mode=paper_literal, num_gc_layers=2,
+# Same fixed settings: gamma_mode=legacy_signal_literal, num_gc_layers=2,
 # node_feature_mode=alff_pcc, reg_lambda=0.2, 300 epochs.
 BATCH_SIZES=(32 128 256)
 EMB_DIMS=(512 256)
@@ -47,7 +47,7 @@ echo "Task ${SLURM_ARRAY_TASK_ID}: config=${CONFIG_IDX} fold=${FOLD} batch_size=
   --num_gc_layers 2 \
   --reg_lambda 0.2 \
   --node_feature_mode alff_pcc \
-  --gamma_mode paper_literal \
+  --gamma_mode legacy_signal_literal \
   --mij_source "${MIJ_SOURCE}" \
   --vib_hidden_dim 400 \
   --drop_ratio 0.3 \

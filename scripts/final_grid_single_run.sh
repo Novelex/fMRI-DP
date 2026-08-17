@@ -16,7 +16,7 @@ PYTHON=/users/3171356m/miniconda3/envs/grastiacl/bin/python3
 cd "${PROJECT_ROOT}"
 
 # 12 configs = {batch_size: 32,128,256} x {emb_dim: 512,256} x {mij_source: alff,alff_pcc}.
-# Fixed across all: gamma_mode=paper_literal, num_gc_layers=2, node_feature_mode=alff_pcc,
+# Fixed across all: gamma_mode=legacy_signal_literal, num_gc_layers=2, node_feature_mode=alff_pcc,
 # reg_lambda=0.2 (confirmed healthy fin_reg ~37-45% at num_gc_layers=2), 300 epochs.
 # GraSTIACL.py (single transductive run) -- the main-paper-related pipeline.
 BATCH_SIZES=(32 128 256)
@@ -44,5 +44,5 @@ echo "Task ${SLURM_ARRAY_TASK_ID}: batch_size=${BATCH_SIZE} emb_dim=${EMB_DIM} m
   --num_gc_layers 2 \
   --reg_lambda 0.2 \
   --node_feature_mode alff_pcc \
-  --gamma_mode paper_literal \
+  --gamma_mode legacy_signal_literal \
   --mij_source "${MIJ_SOURCE}"
