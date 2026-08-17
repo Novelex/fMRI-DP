@@ -7,13 +7,13 @@ Date: 2026-08-17 · Stages 1-4 frozen · Seed 42 · Read-only (zero production e
 | quantity | paper | authors' released code | our code | verdict |
 |---|---|---|---|---|
 | X_topo source | GCN(X, A) (Eq. 17) | GCN, then `F.normalize(x)` | GCN, un-normalized (deliberate) | ours closer to Eq. 17 (no normalize in paper) |
-| X_atte source | Eq. 16 Transformer/Graphormer attention | DIFFormer-style linear attention (uncited), computed then DISCARDED | softmax(QK^T/√d)V, per-subject blocks | ours matches Eq. 16; authors neither |
-| attention equation | softmax attention | no softmax anywhere | rows sum to 1.0 (verified) | ours PASS |
+| X_atte source | Eq. 16 Transformer/Graphormer attention | DIFFormer-style linear attention (uncited), computed then DISCARDED | softmax(QK^T/√d)V, per-subject blocks | ours = PAPER-CONSISTENT Transformer interpretation (Eq. 16 does not uniquely specify the exact Q/K/V operator); authors' operator is neither cited nor softmax |
+| attention equation | Transformer principle (operator not uniquely specified) | no softmax anywhere | rows sum to 1.0 (verified) | ours internally consistent softmax; paper-consistent, not uniquely paper-exact |
 | attention subject isolation | — | unbatched only | verified exact | PASS |
 | gamma meaning | "strength of RETAINED edges … average of all elements in the ADJACENCY matrix" → retention | epoch-level `np.random.beta(fin_reg, 1-fin_reg)` computed but unused in fusion | per-subject; see call-site table | paper = retention |
 | gamma original graph | adjacency initialized all-ones → 1 | n/a (fusion dead) | `paper_literal`: FALLBACK per-subject mean(gcn_w) = signal strength; `baseline`: 1.0 | **current paper_literal deviates** |
 | gamma augmented graph | mean of gate/adjacency elements | n/a | per-subject mean(gate) | ours paper-aligned (Stage 2) |
-| Beta parameters | λ ~ B(γ, 1−γ) (Eq. 18) | never executed in fusion | literal: B(γ,1−γ); reversed: B(1−γ,γ) | both offered; see contradiction |
+| Beta parameters | Eq. 18 PRINTS the mathematical Beta FUNCTION integral B(x,y) with printed parameter order (γ, 1−γ); sampling from a Beta DISTRIBUTION is an implementation INFERENCE (supported by the Mixup-style prose and the authors' own `np.random.beta` call) | never executed in fusion | "literal": B(γ,1−γ); "reversed": B(1−γ,γ) | printed order = (γ,1−γ) — call it PAPER_PRINTED_PARAMETER_ORDER, not "literal Eq.18 distribution" |
 | expected λ | E=γ (equation) vs E=1−γ (prose) | n/a | matches each convention (sampled-verified) | **equation and prose CONTRADICT** |
 | λ train/eval | reparameterized sample | n/a | train: sampled; eval: deterministic expectation | PROJECT_CORRECTION (paper silent, authors n/a) |
 | λ granularity | per graph | n/a | per subject [B], `lambda[batch]` per node, isolation verified | PASS |
@@ -46,11 +46,20 @@ retention from the adjacency, not edge-weight magnitude).
 
 ## 8. Beta table (theoretical + 20k-sample verified)
 
-γ ∈ {0.1,0.25,0.5,0.75,0.9}: literal B(γ,1−γ) → E[λ]=γ exactly (sampled 0.0999-0.9028);
-reversed B(1−γ,γ) → E[λ]=1−γ. Eq. 18's symbol order = literal (attention grows WITH
-retention). Prose ("as connectivity diminishes … focus more on global information") =
-reversed. **EQUATION AND PROSE CONTRADICT; both recorded; not resolved by intuition.**
-Authors' executable code: no Beta reaches fusion at all.
+γ ∈ {0.1,0.25,0.5,0.75,0.9}: B(γ,1−γ) → E[λ]=γ exactly (sampled 0.0999-0.9028);
+B(1−γ,γ) → E[λ]=1−γ.
+
+CORRECTION (Eq. 18 nuance): the paper literally prints the mathematical Beta
+FUNCTION integral B(x,y) while describing Mixup-style randomness. Interpreting λ as a
+sample from a Beta DISTRIBUTION is therefore an **implementation inference**, supported
+by the Mixup text and the authors' own `np.random.beta` call — B(γ,1−γ) is the
+**PAPER_PRINTED_PARAMETER_ORDER**, not a "literal Eq.18 distribution". The PRINTED
+parameter order (γ,1−γ) implies attention grows WITH retention; the prose ("as
+connectivity diminishes … focus more on global information") implies the opposite,
+E[λ]=1−γ — and the authors' unused `np.random.beta(fin_reg, 1-fin_reg)` puts the DROP
+rate (1−γ) first, siding with the prose. **PRINTED ORDER AND PROSE CONTRADICT; both
+recorded; not resolved by intuition.** Authors' executable code: no Beta reaches
+fusion at all.
 
 ## 9. paper_literal profile verdict
 
@@ -94,14 +103,25 @@ default: it does (mix ON). Gradients: mix ON → attention branch 2372.4 (live);
 exactly 0 (genuinely disconnected). Batch composition (eval, deterministic λ): A alone ==
 A batched, before and after fusion. PASS.
 
+CORRECTION (authors-literal): `enable_attention_mix=False` is **NOT** authors-literal.
+The released TAEncoder executes `x_trans = F.normalize(x_trans)` **and
+`x = F.normalize(x)`** before the commented-out fusion, then pools the NORMALIZED
+GCN branch; our mix-off path returns the RAW (un-normalized) X_topo. Same "attention
+discarded" property, different final representation.
+`CURRENT_OLD_MIX_OFF_WAS_AUTHORS_LITERAL = NO` — a true `authors_release` profile
+must normalize both branches and discard attention.
+
 ## 20. Proposed profile separation (PROPOSAL ONLY — not implemented)
 
-- `PAPER_EQUATION`: γ=retention (orig 1, aug mean(gate)); λ~B(γ,1−γ); fusion X_topo+λ·X_atte (raw).
-- `PAPER_PROSE_CORRECTED`: same but B(1−γ,γ) — only if the prose reading is chosen.
-- `AUTHORS_LITERAL`: mix OFF (already exists via replicate/enable_attention_mix).
-- `CURRENT_ABIDE`: today's stabilized behavior, renamed away from "paper_literal"
-  (the name overstates; it is Beta-order-literal only).
-Awaiting decision; zero code changed in Stage 5.
+- `paper_printed`: γ=retention (orig 1, aug mean(gate)); λ~B(γ,1−γ) (printed parameter
+  order); fusion X_topo+λ·X_atte (raw).
+- `paper_intent`: same but B(1−γ,γ) — the prose reading, additionally supported by the
+  authors' unused `np.random.beta(fin_reg, 1-fin_reg)` (drop rate first).
+- `authors_release`: normalize BOTH branches, discard attention, pool normalized X_topo.
+  (NOT the old mix-off path, which returned raw X_topo — see the correction above.)
+- `abide_stable_legacy`: today's stabilized behavior, renamed away from "paper_literal"
+  (the name overstated; it was printed-parameter-order only, with signal-strength γ_orig).
+Implemented in the FINAL PROFILE IMPLEMENTATION section below.
 
 ## Final block
 
