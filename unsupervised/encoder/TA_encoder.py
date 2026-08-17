@@ -194,6 +194,17 @@ class TransConv(nn.Module):
         return x
 
     def get_attentions(self, x):
+        # DIAGNOSTIC ONLY (zero production callers, verified repo-wide). This
+        # method has no `batch` argument: its attention is single-graph logic
+        # that would silently mix subjects if handed a multi-subject node stack.
+        # Fail loudly unless the input is exactly one 90-ROI subject (AAL atlas,
+        # fixed node count certified in Stage 1). Batched attention-map
+        # extraction is deliberately NOT designed here.
+        if x.dim() != 2 or x.shape[0] != 90:
+            raise ValueError(
+                f"get_attentions expects exactly one 90-ROI subject, [90, F]; "
+                f"got {tuple(x.shape)}. It has no batch argument -- multiple "
+                "subjects would be silently mixed by single-graph attention.")
         layer_, attentions = [], []
         x = self.fcs[0](x)
         if self.use_bn:
@@ -258,6 +269,17 @@ class TAEncoder(torch.nn.Module):
             raise ValueError(
                 "paper_printed/paper_intent fuse the attention branch by definition "
                 "(Eq. 19); enable_attention_mix=False only applies to abide_stable_legacy")
+        if tae_profile in ("paper_printed", "paper_intent") and pooling_type != "standard":
+            # 'layerwise' pooling builds xpool from `xs`, the PRE-FUSION per-layer
+            # GCN tensors -- the graph embedding would silently bypass the Eq. 19
+            # fused representation entirely, making the paper profile a lie at the
+            # pooled level. The paper does not specify this project-specific
+            # pooling mode, so no paper-layerwise semantics are invented here.
+            raise ValueError(
+                f"tae_profile='{tae_profile}' requires pooling_type='standard': "
+                f"'{pooling_type}' pooling is built from the pre-fusion GCN layer "
+                "outputs (xs) and would silently bypass the Eq. 19 attention "
+                "fusion in the graph embedding.")
         # The original authors' released code computes x_trans (attention branch)
         # and beta (Eq. 18's Beta-Mixup weight), but the line that would actually
         # mix them into x is commented out (unsupervised/encoder/TA_encoder.py:272-274
@@ -388,8 +410,17 @@ class TAEncoder(torch.nn.Module):
                     f"tae_profile='{self.tae_profile}': non-finite gamma "
                     f"{gamma.tolist()} -- failing loudly (no nan_to_num in paper "
                     "profiles).")
-            # epsilon ONLY to make the Beta shape parameters valid (Beta(0,1) /
-            # Beta(1,0) are undefined); gamma itself is reported un-mutated.
+            if ((gamma < 0) | (gamma > 1)).any():
+                # gamma is a retention RATIO -- any finite value outside [0, 1] is
+                # a caller bug, not a boundary case, and must never be silently
+                # clamped into range.
+                raise ValueError(
+                    f"tae_profile='{self.tae_profile}': gamma out of range "
+                    f"{gamma.tolist()} -- retention ratio must lie in [0, 1] "
+                    "(failing loudly; no silent clamp of out-of-range values).")
+            # epsilon ONLY for the legitimate boundary values 0/1, to make the
+            # Beta shape parameters valid (Beta(0,1) / Beta(1,0) are undefined);
+            # gamma itself is reported un-mutated.
             gamma_safe = gamma.clamp(eps, 1 - eps)
             if self.tae_profile == "paper_printed":
                 # PRINTED parameter order: lambda ~ Beta(gamma, 1-gamma), E = gamma.
@@ -427,11 +458,13 @@ class TAEncoder(torch.nn.Module):
         # forcing every node to unit length was erasing real, verified variation
         # (up to 37x between real ROIs) before it ever reached the classifier.
         if not self.enable_attention_mix:
-            # Matches the original released code exactly: x_trans is computed
-            # above (so its parameters still get gradients from wherever else
-            # they're used) but never reaches x -- pooling runs on the GCN
-            # branch alone. Skips the whole gamma/Beta machinery below, so
-            # this path cannot hit the NaN/Beta crash at all.
+            # Historical pre-Stage5 mix-off behavior (abide_stable_legacy only):
+            # attention is discarded -- x_trans is computed above but never
+            # reaches x, and pooling runs on the GCN branch alone -- but unlike
+            # authors_release it does NOT normalize X_topo before pooling (the
+            # released code pools NORMALIZED X_topo; this path pools RAW X_topo
+            # -- Stage-5 audit correction). Skips the whole gamma/Beta machinery
+            # below, so this path cannot hit the NaN/Beta crash at all.
             if self.pooling_type == "standard":
                 xpool = global_add_pool(x, batch)
                 return xpool, x

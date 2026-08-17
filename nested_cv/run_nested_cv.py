@@ -287,6 +287,10 @@ def arg_parse():
                         help='Same four LEGACY arms as GraSTIACL.py --gamma_mode (Issue D); '
                              'legacy_signal_literal is the Stage-5 rename of the retired '
                              '"paper_literal" (identical behavior).')
+    # TODO(Stage 10/orchestration): same as GraSTIACL.py -- final experiments
+    # must pass an explicit canonical corrected configuration, never rely on
+    # this temporary backward-compatibility default (abide_stable_legacy =
+    # regression reproducibility only, not a scientific primary).
     parser.add_argument('--tae_profile', type=str, default='abide_stable_legacy',
                         choices=['paper_printed', 'paper_intent', 'authors_release', 'abide_stable_legacy'],
                         help='Same Stage-5 TAEncoder profiles as GraSTIACL.py --tae_profile; '

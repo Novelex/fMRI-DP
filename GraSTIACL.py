@@ -401,6 +401,13 @@ def arg_parse():
                              'legacy_signal_literal=both together (printed order AND signal-strength '
                              'gamma_orig) -- Stage-5 rename of the retired "paper_literal", which '
                              'overstated paper fidelity; behavior is identical to the old name.')
+    # TODO(Stage 10/orchestration): define ONE explicit canonical corrected
+    # configuration (tae_profile + gamma_mode + signed_edges + node_feature_mode)
+    # and pass it explicitly in every final-experiment script -- final runs must
+    # NEVER rely on argparse defaults. The default below stays abide_stable_legacy
+    # temporarily, ONLY so old command lines keep their old (recorded) behavior;
+    # abide_stable_legacy is a regression-reproducibility profile, not a
+    # scientific primary.
     parser.add_argument('--tae_profile', type=str, default='abide_stable_legacy',
                         choices=['paper_printed', 'paper_intent', 'authors_release', 'abide_stable_legacy'],
                         help='Stage-5 TAEncoder profile. paper_printed=retention gamma (orig 1.0, aug '
