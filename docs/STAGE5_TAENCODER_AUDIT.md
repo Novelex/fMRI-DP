@@ -271,3 +271,83 @@ ALL_STAGE5_PROFILE_TESTS =
 SAFE_TO_FREEZE_STAGE5 =
     YES
 ```
+
+---
+
+# STAGE 5 — FINAL HARDENING (2026-08-17, post-implementation)
+
+No architecture redesign. Profiles, Stages 1-4, and Θ/Φ ownership untouched. No epochs.
+
+**1. Paper-profile layerwise bug (real, untested configuration).** With
+`pooling_type='layerwise'`, xpool is built from `xs` — the PRE-FUSION per-layer GCN
+tensors — so a paper profile's graph embedding would silently bypass the Eq. 19 fused
+representation. The paper does not specify this project-specific pooling mode, so no
+paper-layerwise semantics were invented: construction now FAILS LOUDLY for
+`paper_printed`/`paper_intent` + non-standard pooling. Guard is scoped: legacy and
+authors_release still accept layerwise (unchanged behavior).
+
+**2. Gamma range validation.** Paper profiles previously rejected None/NaN/Inf but
+silently clamped any finite out-of-range gamma. Now: finite gamma outside [0, 1]
+RAISES (a retention ratio out of range is a caller bug, not a boundary case); the
+epsilon clamp [1e-4, 1−1e-4] remains ONLY for the legitimate boundary values 0/1
+required by Beta shape validity. Verified: γ=0 accepted (output bitwise == γ=eps),
+γ=1 accepted (bitwise == γ=1−eps), and −0.1 / 1.1 / NaN / Inf all raise.
+
+**3. Stale comment fixed (comment-only).** The legacy mix-off branch no longer claims
+"matches the original released code exactly"; it now states: historical pre-Stage5
+mix-off behavior — attention discarded, but unlike `authors_release` it does NOT
+normalize X_topo before pooling.
+
+**4. get_attentions guard.** `TransConv.get_attentions` has zero production callers
+(verified repo-wide) and no batch argument — single-graph logic that would silently
+mix subjects. It now fails loudly unless the input is exactly one 90-ROI subject
+([90, F]); batched attention-map extraction deliberately NOT designed here.
+Verified: [90,3] works ([layers, 90, 90]); [180,3], [45,3], and 1-D all raise.
+
+**5. paper_intent boundary — documented, NOT changed.** Original/eval γ=1 →
+γ_safe=0.9999 → E[λ]=1e-4: `paper_intent` is topology-dominant for the
+unaugmented/evaluation view, EXPECTED under the prose reading (less retained
+connectivity → more global attention). Augmented graphs with lower γ receive
+materially larger attention weight — measured: ‖X_update − X_topo‖ = 0.0058 at γ=1
+vs 40.54 at γ=0.3 (≈7000×).
+
+**6-7.** All four profiles kept; `abide_stable_legacy` remains regression-
+reproducibility only, never a scientific primary. CLI defaults unchanged
+(`abide_stable_legacy`) for backward compatibility, with a TODO in BOTH parsers:
+Stage 10/orchestration must define one explicit canonical corrected configuration
+and never rely on argparse defaults for final experiments.
+
+**8. Tests.** Hardening battery 28/28 (layerwise guards, gamma range, standard-pooling
+BITWISE regression vs pre-hardening `63db75d` capture incl. seeded train forwards,
+get_attentions guard, boundary-lambda asserts) + full previous profile battery
+re-run 63/63 (legacy probes re-captured from post-hardening code, still bitwise ==
+pristine 46940f5) + the 2-subject paper_intent `train_one_epoch` step reproducing
+identical losses (−3.3279 / −12.9785). Total 91/91.
+
+## FINAL HARDENING BLOCK
+
+```
+PAPER_PROFILE_STANDARD_POOLING =
+    PASS  (bitwise unchanged vs pre-hardening, eval + seeded train)
+
+PAPER_PROFILE_LAYERWISE =
+    UNSUPPORTED_FAIL_LOUD
+
+PAPER_GAMMA_RANGE_VALIDATION =
+    PASS  (finite out-of-[0,1] raises; 0/1 accepted then eps-clamped)
+
+PAPER_INTENT_ORIGINAL_EVAL_LAMBDA =
+    ~1e-4
+
+PAPER_INTENT_ORIGINAL_ATTENTION_STATUS =
+    MINIMAL_BY_DESIGN  (prose reading; augmented low-gamma views get ~7000x more)
+
+GET_ATTENTIONS_BATCH_STATUS =
+    SINGLE_SUBJECT_GUARDED  (diagnostic only, zero production callers)
+
+ALL_STAGE5_PROFILE_TESTS =
+    PASS  (63/63 profile + 28/28 hardening = 91/91)
+
+SAFE_TO_FREEZE_STAGE5 =
+    YES
+```
