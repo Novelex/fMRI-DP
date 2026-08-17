@@ -41,9 +41,13 @@ saturation M~0: 0   M~1: 0
 diagonal mean 0.5758 · off-diagonal mean 0.5588
 ```
 
-**All M >= 0.5 is a mathematical consequence** of the [0,1] alff_paper features + the
-paper's own formula (non-negative dots), NOT a code bug. CE-target implication: the target
-distribution is one-sided (>=0.5), narrow (std 0.054). Documented; no change triggered.
+**The one-sided M distribution is a deterministic consequence of this project's frozen
+alff_paper preprocessing ([0,1], A-GCL-aligned) combined with GraSTI Eq. 4.** GraSTI-ACL
+specifies three-band ALFF node features but does not publicly specify the
+preprocessing/normalization used to create the released precomputed norm_matrix. Therefore
+the numerical M distribution of the authors' experiments cannot be established. CE-target
+implication for THIS project's profile: the target distribution is one-sided (>=0.5),
+narrow (std 0.054). Documented; no change triggered; Stage 1 not reopened.
 
 ## 8. Legacy-ALFF comparison (diagnostic only)
 
@@ -58,9 +62,13 @@ Paper-aligned setting: **mij_source='alff'** — the default in BOTH main and ne
 
 ## 11-12. CE prediction vs paper; noise
 
-Current: `BCE(σ((logits+noise)/τ), σ(ALFF-dot).detach())`. Paper: Eq. 12 defines A AS the
-reparameterized noisy adjacency; Eq. 13's L_CE(A_ij, M_ij) therefore compares the SAMPLED
-soft adjacency to M. Current form is the literal Eq. 12+13 composition → **MATCH**.
+Current: `BCE(σ((logits+noise)/τ), σ(ALFF-dot).detach())`. Paper: Eq. 12 defines A as the
+reparameterized noisy adjacency; Eq. 13's L_CE(A_ij, M_ij) compares that soft adjacency to
+M. Current form matches **under the learned-Bernoulli-logit interpretation of Eq. 12**,
+which is also what the authors' released executable code does. Note the notation ambiguity:
+Eq. 12 writes `log(W_ij/(1−W_ij))`, but raw signed PCC cannot literally serve as a
+Bernoulli probability. The public implementation instead uses learned edge logits in this
+position. This is treated as a notation ambiguity, not a Stage-4 implementation error.
 M bitwise noise-invariant; CE varies with the draw (1.0117 vs 1.0067) — inherent to the
 paper's own reparameterization trick, not an error.
 
@@ -108,11 +116,14 @@ ALFF_PCC_MIJ_STATUS = PROJECT_ABLATION
 AUTHORS_MIJ_MATCHES_PAPER = NO (learned embeddings vs paper's explicit ALFF)
 CURRENT_CE_PREDICTION = sigmoid((edge_logits + logistic_noise)/temperature)
 PAPER_CE_PREDICTION = Eq.12's A -- the reparameterized (noisy) soft adjacency
-CURRENT_CE_MATCHES_PAPER = YES (literal Eq.12+13 composition)
+CURRENT_CE_MATCHES_PAPER = YES under the learned-Bernoulli-logit interpretation of Eq.12,
+    which matches the authors' released executable code
 CE_NOISE_DEPENDENT = YES (inherent to the paper's reparameterization)
 MIJ_TARGET_DETACHED = YES (conceptually correct: input-derived, non-learnable)
 CE_GRADIENT_RECIPIENTS = view.net only (measured; all others zero, x.grad None)
 SELF_EDGES_IN_PAPER_CE = AMBIGUOUS (notation includes; prose silent; retained)
+GLOBAL_PHI_THETA_OWNERSHIP_CERTIFIED_IN_STAGE4 = NO
+DEFERRED_TO_STAGE8 = YES
 ALL_STAGE4_INTERNAL_TESTS = PASS (20/20)
 SAFE_TO_FREEZE_STAGE4 = YES
 ```
