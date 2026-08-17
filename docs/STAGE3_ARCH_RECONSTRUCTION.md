@@ -76,12 +76,31 @@ CURRENT_TOYNET_VS_AUTHORS_RATIO = 2.452x
 
 The current ToyNet has substantially greater absolute capacity than the
 paper-accounted layer configuration; paper-tuned optimization/regularization
-hyperparameters may therefore not transfer quantitatively. Note carefully:
-this is NOT a claim that the adversarial Phi network alone is 2.45x larger
-relative to Theta — current `training.py` constructs equally enlarged,
-INDEPENDENT ToyNets for BOTH the model and the view learner, so the
-Theta/Phi balance is unchanged. No underfitting/overfitting inference is
-drawn from this parameter count.
+hyperparameters may therefore not transfer quantitatively.
+
+CORRECTED (cross-stage parameter-usage audit, measured on two real subjects,
+seed 42, exact Phase-1/Phase-2 flows): both wrappers instantiate equally
+enlarged ToyNets, but the current training path bypasses `model.net`
+(`dyn_weight=None` in both phases: zero gradient in both, zero parameter
+delta after both optimizer steps) while `view.net` drives the learned
+augmentation (Phase-1 grad norm 1.187, delta 0.5045 after the real step).
+Therefore INSTANTIATED parameter symmetry does NOT imply effective
+optimization-capacity symmetry. Measured effective optimized capacity:
+
+```
+STRUCTURAL (instantiated):
+  model.encoder 4,672 · model.net 1,018,490 · model.proj_head 2,112
+  view.encoder  4,672 · view.net  1,018,490 · view.mlp_edge_model 4,225
+
+EFFECTIVE (receiving real optimizer updates in the current path):
+  Theta (model_optimizer): encoder + proj_head = 6,784   (model.net: 0 updates)
+  Phi   (view_optimizer):  view.net = 1,018,490          (view.encoder + mlp: 0 updates
+                                                          in the dyn branch)
+```
+
+The consequences of this measured asymmetry are deferred to the
+training/min-max audit. No underfitting/overfitting inference is drawn from
+these counts alone.
 
 ## FINAL STAGE-3 BLOCK
 

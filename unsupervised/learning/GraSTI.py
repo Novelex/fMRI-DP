@@ -61,9 +61,11 @@ class ToyNet(nn.Module):
             xavier_init(self._modules[m])
 
     def get_mu_std_logits(self, pcc_weight, dyn_weight):
-        # Eq. (13): dynamic edge weight matrix W in R^(T x N x N) feeds into the
-        # node information bottleneck alongside the static PCC -- concatenated
-        # per ROI row so both actively inform mu/std/edge_logits.
+        # Dynamic-PCC inclusion is paper-supported (Eq. 13 conditions the node
+        # IB on the dynamic weight matrix W in R^(T x N x N)); the particular
+        # static+dynamic per-ROI concatenation used here is the documented
+        # ABIDE implementation choice, not explicitly specified by Eq. 13
+        # (see docs/STAGE3_ARCH_RECONSTRUCTION.md).
         device = pcc_weight.device
         edge_logits = torch.tensor([], device=device)
         mu = torch.tensor([], device=device)
