@@ -77,7 +77,6 @@ VALID_STRATEGIES = [
 ]
 
 DEFAULT_DERIVATIVES = {
-    "rois_aal": ".1D",
     "func_preproc": ".nii.gz",
 }
 
@@ -111,7 +110,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
             "Download ABIDE-I PCP C-PAC nofilt_noglobal derivatives: "
-            "rois_aal and func_preproc."
+            "func_preproc."
         )
     )
 
@@ -144,7 +143,7 @@ def parse_args() -> argparse.Namespace:
         nargs="+",
         choices=list(DEFAULT_DERIVATIVES.keys()),
         default=list(DEFAULT_DERIVATIVES.keys()),
-        help="Which derivatives to fetch. Default: both rois_aal and func_preproc.",
+        help="Which derivatives to fetch. Default: func_preproc.",
     )
 
     parser.add_argument(
