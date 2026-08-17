@@ -123,7 +123,7 @@ must normalize both branches and discard attention.
   (the name overstated; it was printed-parameter-order only, with signal-strength γ_orig).
 Implemented in the FINAL PROFILE IMPLEMENTATION section below.
 
-## Final block
+## Audit-phase block (historical -- superseded by FINAL PROFILE IMPLEMENTATION below)
 
 ```
 PAPER_GAMMA_MEANING = retention -- "strength of retained edges", average of the ADJACENCY matrix elements
@@ -151,4 +151,123 @@ TRAIN_EVAL_DETERMINISM = PASS
 ALL_STAGE5_INTERNAL_TESTS = PASS (13/13)
 SAFE_TO_FREEZE_STAGE5 = NO (two confirmed paper-mismatches recorded -- Eq.19 extra operations
     and the paper_literal gamma_orig misnomer -- pending the Section-20 profile decision)
+```
+
+---
+
+# STAGE 5 — FINAL PROFILE IMPLEMENTATION (2026-08-17)
+
+Baseline: `46940f5` (+ doc corrections `387fd67`). Seed 42 diagnostics, B=2 real
+subjects (+ per-probe fresh encoders). NO epochs, NO accuracy. Stages 1-4 untouched.
+
+## The four explicit profiles (`--tae_profile`, main + nested, one shared builder)
+
+| profile | gamma (orig / aug) | lambda | fusion | eval lambda |
+|---|---|---|---|---|
+| `paper_printed` | 1.0 explicit / mean(gate) | ~Beta(γ,1−γ) — PRINTED parameter order | EXACTLY `X_topo + λ·X_atte` (raw X_atte; no normalize, no ‖x‖ multiplier) | γ_safe (γ=1 → 0.9999: attention ~fully present) |
+| `paper_intent` | 1.0 explicit / mean(gate) | ~Beta(1−γ,γ) — prose + authors' drop-rate-first `np.random.beta` | same printed Eq. 19 | 1−γ_safe (γ=1 → 1e-4: attention ~absent on original views) |
+| `authors_release` | unused | none reaches fusion | `normalize(X_topo)`; attention computed, normalized, DISCARDED | n/a (deterministic) |
+| `abide_stable_legacy` | old `gamma_mode` semantics incl. signal-strength fallback | old `beta_convention` | old stabilized `X_topo + λ·‖X_topo‖·normalize(X_atte)` | old semantics |
+
+Contracts: paper profiles REQUIRE explicit finite gamma — `gamma=None` and non-finite
+gamma both RAISE (no signal-strength fallback, no `nan_to_num`; both remain
+legacy-only). Epsilon clamp [1e-4, 1−1e-4] applied ONLY to make Beta shape parameters
+valid. Training samples λ per subject; evaluation uses the deterministic expectation
+(project reproducibility correction — the paper does not specify eval-time sampling).
+`paper_printed`/`paper_intent` + `enable_attention_mix=False` raises (contradiction).
+Rename: retired `--gamma_mode paper_literal` → `legacy_signal_literal` (identical
+behavior; the old name overstated paper fidelity); the retired name FAILS LOUDLY with
+a rename message; all 11 campaign/nested scripts updated. Nested CV: `--tae_profile`
+recorded in result JSON; filename tag appended ONLY for non-legacy profiles, so all
+old saved-run filenames and behavior are unchanged.
+
+## Test results — 63/63 PASS (+ authors cross-check)
+
+- **paper_printed / paper_intent** (19 checks each): builder returns γ_orig=1.0
+  explicitly; augmented γ == per-subject mean(gate); eval λ exact (γ=0.2 →
+  printed 0.2 / intent 0.8; γ=0.8 → printed 0.8 / intent 0.2); output BITWISE ==
+  `X_topo + λ·X_atte` via seeded mirror-forward re-execution (proves Beta parameters
+  AND that no normalize(X_atte)/‖x‖ multiplier enters fusion — the legacy-style
+  variant provably differs); γ=None RAISES; NaN γ RAISES; train-mode bitwise mirror
+  with Beta(γ_safe,1−γ_safe) resp. Beta(1−γ_safe,γ_safe); per-subject λ [B] finite in
+  [0,1]; backward finite; attention branch gradient live; subject isolation; eval
+  repeatable bitwise.
+- **authors_release** (9 checks): node representation BITWISE == `F.normalize(X_topo)`;
+  pooled matches; node norms all 1 (unlike old mix-off raw X_topo); scrambling ALL
+  attention parameters leaves output bitwise unchanged; attention parameters receive
+  ZERO gradient; γ ∈ {0.1, 0.9, None} outputs bitwise identical; isolation; finite.
+- **authors cross-check**: our `authors_release` vs the authors' OWN released
+  TA_encoder.py, instantiated from their repo clone in its own process, identical
+  weights (state_dict transfer: 0 missing / 0 unexpected), single real subject,
+  |PCC|-clamped edges, their `add_self_loops=True` set to False post-construction
+  (our edge_index already carries explicit self-loops — the one harmonization
+  architecture requires): **pooled and node outputs BITWISE EQUAL (max diff 0.0)**.
+  Finding en route: the release does not import as shipped — `convs/__init__.py`
+  requires `gine_conv.py`, absent from the release (stub-shimmed in the harness;
+  same public-source provenance pattern as the broken released ToyNet forward).
+- **abide_stable_legacy** (7 checks): pristine-`46940f5` worktree vs post-refactor
+  code, same probe script, per-probe fresh same-seed encoders, deep-copied state
+  dicts: constructed weights (24 tensors incl. BN stats), eval explicit-γ, eval
+  γ=None fallback, seeded train-mode forward, `get_embeddings`, and the old
+  mix-off path — **all BITWISE EQUAL**. (A first comparison failed spuriously:
+  the capture had saved `state_dict()` by reference and its own train-mode probe
+  mutated the saved BN running stats; the v2 methodology above eliminates this.)
+- **guards + integration** (6 checks): retired name fails loudly; contradiction
+  guard; both parsers expose all four profiles; both entry points thread
+  `tae_profile=args.tae_profile` into the SAME shared `build_model_and_view_learner`;
+  encoders of BOTH networks (Θ model + Φ view) carry the requested profile.
+- **shared-path forward/backward** (3 checks): one 2-subject `train_one_epoch` step
+  under `paper_intent`: model_loss −3.3279, view_loss −12.9785, all gradients of
+  both networks finite, γ_orig=1.0 used explicitly.
+
+## FINAL STAGE-5 BLOCK
+
+```
+EQ18_PRINTS_BETA_FUNCTION_NOT_DISTRIBUTION =
+    YES
+
+BETA_DISTRIBUTION_INTERPRETATION =
+    SUPPORTED_BY_MIXUP_TEXT_AND_AUTHORS_NP_RANDOM_BETA
+
+PAPER_PRINTED_BETA_ORDER =
+    (gamma,1-gamma)
+
+PAPER_INTENT_BETA_ORDER =
+    (1-gamma,gamma)
+
+PAPER_INTENT_SUPPORT =
+    PAPER_PROSE_PLUS_AUTHORS_DROP_RATE_BETA
+
+PAPER_GAMMA_ORIGINAL =
+    1
+
+PAPER_GAMMA_AUGMENTED =
+    MEAN_GATE
+
+PAPER_EQ19 =
+    X_TOPO_PLUS_LAMBDA_X_ATTE
+
+PAPER_PRINTED_PROFILE =
+    PASS
+
+PAPER_INTENT_PROFILE =
+    PASS
+
+AUTHORS_RELEASE_PROFILE =
+    PASS  (bitwise vs authors' own released module, identical weights)
+
+ABIDE_STABLE_LEGACY_REPRODUCED =
+    PASS  (bitwise vs pristine 46940f5, all probes)
+
+CURRENT_OLD_MIX_OFF_WAS_AUTHORS_LITERAL =
+    NO
+
+CURRENT_ATTENTION_OPERATOR_STATUS =
+    PAPER_CONSISTENT_NOT_UNIQUELY_SPECIFIED
+
+ALL_STAGE5_PROFILE_TESTS =
+    PASS  (63/63 + authors cross-check)
+
+SAFE_TO_FREEZE_STAGE5 =
+    YES
 ```
