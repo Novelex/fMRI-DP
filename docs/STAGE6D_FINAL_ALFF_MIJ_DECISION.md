@@ -130,7 +130,7 @@ paper_intent λ-regime asymmetry still dominates orig-vs-aug (Stage-7 material, 
 BEST_SOURCE_FOR_PAPER_FIDELITY   = M2 (voxel-first: A-GCL official is voxelwise DPABI;
                                    GraSTI used DPARSF whose mALFF chain is voxelwise;
                                    GraSTI's exact operator remains PUBLICLY_UNRESOLVED)
-BEST_SOURCE_FOR_ABIDE_PERFORMANCE= M1 (multi-seed best at fixed normalization; NEW
+BEST_SOURCE_FOR_ABIDE_REPRESENTATION_HEALTH = M1 (multi-seed best at fixed normalization; NEW
                                    statistically equivalent, with full-956 coverage;
                                    M1 costs 2 subjects: 954)
 BEST_NORMALIZATION_FOR_REPRESENTATION = per-band z (subjR 5.44 vs joint-z 4.40;
@@ -163,3 +163,50 @@ READY_TO_INTEGRATE_PRODUCTION    = YES (as a certified recommendation -- integra
 ```
 
 STOP. No Dataset.py edits, no cache replacement, no Stage 7, no full epochs.
+
+---
+
+# STAGE 6E — PRODUCTION INTEGRATION (2026-08-18)
+
+Stage 6D accepted as feature-selection evidence. Two explicit production modes added;
+alff_paper FROZEN and bitwise-unchanged. No Stage 7, no epochs.
+
+## What was added
+
+- `--node_feature_mode alff_new_z`: alff_new.npz raw `alff` (956 subjects), per-subject
+  PER-BAND z across the 90 ROIs. Cache `data_alff_new_z.pt`.
+- `--node_feature_mode alff_m1_z`: ALFF_func_proc/method1/alff_roi_first.npz, EXACT 954
+  cohort — CMU_b_0050669 + Leuven_1_0050706 are DROPPED (never imputed, never mixed);
+  `len(dataset)==954`. Cache `data_alff_m1_z.pt`.
+- z contract: `(x[:,b]-mean)/std` per band; `std<=1e-8` RAISES; no nan_to_num; post-z
+  mean/std asserted. Both modes in Dataset.py AND nested (`load_alff_z_features` +
+  parser + 954 cohort filtering before folds/ComBat, difference recorded via
+  node_feature_mode provenance).
+- Wording correction applied: BEST_SOURCE_FOR_ABIDE_PERFORMANCE →
+  **BEST_SOURCE_FOR_ABIDE_REPRESENTATION_HEALTH** (no trained performance comparison
+  exists yet).
+
+## Production-path verification — 23/23 PASS
+
+IDs + recipe: production `x == z(npz[id])` BITWISE for all 954 / all 956 (proves ID
+order and normalization in one check) · x=[90,3], band mean≈0/std≈1 everywhere ·
+static PCC + edge_index + dynamic PCC + labels bitwise unchanged vs the frozen
+alff_paper dataset · batching correct ([720,3] / [64800] / [8,T,90,90]) · production
+Mij == Stage-6D paper-M pb_z on the 50 audit subjects (allclose 1e-6), finite,
+symmetric (1.2e-07), two-sided 48.5/51.5 · production 954-subject R7 eRank = 5.65
+(Stage-6C audit 5.64; features bitwise-equal ⇒ metrics identical by construction) ·
+TAE X_topo/X_atte/Eq.19 fusion finite over the full 954 forward · nested loaders ==
+production features BITWISE (both modes), keep-mask exact · ALL pre-existing caches
+bitwise unchanged (md5: data.pt, alff_pcc93, alff_raw, **alff_paper**, filters) ·
+new caches under NEW filenames only · both parsers expose the new modes.
+
+## FINAL
+
+```
+ALFF_M1_Z_PRODUCTION          = PASS
+ALFF_NEW_Z_PRODUCTION         = PASS
+ALFF_PAPER_UNCHANGED          = PASS (cache md5 bitwise identical; [0,1] endpoints intact)
+STAGE6_PRODUCTION_MATCHES_AUDIT = PASS (features bitwise == audit variants; Mij and
+                                  eRank reproduce Stage 6C/6D)
+SAFE_TO_FREEZE_STAGE6         = YES
+```
