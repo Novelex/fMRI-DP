@@ -91,6 +91,60 @@ def load_alff_paper_features(subject_ids):
     return np.stack(out)
 
 
+def load_alff_z_features(subject_ids, source):
+    """Stage 6E: the SAME per-subject PER-BAND z recipe as ADNIDataset's
+    alff_new_z / alff_m1_z modes, applied to the nested pipeline's subject
+    order. source='new' -> alff_new.npz raw 'alff' (956, full equality);
+    source='m1' -> ALFF_func_proc/method1/alff_roi_first.npz (exact 954: the
+    two zero-ROI func_preproc subjects must be DROPPED by the caller using
+    the returned keep mask -- never imputed). Fail-loud: std<=eps raises; no
+    nan_to_num anywhere."""
+    assert source in ('new', 'm1')
+    if source == 'new':
+        d = np.load(ALFF_NEW_NPZ, allow_pickle=True)
+        expected_n = 956
+    else:
+        d = np.load(osp.join(osp.dirname(osp.dirname(osp.abspath(__file__))),
+                             'ALFF_func_proc', 'method1', 'alff_roi_first.npz'),
+                    allow_pickle=True)
+        expected_n = 954
+    assert len(d['file_ids']) == expected_n
+    assert len(set(d['file_ids'].tolist())) == len(d['file_ids'])
+    if 'ok' in d:
+        assert d['ok'].all()
+    raw_map = {}
+    for i, sid in enumerate(d['file_ids']):
+        arr = d['alff'][i].astype(np.float64)
+        assert arr.shape == (90, 3), f"{sid}: raw ALFF shape {arr.shape}"
+        assert np.isfinite(arr).all(), f"{sid}: non-finite raw ALFF"
+        raw_map[sid] = arr
+    npz_ids = set(d['file_ids'].tolist())
+    want = set(subject_ids)
+    if source == 'new':
+        assert npz_ids == want, (f"alff_new_z(nested): subject-set mismatch -- "
+                                 f"npz-only={sorted(npz_ids - want)[:5]}, "
+                                 f"loader-only={sorted(want - npz_ids)[:5]}")
+        keep = np.ones(len(subject_ids), dtype=bool)
+    else:
+        expected_missing = {'CMU_b_0050669', 'Leuven_1_0050706'}
+        assert npz_ids <= want, f"alff_m1_z(nested): npz-only {sorted(npz_ids - want)[:5]}"
+        assert want - npz_ids == expected_missing, (
+            f"alff_m1_z(nested): unexpected missing set {sorted(want - npz_ids)}")
+        keep = np.array([sid in npz_ids for sid in subject_ids], dtype=bool)
+    out = []
+    for sid in subject_ids:
+        if sid not in raw_map:
+            continue
+        a = raw_map[sid]
+        mu = a.mean(axis=0, keepdims=True)
+        sd = a.std(axis=0, keepdims=True)
+        assert (sd > 1e-8).all(), f"{sid}: degenerate band std {sd}"
+        x = (a - mu) / sd
+        assert np.isfinite(x).all(), f"{sid}: non-finite after z"
+        out.append(x)
+    return np.stack(out), keep
+
+
 def load_all_subjects():
     """Returns subject_ids, x_all [N,90,3] (90 ROIs x 3 node features per the
     raw .mat's norm_matrix shape), edge_weight_all [N,90,90], dyn_weight_all
@@ -254,7 +308,7 @@ def build_windowed_data_list(indices, x_all, ew_all, dw_all, y_all, node_feature
     # load_alff_paper_features (run_nested_cv.py does it right after loading,
     # BEFORE any ComBat/fold transformation) -- so it is treated like 'alff':
     # x used as-is, no further scaling.
-    assert node_feature_mode in ('alff', 'alff_pcc', 'alff_paper')
+    assert node_feature_mode in ('alff', 'alff_pcc', 'alff_paper', 'alff_new_z', 'alff_m1_z')
     if node_feature_mode == 'alff_pcc':
         assert None not in (alff_min, alff_max, pcc_min, pcc_max), (
             "alff_pcc mode requires scale stats from compute_alff_pcc_scale_stats "

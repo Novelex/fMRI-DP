@@ -419,7 +419,7 @@ def arg_parse():
                              'abide_stable_legacy=pre-Stage5 behavior exactly (default; gamma_mode / '
                              'replicate_original_code keep their old meaning here only).')
     parser.add_argument('--node_feature_mode', type=str, default='alff',
-                        choices=['alff', 'alff_pcc', 'alff_raw', 'alff_paper'],
+                        choices=['alff', 'alff_pcc', 'alff_raw', 'alff_paper', 'alff_new_z', 'alff_m1_z'],
                         help='alff=LEGACY old node-feature cache: DPARSF voxelwise mALFF -> ROI averaging -> '
                              'per-subject per-band z-scoring, [90,3] (default, kept for backward '
                              'compatibility with recorded results -- NOT raw ALFF despite the name). '

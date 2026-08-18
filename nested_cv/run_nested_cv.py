@@ -35,7 +35,8 @@ from unsupervised.training import build_model_and_view_learner, train_one_epoch
 from supervised.sampler import ClassBalancedBatchSampler
 
 from nested_cv.data import (load_all_subjects, harmonize_fold, build_windowed_data_list,
-                             compute_alff_pcc_scale_stats, load_alff_paper_features)
+                             compute_alff_pcc_scale_stats, load_alff_paper_features,
+                             load_alff_z_features)
 
 RESULTS_DIR = osp.join(osp.dirname(__file__), "results")
 
@@ -65,6 +66,20 @@ def run(args):
         # ComBat/fold transformation -- identical recipe to ADNIDataset.
         x_all = load_alff_paper_features(subject_ids)
         logging.info("alff_paper: substituted raw ROI-first ALFF with per-subject shared [0,1] min-max")
+    elif args.node_feature_mode == 'alff_new_z':
+        x_all, _ = load_alff_z_features(subject_ids, 'new')
+        logging.info("alff_new_z: substituted per-subject per-band z-scored ROI-first ALFF (956)")
+    elif args.node_feature_mode == 'alff_m1_z':
+        # Stage 6E: EXACT 954 cohort -- the two zero-ROI func_preproc subjects
+        # are dropped from EVERY array before any fold/ComBat computation
+        # (fold membership therefore differs from 956-cohort runs; recorded
+        # in the result JSON via node_feature_mode).
+        x_all, keep = load_alff_z_features(subject_ids, 'm1')
+        subject_ids = [s for s, k in zip(subject_ids, keep) if k]
+        ew_all, dw_all, y_all = ew_all[keep], dw_all[keep], y_all[keep]
+        covars = covars[keep].reset_index(drop=True)
+        assert len(subject_ids) == len(x_all) == len(y_all) == 954
+        logging.info("alff_m1_z: substituted controlled ROI-first z features; cohort = 954")
     logging.info("Loaded %d subjects (%d ASD, %d NC)" % (len(subject_ids), int((y_all == 1).sum()), int((y_all == 0).sum())))
 
     outer_cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=args.seed)
@@ -296,7 +311,7 @@ def arg_parse():
                         help='Same Stage-5 TAEncoder profiles as GraSTIACL.py --tae_profile; '
                              'threaded into the SAME shared build_model_and_view_learner.')
     parser.add_argument('--node_feature_mode', type=str, default='alff',
-                        choices=['alff', 'alff_pcc', 'alff_paper'],
+                        choices=['alff', 'alff_pcc', 'alff_paper', 'alff_new_z', 'alff_m1_z'],
                         help='Same as GraSTIACL.py --node_feature_mode (alff_paper = Stage-1 validated '
                              'ROI-first raw ALFF + per-subject shared [0,1] min-max, substituted before '
                              'ComBat/fold transforms). alff_pcc scale stats are fit on this '

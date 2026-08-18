@@ -54,7 +54,19 @@ class ADNIDataset(InMemoryDataset):
         # per-band axis=0) preserves the amplitude relationship BETWEEN bands,
         # which per-band normalisation would destroy. Per subject only; no
         # cohort statistic is ever computed.
-        assert node_feature_mode in ('alff', 'alff_pcc', 'alff_raw', 'alff_paper')
+        # "alff_new_z" (Stage 6E, from the accepted Stage-6D decision audit):
+        # raw ROI-first ALFF from alff_new.npz (same source as alff_raw/
+        # alff_paper), PER-SUBJECT PER-BAND z-scored across the 90 ROIs:
+        # x[:,b] = (x[:,b] - mean) / std. 956 subjects. Fail-loud: std <= eps
+        # raises; no nan_to_num anywhere on this path.
+        # "alff_m1_z": same z recipe on the controlled ROI-first recomputation
+        # ALFF_func_proc/method1/alff_roi_first.npz. EXACT 954-subject cohort:
+        # CMU_b_0050669 and Leuven_1_0050706 (zero-ROI func_preproc) are
+        # DROPPED from the dataset in this mode -- never imputed, never
+        # substituted from another source. len(dataset) == 954 here.
+        # alff_paper stays FROZEN as the shared-[0,1] normalization control.
+        assert node_feature_mode in ('alff', 'alff_pcc', 'alff_raw', 'alff_paper',
+                                     'alff_new_z', 'alff_m1_z')
         self.node_feature_mode = node_feature_mode
 
         super(ADNIDataset, self).__init__(root, transform, pre_transform)
@@ -80,7 +92,9 @@ class ADNIDataset(InMemoryDataset):
         return {'alff': 'data.pt',
                 'alff_pcc': 'data_alff_pcc93.pt',
                 'alff_raw': 'data_alff_raw.pt',
-                'alff_paper': 'data_alff_paper.pt'}[self.node_feature_mode]
+                'alff_paper': 'data_alff_paper.pt',
+                'alff_new_z': 'data_alff_new_z.pt',
+                'alff_m1_z': 'data_alff_m1_z.pt'}[self.node_feature_mode]
 
     def download(self):
         # Download to `self.raw_dir`.
@@ -125,9 +139,20 @@ class ADNIDataset(InMemoryDataset):
     def _build_data_list(self, raw, alff_min=None, alff_max=None, pcc_min=None, pcc_max=None):
         data_list = []
         for subject_id, x_alff, pcc_matrix, dyn_weight, y in raw:
-            if self.node_feature_mode in ('alff_raw', 'alff_paper'):
+            if self.node_feature_mode in ('alff_raw', 'alff_paper', 'alff_new_z', 'alff_m1_z'):
                 # Substitute raw ALFF by subject ID (never by position).
                 x_alff = self._raw_alff_map[subject_id]
+            if self.node_feature_mode in ('alff_new_z', 'alff_m1_z'):
+                # Stage 6E: per-subject PER-BAND z across the 90 ROIs.
+                mu = x_alff.mean(axis=0, keepdims=True)
+                sd = x_alff.std(axis=0, keepdims=True)
+                # Fail loudly on a degenerate band -- never silently repair.
+                assert (sd > 1e-8).all(), f"{subject_id}: degenerate band std {sd}"
+                x_alff = (x_alff - mu) / sd
+                assert x_alff.shape == (90, 3), f"{subject_id}: shape {x_alff.shape}"
+                assert np.isfinite(x_alff).all(), f"{subject_id}: non-finite after z"
+                assert np.allclose(x_alff.mean(axis=0), 0.0, atol=1e-10), subject_id
+                assert np.allclose(x_alff.std(axis=0), 1.0, atol=1e-6), subject_id
             if self.node_feature_mode == 'alff_paper':
                 # A-GCL Sec 2.1: ONE scalar min and ONE scalar max over the
                 # whole (90,3) -- shared across all three bands, per subject.
@@ -196,15 +221,23 @@ class ADNIDataset(InMemoryDataset):
         )
         raw_all = raw_asd + raw_nc
 
-        if self.node_feature_mode in ('alff_raw', 'alff_paper'):
+        if self.node_feature_mode in ('alff_raw', 'alff_paper', 'alff_new_z', 'alff_m1_z'):
             import numpy as _np
-            d = _np.load(osp.join(osp.dirname(osp.dirname(osp.abspath(__file__))),
-                                  'alff_new', 'non_combat', 'alff_new.npz'), allow_pickle=True)
+            repo_root = osp.dirname(osp.dirname(osp.abspath(__file__)))
+            if self.node_feature_mode == 'alff_m1_z':
+                d = _np.load(osp.join(repo_root, 'ALFF_func_proc', 'method1',
+                                      'alff_roi_first.npz'), allow_pickle=True)
+                expected_n = 954
+            else:
+                d = _np.load(osp.join(repo_root, 'alff_new', 'non_combat',
+                                      'alff_new.npz'), allow_pickle=True)
+                expected_n = 956
             # File-level integrity: exactly the expected cohort, no duplicate
-            # IDs, every subject's own ok flag set.
-            assert len(d['file_ids']) == 956
+            # IDs; the alff_new file additionally carries per-subject ok flags.
+            assert len(d['file_ids']) == expected_n
             assert len(set(d['file_ids'].tolist())) == len(d['file_ids'])
-            assert d['ok'].all()
+            if 'ok' in d:
+                assert d['ok'].all()
             # No nan_to_num: silent repair would hide a corrupted source. The
             # data is asserted finite instead -- fail loudly, never patch.
             self._raw_alff_map = {}
@@ -213,14 +246,28 @@ class ADNIDataset(InMemoryDataset):
                 assert arr.shape == (90, 3), f"{sid}: raw ALFF shape {arr.shape}"
                 assert _np.isfinite(arr).all(), f"{sid}: non-finite raw ALFF"
                 self._raw_alff_map[sid] = arr
-            # Exact subject-set equality (order-free by design: retrieval goes
-            # through self._raw_alff_map[subject_id], never by position).
             npz_ids = set(d['file_ids'].tolist())
             dataset_ids = {sid for sid, *_ in raw_all}
-            assert npz_ids == dataset_ids, (
-                f"{self.node_feature_mode}: subject-set mismatch -- "
-                f"npz-only={sorted(npz_ids - dataset_ids)[:5]}, "
-                f"dataset-only={sorted(dataset_ids - npz_ids)[:5]}")
+            if self.node_feature_mode == 'alff_m1_z':
+                # EXACT 954 cohort: the controlled func_preproc recomputation
+                # cannot produce valid AAL90 features for these two subjects
+                # (one all-zero ROI each). They are DROPPED from the dataset in
+                # this mode -- never imputed, never mixed from another source.
+                expected_missing = {'CMU_b_0050669', 'Leuven_1_0050706'}
+                assert npz_ids <= dataset_ids, (
+                    f"alff_m1_z: npz-only subjects {sorted(npz_ids - dataset_ids)[:5]}")
+                assert dataset_ids - npz_ids == expected_missing, (
+                    f"alff_m1_z: unexpected missing set "
+                    f"{sorted(dataset_ids - npz_ids)}")
+                raw_all = [r for r in raw_all if r[0] in npz_ids]
+                assert len(raw_all) == 954, f"alff_m1_z: {len(raw_all)} subjects after drop"
+            else:
+                # Exact subject-set equality (order-free by design: retrieval
+                # goes through self._raw_alff_map[subject_id], never by position).
+                assert npz_ids == dataset_ids, (
+                    f"{self.node_feature_mode}: subject-set mismatch -- "
+                    f"npz-only={sorted(npz_ids - dataset_ids)[:5]}, "
+                    f"dataset-only={sorted(dataset_ids - npz_ids)[:5]}")
 
         if self.node_feature_mode == 'alff_pcc':
             all_alff = np.stack([r[1] for r in raw_all])   # [N, 90, 3]
