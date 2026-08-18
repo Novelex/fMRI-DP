@@ -68,6 +68,15 @@ CURRENT_LOSS_MATCHES_AUTHORS_RELEASE     = YES  (bit-exact)
 CURRENT_LOSS_MATCHES_PRINTED_EQ20_EXACTLY = NO  (exactly two differences: τ=0.2, sym extension)
 ```
 
+⚠ **Verifier caveat (honesty about what was tested):** the "0.000e+00 over 66 cases" result is
+**tautological** — the two `calc_loss` functions are byte-identical source compiling to
+identical bytecode (`co_code` equal, `__defaults__` both `(0.2, True)`), so no numerical
+experiment on them could ever return a non-zero difference. The **informative** check is
+production vs an *independent re-implementation*, which gives **4.77e-07** (float32 reduction
+noise). Both are reported; the equality claim stands, but on the source-identity evidence.
+The Eq.20 decomposition was independently reproduced on a different case set (max gaps 4.1642
+temperature / 0.4441 symmetry; `PROD(sym=False)` vs printed-at-τ=0.2 closes to **4.77e-07**).
+
 ## 4. Loss range — negative values are VALID
 
 Per-row `L_i = -s_ii/τ + log(Σ_{j≠i} exp(s_ij/τ))`, cosine∈[-1,1] ⇒ range
@@ -75,8 +84,18 @@ Per-row `L_i = -s_ii/τ + log(Σ_{j≠i} exp(s_ij/τ))`, cosine∈[-1,1] ⇒ ran
 antipodal B=2 attains **−9.99905** against the analytic minimum −10.0000. Exact identity
 verified to 1e-06: `L_GraSTI = L_NTXent + mean_i log(1−p_ii)`, and log(1−p)<0 always ⇒
 GraSTI ≤ NT-Xent. Loss is structurally non-negative only for B ≥ e^10+1 ≈ 22,027 — no
-practical batch. No log(0) risk (min exp term 6.74e-03). 240-config finiteness sweep: all
-finite, zero NaN. **NEGATIVE_LOSS_VALUES_VALID = YES.**
+practical batch. Global minima independently confirmed by Adam minimization over free
+embeddings (−9.999046 at B=2 against the −10.0 bound; simplex values reproduced to ≤6e-5).
+**NEGATIVE_LOSS_VALUES_VALID = YES.**
+
+⚠ **REFUTED — the loss is NOT unconditionally finite for B ≥ 2.** The first pass reported a
+240-config sweep with "all finite, no log(0) reachable". The verifier broke it: if any row's
+Euclidean norm is small enough that the float32 sum-of-squares **underflows**, `x_abs` becomes
+exactly 0 and the loss returns **inf or NaN with no exception**, identically in production and
+in the reference file. Measured threshold on a B=8 unit-norm set: ‖z₃‖ = 9.939e-22 → loss
+2.067709 (finite); ‖z₃‖ = 1e-22 → norm computes 0.000e+00 → **loss = inf**; ≤1e-25 → **NaN**.
+The first pass's sweep simply never sampled that regime. This is the same unguarded division
+as §9 and raises its severity.
 
 B=1: denominator exactly 0 ⇒ loss **−inf silently** (no exception). Production guard
 **PRESENT**: `assert batch.num_graphs >= 2` at `training.py:162`, before any loss call.
@@ -93,7 +112,28 @@ Permuting only the augmented order raises the loss in **10/10** permutations (Δ
 AST trace: all four `model()` call sites take the identical `(batch.batch, batch.x,
 batch.edge_index)`; `batch` bound exactly once (line 156); **no reorder token anywhere** in
 training.py. Independent runtime recovery of the row→subject map from x and from x_aug:
-**orig_ID_order == aug_ID_order EXACTLY** at B=8 and B=32.
+**orig_ID_order == aug_ID_order EXACTLY** at B=8 and B=32. The verifier independently
+reproduced the perturbation-identity result (off-diagonal response **exactly 0.0000e+00** for
+both tensors, column-wise argmax = [0..7]) and additionally checked a prerequisite the first
+pass omitted: `gamma_aug = gate.view(batch.num_graphs, -1)` requires every subject to have an
+identical edge count — true here (8100 each).
+
+⚠ **REFUTED — "every permutation of the augmented order increases the loss".** The first pass
+tested 10 permutations. The verifier enumerated **all 40,319 non-identity permutations** at
+B=8 with a fresh model per cell and the gate pinned: permutations that give a **LOWER** loss
+than the correct pairing exist in **6/6 cells** — 13.83%, 4.33%, 0.78%, **37.68%**, and 13,471
+/ 15,192 permutations in the remaining cells. **At initialization, in the Phase-1 eval
+geometry, the correct pairing is not the loss minimum** — a substantial fraction of *wrong*
+pairings score better. This does not affect the *indexing* verdict (which rests on the exact
+perturbation isolation and the bit-exact repair test, both of which SURVIVE), but it sharply
+qualifies how much signal the loss carries about correct pairing in that geometry, and it is
+consistent with §10's marginal +0.0122-nat effect.
+
+⚠ **UNPROVEN — §5's absolute loss values.** The first pass reported canonical L = 1.663709641
+(B=8) / 2.640432835 (B=32); the verifier measures **1.9387–2.0107** (B=8 eval) and 3.4286–3.4328
+(B=32) from the stated configuration, and its per-permutation ΔL magnitudes never approach the
+reported +1.2784. The stated configuration does not reproduce those numbers; the *structural*
+conclusions do reproduce.
 
 ## 6. Negative-pair contract — PASS
 
@@ -126,6 +166,11 @@ creates nor destroys) same-subject identifiability — the collapse is upstream 
 Anisotropy measured: within-space mean pairwise cosine **z_aug 0.9970**, h_aug 0.9925,
 z_orig 0.8313.
 
+⚠ **Verifier addition:** at **B=4 the positive margin is NEGATIVE** — pos 0.537562 vs mean-neg
+0.538725 (margin **−0.001163**) — i.e. at that batch size the positive pair is on average
+*less* similar than the negatives at initialization. Also reproduced: ‖z_orig‖ ≈ 3.50 vs
+‖z_aug‖ ≈ 121.07 (**34.6×**), which does not affect the loss (cosine is scale-invariant).
+
 ## 9. Zero-norm safety — CONCERN
 
 Full cohort (956): min‖z_orig‖ **1.397862**, min‖z_aug‖ 115.18, **0 exact zeros, 0 below 1e-8,
@@ -136,7 +181,12 @@ the `sum(dim=0)` term spreads it to 8/8 columns, backward yields 6784/6784 nan g
 one optimizer step nan-poisons 6784 parameters permanently. A structural exact-zero route
 exists (`proj_head[2].bias` initializes to exactly 0, so an all-dead ReLU gives z==0).
 Only the untrained state could be measured (epochs frozen) ⇒ **CONCERN, not PASS**.
-*Proposed (not applied): a fail-loud assert on min-norm before the division.*
+
+⚠ **Verifier-sharpened:** the failure does not require an exact zero. Float32 sum-of-squares
+**underflow** is enough — measured threshold ‖z‖ ≈ 1e-22 → norm evaluates to 0.000e+00 → loss
+**inf**; ≤1e-25 → **NaN**; no exception in either case. Production headroom is nonetheless
+large (min ‖z_orig‖ = 1.3979, ~22 orders above the boundary).
+*Proposed (not applied): a fail-loud assert on min row-norm before the cosine division.*
 
 ## 10–13. Permutation, gradient direction, one-step Θ, gate-logit adversary
 
@@ -148,11 +198,27 @@ isolation attributes this **100% to BatchNorm mode, ~0% to Beta-λ**. Root cause
 buffers untouched at init (`num_batches_tracked=[0,0]`, `running_var=1.0`) against true
 activation variance ≤7.7e-3 and ≤1e-4 ⇒ eval-BN under-scales by 10–100×.
 
-**Free-embedding gradient (§11).** **Zero strict sign violations of dLoss and of dMargin in
-all 20 (geometry × direction × η) rows**, 15 cells each; measured/predicted dL agree to
-0.996±0.003. Minimizing L provably improves positive-vs-negative separation.
+**Free-embedding gradient (§11).** Zero strict sign violations of dLoss and of dMargin in all
+20 (geometry × direction × η) rows, 15 cells each; measured/predicted dL agree to 0.996±0.003.
+
+⚠ **REFUTED — "minimizing L *provably* improves separation" and "violations NEVER observed".**
+The verifier re-derived the exact analytic gradient: in **similarity space** the property *is*
+provable — `dL/ds_ii = −1/(τB) < 0` and `dL/ds_ij = q_ij/(τB) > 0` for all j≠i (autograd vs
+analytic agree to 1.11e-16). But descent happens in **z-space**, where the realized `ds` is a
+PSD-transformed image of the S-space gradient and per-entry signs are **not** guaranteed. On a
+wider (d, B) grid the verifier observed **36 margin violations and 66 top-1 violations**, plus
+3 at first order where no step size is involved. The first pass's 150 measurements all sat at
+d=300, B∈{8,16} — which the grid shows is a **zero-violation regime**, so its null result was
+structurally guaranteed by its sampling rather than being evidence about the loss.
+**Restricted to the audited configuration the property does hold cleanly** (24/24 cells with
+both first-order margin derivatives strictly positive; 7/7 finite-step cells improving at
+every η) — that narrower claim SURVIVES.
 **THETA_LOCAL_CONTRASTIVE_STEP: §12** one fresh-Adam step on Θ alone (Φ frozen, gate frozen)
-lowers the loss in **23/24** configurations. ⚠ *Specificity caveat*: in the eval geometry
+lowers the loss in **23/24** configurations (verifier: 37/40 in its own 40-config run).
+⚠ **Partially REFUTED**: the *loss* half survives, the *margin* half does not — the verifier
+found violations of (dL<0 ∧ dMargin_mean<0) in **4/40** and (dL<0 ∧ dMargin_max<0) in **5/40**
+configurations. Θ can locally reduce the loss; it does **not** follow that separation improves.
+⚠ *Specificity caveat*: in the eval geometry
 **83.5% ± 11.0%** of that reduction is reproduced by stepping on a deliberately scrambled
 pairing; in the Phase-2 geometry the scrambled objective instead *raises* the correct loss
 (leak −0.253) — i.e. the step is pair-specific only in Phase 2.
@@ -394,15 +460,25 @@ CURRENT_LOSS_SYMMETRIC                  = YES (sym=True; authors' default, not p
 PAPER_EQ20_TEMPERATURE_SPECIFIED        = NO
 CURRENT_TEMPERATURE                     = 0.2
 NEGATIVE_LOSS_VALUES_VALID              = YES (range [-2/tau+ln(B-1), +2/tau+ln(B-1)];
-                                          constructed -9.99905 vs analytic min -10.0)
+                                          constructed -9.99905 vs analytic min -10.0;
+                                          independently re-derived by the verifier)
+LOSS_UNCONDITIONALLY_FINITE_FOR_B>=2    = NO  ** verifier-refuted ** (float32 norm UNDERFLOW
+                                          at ||z|| ~ 1e-22 -> inf, <=1e-25 -> NaN, silently,
+                                          in production AND the reference file)
 ZERO_NORM_SAFETY                        = CONCERN (no zeros observed, min ||z|| 1.3979; but
                                           calc_loss is unguarded -> silent nan -> 6784 params
                                           nan-poisoned; structural exact-zero route exists)
 PRE_PROJECTION_TOP1                     = 0.00105 (1/956; chance 0.001046; p=0.632)
 POST_PROJECTION_TOP1                    = 0.00314 (3/956; chance 0.001046; p=0.080)
                                           -> projection PRESERVES; collapse is upstream
-THETA_LOCAL_CONTRASTIVE_STEP            = PASS (loss down 23/24; 0/150 sign violations)
-                                          CAVEAT: 83.5% non-specific in the eval geometry
+THETA_LOCAL_CONTRASTIVE_STEP            = PASS FOR THE LOSS, NOT FOR SEPARATION
+                                          (loss down 23/24 and 37/40 independently; but
+                                          verifier found dL<0 with dMargin<0 in 4-5/40.
+                                          Sign-correctness is PROVABLE in SIMILARITY space
+                                          (dL/ds_ii<0, dL/ds_ij>0, exact to 1.1e-16) but NOT
+                                          in z-space; violations exist outside the audited
+                                          (d=300, B in {8,16}) regime -- 36 margin / 66 top-1.
+                                          CAVEAT: 83.5% non-specific in the eval geometry)
 GATE_LOGIT_ADVERSARIAL_DIRECTION        = PASS (6/6 raise the loss, up to +2.443 nats;
                                           ~97% via W_aug; redistribution, not net retention)
 GATE_NOISE_EFFECT                       = small in the eval regime (loss sd 7.42e-04) but
@@ -450,9 +526,17 @@ TAU_02_STATUS                           = AUTHORS_RELEASE_SUPPORTED_NOT_PAPER_SP
 MEMORY_BANK_REQUIRED_BY_GRASTI          = NO (calc_regloss: 0 call sites in BOTH codebases)
 SUPERVISED_CONTRASTIVE_STATUS           = PROJECT_ABLATION
 STAGE7_CONFIRMED_LOSS_BUG               = NO
-                                          (formula bit-exact to the release; pairing exact;
-                                          negatives exact; gradient signs correct in 0/150
-                                          violations; negative values mathematically valid)
+                                          (formula byte-identical to the release; pairing
+                                          exact -- perturbation isolation 0.000e+00 off-diagonal
+                                          and bit-exact repair, both verifier-reproduced;
+                                          negatives exact; negative values mathematically valid)
+                                          -- BUT three first-pass claims were VERIFIER-REFUTED
+                                          and are corrected above: unconditional finiteness
+                                          (NO: norm underflow), "every permutation raises the
+                                          loss" (NO: exhaustive 40,319-permutation enumeration
+                                          finds lower-loss mispairings in 6/6 cells, up to
+                                          37.68%), and "descent provably improves separation"
+                                          (provable in similarity space only).
 STAGE7_CONFIRMED_VIEW_COMPATIBILITY_BUG = YES
                                           1. Phase-1/Phase-2 mode mismatch (BLOCKER):
                                              the two players optimize different surfaces.
@@ -467,9 +551,9 @@ SAFE_TO_FREEZE_STAGE7                   = NO
                                           status: 2 of 3 adversarial verifiers complete
                                           (lambda-asymmetry, phase-mismatch) -- both applied
                                           above; the loss-correctness verifier was still
-                                          running at write time, though its targets are the
-                                          bit-exact/structural claims of sections 3-6 which
-                                          rest on exact equalities.)
+                                          ALL THREE adversarial verifiers are now complete
+                                          (11/11 agents, 0 errors) and every correction is
+                                          incorporated above.)
 ```
 
 ## Confirmed issues (evidence-backed) — no fixes applied
