@@ -10,7 +10,7 @@ Common cohort: **954 subjects**, identical IDs/order in all three sources.
 |---|---|---|---|---|
 | M1 | ALFF_func_proc/method1/alff_roi_first.npz | file_ids, alff, tr | [954,90,3] | 4D → detrend → ROI-average voxels → FFT → 3-band ALFF |
 | M2 | ALFF_func_proc/method2/alff_voxel_first.npz | file_ids, alff, tr | [954,90,3] | 4D → detrend → FFT per voxel → 3-band ALFF → ROI-average |
-| new | alff_new/non_combat/alff_new.npz | file_ids, alff, malff, dx_group, ok | [956,90,3] | official rois_aal.1D → A-GCL formula |
+| new | alff_new/non_combat/alff_new.npz | file_ids, alff, malff, dx_group, ok | [956,90,3] | official rois_aal.1D → this project's ROI-timeseries ALFF script (A-GCL-INSPIRED; **correction, Stage 6D**: the official A-GCL repository documents VOXELWISE DPABI `y_alff_falff` on the 4D BOLD volume — this ROI-first computation is NOT "exact A-GCL ALFF") |
 
 M1 IDs == M2 IDs (same order) ✓. alff_new ∖ M1 = exactly {CMU_b_0050669, Leuven_1_0050706}
 (the two zero-ROI func_preproc subjects — excluded, NOT imputed, no .1D substitution) ✓.
