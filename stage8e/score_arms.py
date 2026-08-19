@@ -1,90 +1,137 @@
-"""Stage 8E — score every completed arm against stage8e/PREREGISTERED_CRITERIA.md.
+"""Stage 8E — score every arm against the SIX governing rescue criteria.
 
-Reads only metrics.json / status.json. Applies the four pre-registered primary
-criteria, expressed relative to each arm's OWN InfoNCE null so that E5 (B=128) is
-comparable to the B=32 arms. Prints the cross-pairing table that separates a
-representation rescue from a measurement-only rescue.
+Criteria (fixed before any arm ran; see stage8e/PREREGISTERED_CRITERIA.md and
+docs/STAGE8E_COLLAPSE_MECHANISM_AUDIT.md section 14). Compared with E0:
+
+  C1 sustained improvement in CL_EXCESS (= CL - log B) at >= 2 LATE checkpoints
+  C2 positive-minus-HARDEST-negative improves materially
+  C3 positive rank improves
+  C4 uniformity stays meaningfully below 0 rather than collapsing to ~0
+  C5 subject effective rank does not collapse to the E0 regime
+  C6 the effect is NOT a one-checkpoint transient
+
+Rescue is never declared from positive cosine alone. "Late" = epochs >= 20.
+All criteria are read on the eval surface, under BOTH the arm's own pairing and the
+fixed 'production' pairing, because E1-E3 change the ruler as well as the encoder.
 """
-import json, os, sys, glob
+import json, os, glob, sys
 import numpy as np
 
-REPO = '/users/3171356m/muhammad/GraSTIACL'
-OUT = f'{REPO}/stage8e'
+OUT = '/users/3171356m/muhammad/GraSTIACL/stage8e'
+LATE = 20                    # epochs >= LATE are "late checkpoints"
+MATERIAL_PMH = 0.02          # C2: material improvement in pos - hardest-neg
+MATERIAL_CLX = 0.05          # C1: material improvement in CL excess (nats)
+UNIF_MEANINGFUL = -0.10      # C4: uniformity must stay below this
+RANK_FACTOR = 1.25           # C5: rank must exceed 1.25x the E0 regime
 
-def crit(m, nl):
-    """The four pre-registered criteria, on the eval/own surface, vs this arm's null."""
-    return dict(
-        top1   = (m['top1']   >= 8.0 * nl['null_top1'],   m['top1'],   8.0 * nl['null_top1']),
-        posRank= (m['posRank'] <= nl['probe_batch_size'] / 4.0, m['posRank'], nl['probe_batch_size'] / 4.0),
-        CL     = (m['CL']     <= nl['null_CL'] - 0.2657,  m['CL'],     nl['null_CL'] - 0.2657),
-        rank   = (m['rank_z'] >= 4.0,                     m['rank_z'], 4.0))
 
-rows = []
-for d in sorted(glob.glob(f'{OUT}/E*/') + glob.glob(f'{OUT}/R*/')):
-    name = os.path.basename(d.rstrip('/'))
-    if not os.path.exists(f'{d}/metrics.json'):
-        rows.append((name, 'NO_METRICS', None, None)); continue
-    M = json.load(open(f'{d}/metrics.json'))
-    st = json.load(open(f'{d}/status.json')) if os.path.exists(f'{d}/status.json') else {}
-    cfg = json.load(open(f'{d}/config.json'))
-    last = M[-1]
-    state = st.get('state', '?')
-    if state == 'NONFINITE': verdict = 'NON_FINITE'
-    elif state != 'COMPLETED': verdict = f"INCOMPLETE_{last['epoch']}"
-    else:
-        c = crit(last['eval_own'], last)
-        verdict = 'RESCUED' if all(v[0] for v in c.values()) else (
-            'PARTIAL' if any(v[0] for v in c.values()) else 'NOT_RESCUED')
-    rows.append((name, verdict, last, cfg))
+def load():
+    arms = {}
+    for d in sorted(glob.glob(f'{OUT}/E*/') + glob.glob(f'{OUT}/R*/')):
+        n = os.path.basename(d.rstrip('/'))
+        if not os.path.exists(f'{d}/metrics.json'):
+            arms[n] = dict(state='NO_METRICS'); continue
+        arms[n] = dict(M=json.load(open(f'{d}/metrics.json')),
+                       cfg=json.load(open(f'{d}/config.json')),
+                       state=json.load(open(f'{d}/status.json')).get('state', '?')
+                       if os.path.exists(f'{d}/status.json') else '?')
+    return arms
 
-print(f"{'arm':22s} {'pairing':14s} {'B':>4s} {'ep':>3s} {'verdict':16s}")
-print('-' * 66)
-for name, v, last, cfg in rows:
-    if last is None: print(f"{name:22s} {'-':14s} {'-':>4s} {'-':>3s} {v:16s}"); continue
-    print(f"{name:22s} {cfg['lambda_pairing_mode']:14s} {cfg['batch_size']:4d} "
-          f"{last['epoch']:3d} {v:16s}")
 
-print(f"\n=== PRIMARY criteria on eval/own (null-relative) ===")
-print(f"{'arm':22s} {'top1':>18s} {'posRank':>18s} {'CL':>18s} {'rank_z':>14s}")
-for name, v, last, cfg in rows:
-    if last is None or 'eval_own' not in last: continue
-    c = crit(last['eval_own'], last)
-    f = lambda k, fmt: f"{c[k][1]:{fmt}}{'PASS' if c[k][0] else 'fail':>6s}({c[k][2]:{fmt}})"
-    print(f"{name:22s} {f('top1','.4f'):>18s} {f('posRank','.2f'):>18s} "
-          f"{f('CL','.3f'):>18s} {f('rank','.2f'):>14s}")
+def series(M, surface, key):
+    return [(m['epoch'], m[surface][key]) for m in M if surface in m]
 
-print(f"\n=== CROSS-PAIRING / CROSS-STATE table (epoch 30) ===")
-print(f"{'arm':22s} {'surface':12s} {'CL':>8s} {'top1':>8s} {'posRank':>9s} {'rank_z':>8s} "
-      f"{'margin':>9s} {'unif':>8s} {'lam_o':>7s} {'lam_a':>7s}")
-for name, v, last, cfg in rows:
-    if last is None: continue
-    for s in ('eval_own', 'eval_prod', 'train_own', 'train_prod'):
-        if s not in last: continue
-        m = last[s]
-        print(f"{name:22s} {s:12s} {m['CL']:8.4f} {m['top1']:8.4f} {m['posRank']:9.2f} "
-              f"{m['rank_z']:8.2f} {m['margin']:+9.5f} {m['unif']:8.3f} "
-              f"{m['lam_orig']:7.4f} {m['lam_aug']:7.4f}")
 
-# representation vs measurement rescue (pre-declared rule)
-E0 = next((r for r in rows if r[0].startswith('E0') and r[2] and 'eval_prod' in r[2]), None)
-if E0:
-    base = E0[2]['eval_prod']
-    print(f"\n=== RESCUE CLASSIFICATION (vs E0 eval_prod top1={base['top1']:.4f}, "
-          f"posRank={base['posRank']:.2f}) ===")
-    for name, v, last, cfg in rows:
-        if last is None or v not in ('RESCUED', 'PARTIAL') or name.startswith('E0'): continue
-        beats = last['eval_prod']['top1'] > base['top1'] and last['eval_prod']['posRank'] < base['posRank']
-        print(f"  {name:22s} {v:10s} -> "
-              f"{'RESCUED_REPRESENTATION' if (v=='RESCUED' and beats) else ('RESCUED_MEASUREMENT_ONLY' if v=='RESCUED' else 'PARTIAL')} "
-              f"(eval_prod top1 {last['eval_prod']['top1']:.4f}, posRank {last['eval_prod']['posRank']:.2f})")
+def excess(M, surface):
+    return [(m['epoch'], m[surface]['CL'] - m['null_CL']) for m in M if surface in m]
 
-resc = [r[0] for r in rows if r[1] == 'RESCUED']
-print(f"\nRESCUED_ARMS = {resc if resc else 'NONE'}")
-if not resc:
-    print("VERDICT = NO_ARM_RESCUES (pre-registered: no replication is run)")
-else:
-    best = max((r for r in rows if r[1] == 'RESCUED'),
-               key=lambda r: (r[2]['eval_own']['top1'], -r[2]['eval_own']['CL']))
-    print(f"REPLICATE = {best[0]}  (pairing={best[3]['lambda_pairing_mode']})")
-json.dump([(n, v, (c or {}).get('lambda_pairing_mode')) for n, v, _, c in rows],
-          open(f'{OUT}/scoreboard.json', 'w'), indent=1)
+
+def judge(a, e0, surface):
+    """Apply C1..C6. Returns (verdict, per-criterion dict)."""
+    M, M0 = a['M'], e0['M']
+    lastN = lambda s: [v for ep, v in s if ep >= LATE]
+    ax, bx = lastN(excess(M, surface)), lastN(excess(M0, surface))
+    b_cx = np.mean(bx) if bx else 0.0
+    c1n = sum(1 for v in ax if v < b_cx - MATERIAL_CLX)
+    C1 = (c1n >= 2, f"{c1n}/{len(ax)} late ckpts improve CL_excess by >{MATERIAL_CLX} "
+                    f"(arm {np.mean(ax):+.3f} vs E0 {b_cx:+.3f})")
+
+    ap, bp = lastN(series(M, surface, 'pos_minus_maxneg')), lastN(series(M0, surface, 'pos_minus_maxneg'))
+    d2 = np.mean(ap) - np.mean(bp) if ap and bp else 0.0
+    C2 = (d2 > MATERIAL_PMH, f"pos-hardestneg {np.mean(ap):+.4f} vs E0 {np.mean(bp):+.4f} (d {d2:+.4f})")
+
+    ar, br = lastN(series(M, surface, 'posRank')), lastN(series(M0, surface, 'posRank'))
+    C3 = (np.mean(ar) < np.mean(br) - 0.5, f"posRank {np.mean(ar):.2f} vs E0 {np.mean(br):.2f}")
+
+    au = lastN(series(M, surface, 'unif'))
+    C4 = (np.mean(au) < UNIF_MEANINGFUL, f"uniformity {np.mean(au):+.4f} (needs < {UNIF_MEANINGFUL})")
+
+    ak, bk = lastN(series(M, surface, 'rank_z')), lastN(series(M0, surface, 'rank_z'))
+    C5 = (np.mean(ak) > RANK_FACTOR * np.mean(bk), f"rank_z {np.mean(ak):.2f} vs E0 regime {np.mean(bk):.2f}")
+
+    # C6: the improvement is present at more than one late checkpoint on the two
+    # scale-free identity measures, i.e. not a single-epoch spike.
+    at = lastN(series(M, surface, 'top1')); bt = lastN(series(M0, surface, 'top1'))
+    nsp = sum(1 for v in at if v > np.mean(bt) * 2 + 1e-9)
+    C6 = (nsp >= 2, f"{nsp}/{len(at)} late ckpts hold >2x E0 top1 ({np.mean(bt):.4f})")
+
+    C = dict(C1=C1, C2=C2, C3=C3, C4=C4, C5=C5, C6=C6)
+    npass = sum(v[0] for v in C.values())
+    verdict = 'RESCUE' if npass == 6 else ('PARTIAL' if npass >= 3 else 'NO_RESCUE')
+    return verdict, C, npass
+
+
+def main():
+    arms = load()
+    if 'E0_baseline' not in arms or 'M' not in arms.get('E0_baseline', {}):
+        print('E0_baseline has no metrics yet -- cannot score.'); return
+    e0 = arms['E0_baseline']
+
+    print('=== arm status ===')
+    for n, a in arms.items():
+        if 'M' not in a: print(f'  {n:22s} {a["state"]}'); continue
+        print(f'  {n:22s} {a["state"]:12s} last epoch {a["M"][-1]["epoch"]:3d} '
+              f'pairing={a["cfg"]["lambda_pairing_mode"]:14s} B={a["cfg"]["batch_size"]}')
+
+    results = {}
+    for surface in ('eval_own', 'eval_prod'):
+        print(f'\n=== SIX GOVERNING CRITERIA on {surface} (late = epochs >= {LATE}) ===')
+        for n, a in arms.items():
+            if 'M' not in a or n == 'E0_baseline': continue
+            if a['state'] != 'COMPLETED':
+                print(f'  {n:22s} {a["state"]} -- not scored'); continue
+            v, C, npass = judge(a, e0, surface)
+            results.setdefault(n, {})[surface] = (v, npass)
+            print(f'  {n:22s} {v:10s} ({npass}/6)')
+            for k in ('C1', 'C2', 'C3', 'C4', 'C5', 'C6'):
+                print(f'      [{"PASS" if C[k][0] else "fail"}] {k}: {C[k][1]}')
+
+    print('\n=== late-epoch panel (mean over epochs >= 20) ===')
+    hdr = f"{'arm':22s} {'surface':10s} {'CLexcess':>9s} {'top1':>8s} {'posRank':>8s} " \
+          f"{'p-hneg':>8s} {'unif':>8s} {'rank_z':>7s}"
+    print(hdr)
+    for n, a in arms.items():
+        if 'M' not in a: continue
+        for surface in ('eval_own', 'eval_prod', 'train_own'):
+            L = [m for m in a['M'] if m['epoch'] >= LATE and surface in m]
+            if not L: continue
+            f = lambda k: np.mean([m[surface][k] for m in L])
+            cx = np.mean([m[surface]['CL'] - m['null_CL'] for m in L])
+            print(f"{n:22s} {surface:10s} {cx:+9.4f} {f('top1'):8.4f} {f('posRank'):8.2f} "
+                  f"{f('pos_minus_maxneg'):+8.4f} {f('unif'):+8.4f} {f('rank_z'):7.2f}")
+
+    resc = [n for n, r in results.items() if r.get('eval_own', ('', 0))[0] == 'RESCUE']
+    print(f"\nRESCUED_ARMS (eval_own) = {resc if resc else 'NONE'}")
+    if resc:
+        best = max(resc, key=lambda n: np.mean(
+            [m['eval_own']['top1'] for m in arms[n]['M'] if m['epoch'] >= LATE]))
+        also = results[best].get('eval_prod', ('', 0))[0]
+        print(f"BEST_MECHANISTIC_ARM = {best} (pairing={arms[best]['cfg']['lambda_pairing_mode']})")
+        print(f"  on the common yardstick eval_prod it scores: {also}")
+        print(f"  -> {'RESCUED_REPRESENTATION' if also == 'RESCUE' else 'RESCUED_ENCODING_PAIRING'}")
+    json.dump({n: {k: v[0] for k, v in r.items()} for n, r in results.items()},
+              open(f'{OUT}/scoreboard.json', 'w'), indent=1)
+
+
+if __name__ == '__main__':
+    main()
