@@ -149,11 +149,25 @@ def _bn_buffer_restore(module, snapshot):
         sd[k].copy_(v)
 
 
+def _pair_gammas(mode, gamma_orig, gamma_aug):
+    """Stage-8E experimental view pairing. Returns (gamma_for_original_view,
+    gamma_for_augmented_view). 'production' is the identity and is what every
+    frozen stage used."""
+    if mode == "production":
+        return gamma_orig, gamma_aug
+    if mode == "matched":
+        return gamma_aug, gamma_aug
+    if mode == "attention_off":
+        return 1.0, 1.0
+    if mode == "balanced":
+        return 0.5, 0.5
+    raise ValueError(mode)
+
 def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, dataloader, device,
                      beta, gamma_orig, ce_lambda, reg_lambda, kld_lambda, template,
                      contrastive_mode="self_supervised", supervised_temperature=0.1,
                      replicate_original_code=False, epoch_num=None, signed_edges=False,
-                     phase_state_mode="legacy"):
+                     phase_state_mode="legacy", lambda_pairing_mode="production"):
     # phase_state_mode (Stage 8C) -- forward-STATE policy only. It changes no loss,
     # no weight, no data and no optimizer membership; it changes only which module
     # is in train() vs eval() during each phase, and whether the frozen player's
@@ -216,6 +230,28 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
     n_asd_seen = 0
     n_nc_seen = 0
 
+    # lambda_pairing_mode (Stage 8E) -- EXPERIMENTAL, DIAGNOSTIC-ONLY control over which
+    # retention ratio gamma (and therefore which Eq.18 lambda) each of the two contrastive
+    # views is encoded with. It changes no loss term, no optimizer membership, no data.
+    #
+    #   "production"    : UNCHANGED historical behavior and the ONLY mode used by any
+    #                     frozen stage. Original view gamma=gamma_orig, augmented view
+    #                     gamma=per-subject mean(gate). Under tae_profile='paper_intent'
+    #                     this makes lambda_orig=1e-4 and lambda_aug~0.49, i.e. the two
+    #                     views run DIFFERENT EFFECTIVE BRANCH MIXTURES.
+    #   "matched"       : both views use the augmented view's per-subject gamma.
+    #   "attention_off" : both views use gamma=1.0 (lambda=1e-4 under paper_intent --
+    #                     the clamp floor, not exactly 0).
+    #   "balanced"      : both views use gamma=0.5 (lambda=0.5 under paper_intent).
+    #
+    # Only "production" preserves the historical forward ORDER (original-view forward
+    # before the view_learner forward). The other modes must compute the gate first,
+    # which changes RNG consumption order and BatchNorm buffer update order; that is
+    # why the production path below is left byte-identical rather than unified.
+    if lambda_pairing_mode not in ("production", "matched", "attention_off", "balanced"):
+        raise ValueError(f"unknown lambda_pairing_mode {lambda_pairing_mode!r}")
+    _pair_reorder = lambda_pairing_mode != "production"
+
     for batch in dataloader:
         batch = batch.to(device)
         # The contrastive loss (calc_loss) normalizes each positive pair
@@ -252,8 +288,9 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
         # dyn_weight=None: model's own edge_logits/mu/std from get_mu_std_logits
         # are never used downstream -- passing None skips ToyNet's expensive
         # batch_size x 90 row-by-row loop entirely for this call.
-        x, _ = model(batch.batch, batch.x, batch.edge_index, beta, None, gcn_w,
-                    batch.edge_weight, None, gamma=gamma_orig)
+        if not _pair_reorder:
+            x, _ = model(batch.batch, batch.x, batch.edge_index, beta, None, gcn_w,
+                        batch.edge_weight, None, gamma=gamma_orig)
         # edge_logits_vl (not model's edge_logits) drives the gate below --
         # view_learner IS the augmenter (Eq. 3's Phi), so the augmentation it
         # produces must come from its own forward pass.
@@ -284,8 +321,12 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
         # of the batch-wide version: 85.5% of a typical between-subject
         # distance, confirmed gamma-mediated).
         gamma_aug = gate.view(batch.num_graphs, -1).mean(dim=1)
+        _g_orig, _g_aug = _pair_gammas(lambda_pairing_mode, gamma_orig, gamma_aug)
+        if _pair_reorder:
+            x, _ = model(batch.batch, batch.x, batch.edge_index, beta, None, gcn_w,
+                        batch.edge_weight, None, gamma=_g_orig)
         x_aug, _ = model(batch.batch, batch.x, batch.edge_index, beta, None, batch_aug_edge_weight,
-                        batch.edge_weight, None, gamma=gamma_aug)
+                        batch.edge_weight, None, gamma=_g_aug)
         row, col = batch.edge_index
         edge_batch = batch.batch[row]
         # gate = retention probability; 1-gate = drop probability. fin_reg
@@ -357,8 +398,9 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
             _p2_nonowner_bn = None
         model_optimizer.zero_grad()
 
-        x, _ = model(batch.batch, batch.x, batch.edge_index, beta, None, gcn_w,
-                    batch.edge_weight, None, gamma=gamma_orig)
+        if not _pair_reorder:
+            x, _ = model(batch.batch, batch.x, batch.edge_index, beta, None, gcn_w,
+                        batch.edge_weight, None, gamma=gamma_orig)
         # mu/std/edge_prod discarded here -- ce_loss (Item 4b) moved entirely
         # to Phase 1; only edge_logits_vl (for the gate) is needed here.
         # (replicate_original_code=True needs edge_prod here too, to compute
@@ -374,8 +416,12 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
         gate = torch.sigmoid(gate_inputs).squeeze()
         batch_aug_edge_weight = gcn_w * gate      # universal: weight x retention (see Phase 1)
         gamma_aug = gate.view(batch.num_graphs, -1).mean(dim=1)  # per-subject mean of the GATE
+        _g_orig, _g_aug = _pair_gammas(lambda_pairing_mode, gamma_orig, gamma_aug)
+        if _pair_reorder:
+            x, _ = model(batch.batch, batch.x, batch.edge_index, beta, None, gcn_w,
+                        batch.edge_weight, None, gamma=_g_orig)
         x_aug, _ = model(batch.batch, batch.x, batch.edge_index, beta, None, batch_aug_edge_weight,
-                        batch.edge_weight, None, gamma=gamma_aug)
+                        batch.edge_weight, None, gamma=_g_aug)
 
         # Fig. 3/4 interpretability: batch_aug_edge_weight is the EFFECTIVE
         # AUGMENTED FC (original weight * gate), NOT the learned retention
