@@ -618,3 +618,133 @@ proven bit-for-bit identical to the pre-8E code in both `phase_state_mode`s. Sta
 was authorised to diagnose, not to fix, and it has not fixed anything. The evidence
 supports a specific, narrow change — encode both contrastive views with the same γ —
 but making that change is a separate decision that requires its own authorisation.
+
+---
+
+## Verdict block
+
+```text
+PROVENANCE_PASS =
+YES
+
+STAGE8D_ALL_ARMS_3_43_TO_3_46 =
+NO          (38.3% of 248 rows; true range 2.089-3.980)
+
+CONSISTENT_ALWAYS_AT_OR_ABOVE_LOG31 =
+NO          (20/155 rows dip below log 31, but never by more than 0.084 nats)
+
+LEGACY_TRANSIENTLY_ESCAPES_NULL_REGIME =
+YES         (CL excess to -1.377, margin +0.440, top1 0.604, uniformity -2.59)
+
+TRAIN_CL_STUCK_AT_NULL =
+NO          (arm04 0.1133, arm05 -0.0901; E0 train CL excess -0.317)
+
+EVAL_CL_STUCK_AT_NULL =
+PARTIAL     (E0 excess -0.0021 = stuck; arm05 3.2683 and E1 2.840 = not stuck)
+
+TRAIN_EVAL_CL_BEHAVIOR_DIFFERENT =
+YES         (arm04 train top1 0.948 / eval top1 0.031)
+
+KLD_EXPLAINS_MOST_OF_J_DESCENT =
+YES         (98.8% of dJ_Phi, REG included)
+
+CE_IMPROVES_UNDER_PHI_OPTIMIZATION =
+NO          (CE worsens by +0.108)
+
+CL_ADVERSARIAL_COMPONENT_CHANGES_MATERIALLY =
+NO          (+0.003 over epochs 0->30; 3.2% of Phi's gradient at epoch 30)
+
+GATE_STOCHASTIC_FRACTION_E0 =
+0.9618
+GATE_STOCHASTIC_FRACTION_E5 =
+0.7063
+GATE_STOCHASTIC_FRACTION_E30 =
+0.8558
+
+GATE_IS_MOSTLY_NOISE_AT_E30 =
+YES
+
+ORIGINAL_VIEW_ATTENTION_EFFECTIVELY_SUPPRESSED =
+YES         (lambda_orig = 1e-4; ||lam*X_atte||/||X_topo|| = 0.000279)
+
+AUGMENTED_LAMBDA_U_SHAPED =
+YES         (train mode: sd 0.352, q01 0.000, q99 1.000, P(<.05) 0.143, P(>.95) 0.136)
+
+LAMBDA_MISMATCH_BREAKS_POSITIVE_IDENTITY =
+YES         (frozen weights: posRank 16.53 vs null 16.5 -> 4.38 when gamma is shared;
+             improves eval identity in 6/6 Stage-8D arms)
+
+GCN2_COMPRESSION_REPLICATES =
+PARTIAL     (3/6 arms, all 'consistent'; two legacy arms INCREASE rank)
+
+GCN2_COMPRESSION_DOMINANT_SOURCE =
+PROPAGATION (-1.32 vs feature transform -0.40, BatchNorm +0.11)
+
+DENSE_GCN_OVERSMOOTHING_SUPPORTED =
+PARTIAL     (spectral gap 0.7684, eRank(S) 10.85 -> eRank(S@S) 1.73, but
+             non-monotone on real features: 1.64 -> 1.86 -> 1.37)
+
+COLLAPSED_STATE_HAS_NEAR_ZERO_ESCAPE_GRADIENT =
+NO          (O(1) contrastive gradient in every module: 0.29-1.91)
+
+PRIMARY_SUPPORTED_MECHANISM =
+LAMBDA_MISMATCH
+
+PRIMARY_MECHANISM_CONFIDENCE =
+HIGH
+
+E0_BASELINE =
+Pinned at the null. Late-epoch eval: CL 3.4636 (excess -0.0021 vs log 32), top1 0.0360
+(chance 0.03125), posRank 16.37 (null 16.5), pos-minus-hardest-neg -0.0873,
+uniformity -0.0019, subject effective rank 1.79. Late-epoch TRAIN: CL 3.1488
+(excess -0.3169), top1 0.0862, posRank 9.95, uniformity -1.5265, rank 15.35.
+
+E1_MATCHED_LAMBDA =
+RESCUE      (6/6; top1 0.9157, posRank 1.90, CL excess -0.473, uniformity -0.374,
+             subject rank 4.34, sustained at 11/11 late checkpoints)
+
+E2_TOPOLOGY_ONLY =
+NO_RESCUE   (3/6 -- PARTIAL. CL excess remains POSITIVE at +0.023; uniformity -0.0001;
+             subject rank 2.06. This is the control that rules out "turn attention off")
+
+E3_FIXED_HALF_LAMBDA =
+RESCUE      (6/6; top1 0.8172, posRank 3.10, CL excess -0.462, uniformity -0.383)
+
+E4_KLD_0001 =
+NO_RESCUE   (0/6 -- the direct test of the KLD-dominance hypothesis)
+
+E5_BATCH128 =
+NO_RESCUE   (2/6; posRank 55.84 against its own null of 64.5)
+
+BEST_MECHANISTIC_ARM =
+E1_matched_lambda
+
+RESCUE_REPLICATES_MULTI_SEED =
+YES         (seed 7 = 6/6, seed 2024 = 6/6; seed 7 is the weakest and non-monotone)
+
+SAFE_TO_CHANGE_PRODUCTION =
+NO
+
+SAFE_TO_BEGIN_FULL_NESTED_CV =
+NO
+
+NEED_RANDOM_ARCHITECTURE_SEARCH =
+NO
+```
+
+### Why SAFE_TO_CHANGE_PRODUCTION = NO despite a replicated 6/6 rescue
+
+Three reasons, none of which is a doubt about the mechanism:
+
+1. Stage 8E was authorised to diagnose, not to fix. Implementing the change is a
+   separate decision.
+2. The rescue is `RESCUED_ENCODING_PAIRING`, not `RESCUED_REPRESENTATION` — every
+   rescuing arm scores 0–1/6 on the fixed `production` yardstick.
+3. **Classification does not improve.** Best arm 0.5398 balanced accuracy vs E0 0.5014,
+   not reproduced by either replication seed (0.5103, 0.5095), against raw baselines of
+   FC 0.663 / ALFF 0.591 / FC+ALFF 0.657.
+
+A production change would also have to decide what the *original* view's γ should be,
+which is a modelling decision the paper does not settle — and it should be taken
+together with the second, independent defect Stage 8E identified but did not address:
+the BatchNorm train/eval transfer gap.
