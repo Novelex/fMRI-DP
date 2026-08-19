@@ -173,7 +173,8 @@ def run(args):
             model, view_learner, model_optimizer, view_optimizer, dataloader, device,
             beta, gamma_orig, args.ce_lambda, args.reg_lambda, args.kld_lambda, args.template,
             contrastive_mode=args.contrastive_mode, supervised_temperature=args.supervised_temperature,
-            epoch_num=epoch, signed_edges=args.signed_edges)
+            epoch_num=epoch, signed_edges=args.signed_edges,
+            phase_state_mode=args.phase_state_mode)
         logging.info('Epoch {}, Model Loss {}, View Loss {}, Reg {}'.format(
             epoch, fin_model_loss, fin_view_loss, fin_reg))
 
@@ -229,6 +230,7 @@ def run(args):
         "signed_edges": args.signed_edges,
         "gamma_mode": args.gamma_mode,
         "tae_profile": args.tae_profile,
+        "phase_state_mode": args.phase_state_mode,
         "mij_source": args.mij_source,
         "reg_lambda": args.reg_lambda,
         "epochs": args.epochs,
@@ -306,6 +308,10 @@ def arg_parse():
     # must pass an explicit canonical corrected configuration, never rely on
     # this temporary backward-compatibility default (abide_stable_legacy =
     # regression reproducibility only, not a scientific primary).
+    parser.add_argument('--phase_state_mode', type=str, default='legacy',
+                        choices=['legacy', 'consistent'],
+                        help='Same Stage-8C forward-state policy as GraSTIACL.py; threaded into '
+                             'the SAME shared train_one_epoch.')
     parser.add_argument('--tae_profile', type=str, default='abide_stable_legacy',
                         choices=['paper_printed', 'paper_intent', 'authors_release', 'abide_stable_legacy'],
                         help='Same Stage-5 TAEncoder profiles as GraSTIACL.py --tae_profile; '

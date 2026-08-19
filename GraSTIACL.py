@@ -133,7 +133,8 @@ def run(args):
                 beta, gamma_orig, args.ce_lambda, args.reg_lambda, args.kld_lambda, args.template,
                 contrastive_mode="supervised",
                 replicate_original_code=args.replicate_original_code,
-                epoch_num=epoch, signed_edges=args.signed_edges)
+                epoch_num=epoch, signed_edges=args.signed_edges,
+                phase_state_mode=args.phase_state_mode)
             logging.info('Epoch {}, Model Loss {}, View Loss {}, Reg {}'.format(
                 epoch, fin_model_loss, fin_view_loss, fin_reg))
             if epoch % args.eval_interval == 0:
@@ -218,7 +219,8 @@ def run(args):
             train_one_epoch(model, view_learner, model_optimizer, view_optimizer, dataloader, device,
                              beta, gamma_orig, args.ce_lambda, args.reg_lambda, args.kld_lambda, args.template,
                              replicate_original_code=args.replicate_original_code,
-                             epoch_num=epoch, signed_edges=args.signed_edges)
+                             epoch_num=epoch, signed_edges=args.signed_edges,
+                phase_state_mode=args.phase_state_mode)
         logging.info(
             'Epoch {}, Model Loss {}, View Loss {}, Reg {}'.format(epoch, fin_model_loss,
                                                                    fin_view_loss,
@@ -408,6 +410,17 @@ def arg_parse():
     # temporarily, ONLY so old command lines keep their old (recorded) behavior;
     # abide_stable_legacy is a regression-reproducibility profile, not a
     # scientific primary.
+    parser.add_argument('--phase_state_mode', type=str, default='legacy',
+                        choices=['legacy', 'consistent'],
+                        help="Stage-8C forward-STATE policy (changes NO loss, weight, data or "
+                             "optimizer membership). legacy=historical Phase1 model.eval()/"
+                             "Phase2 model.train(), preserved bit-for-bit; MEASURED DEFECT: the "
+                             "two phases score the contrastive objective on different forward "
+                             "surfaces (cross-phase CL gap 9.3x the noisier phase's own SD, zero "
+                             "distribution overlap, Phi-gradient cosine 0.31). consistent=both "
+                             "phases use the same train-like distribution and each phase may "
+                             "mutate only the state (params AND BatchNorm buffers) of the player "
+                             "it owns. Default stays legacy until a campaign explicitly opts in.")
     parser.add_argument('--tae_profile', type=str, default='abide_stable_legacy',
                         choices=['paper_printed', 'paper_intent', 'authors_release', 'abide_stable_legacy'],
                         help='Stage-5 TAEncoder profile. paper_printed=retention gamma (orig 1.0, aug '

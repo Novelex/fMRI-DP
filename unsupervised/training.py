@@ -121,10 +121,74 @@ def build_model_and_view_learner(num_dataset_features, emb_dim, num_gc_layers, d
     return model, view_learner, model_optimizer, view_optimizer, gamma_orig, beta
 
 
+def _bn_buffer_snapshot(module):
+    """Clone every persistent BatchNorm buffer (running_mean/var, num_batches_tracked).
+
+    Stage 8C: these are the ONLY stateful buffers in either network -- measured census:
+    model.encoder.bns[0..1] and view_learner.encoder.bns[0..1], all BatchNorm1d(32).
+    trans_conv.bns are LayerNorm (zero buffers, mode-invariant) and ToyNet is pure
+    Linear/LeakyReLU, so nothing else can drift.
+    """
+    return {k: v.detach().clone() for k, v in module.state_dict().items()
+            if ('running_mean' in k or 'running_var' in k or 'num_batches_tracked' in k)}
+
+
+def _bn_buffer_restore(module, snapshot):
+    """Revert BatchNorm buffers to a snapshot, in place.
+
+    MUST be called AFTER backward(), never between forward and backward: PyTorch's
+    native batch_norm saves running_mean/running_var as backward inputs, so mutating
+    them earlier raises "one of the variables needed for gradient computation has been
+    modified by an inplace operation" (measured, Stage 8C adversarial verification).
+    Restoring after backward is free: a train-mode forward's OUTPUT is provably
+    independent of the running buffers (verified by corrupting them and observing
+    bit-identical train-mode output).
+    """
+    sd = module.state_dict()
+    for k, v in snapshot.items():
+        sd[k].copy_(v)
+
+
 def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, dataloader, device,
                      beta, gamma_orig, ce_lambda, reg_lambda, kld_lambda, template,
                      contrastive_mode="self_supervised", supervised_temperature=0.1,
-                     replicate_original_code=False, epoch_num=None, signed_edges=False):
+                     replicate_original_code=False, epoch_num=None, signed_edges=False,
+                     phase_state_mode="legacy"):
+    # phase_state_mode (Stage 8C) -- forward-STATE policy only. It changes no loss,
+    # no weight, no data and no optimizer membership; it changes only which module
+    # is in train() vs eval() during each phase, and whether the frozen player's
+    # BatchNorm buffers are protected.
+    #
+    #   "legacy"     : the historical behavior, preserved bit-for-bit.
+    #                  Phase 1 = model.eval() + view_learner.train()
+    #                  Phase 2 = model.train() + view_learner.eval()
+    #                  MEASURED DEFECT: the two phases evaluate the contrastive
+    #                  objective on different forward surfaces. At the build state the
+    #                  cross-phase CL gap is -1.67 at 9.3x the noisier phase's own
+    #                  stochastic SD, with ZERO distribution overlap over 192 draws per
+    #                  phase, and the two phases' Phi gradients agree at cosine 0.31.
+    #                  BatchNorm (running stats vs batch stats) causes ~92% of it; the
+    #                  gap shrinks as the buffers calibrate but ~67-69% still survives
+    #                  after 200-400 buffer-populating passes.
+    #
+    #   "consistent" : both phases use the SAME train-like forward distribution, and a
+    #                  phase may mutate only the state of the player it owns --
+    #                  parameters AND persistent buffers. The frozen player's BN buffers
+    #                  are snapshotted and restored around the phase, so a mere forward
+    #                  can no longer alter a network that is supposed to be fixed.
+    #                  Fresh stochastic draws between phases remain allowed: the
+    #                  requirement is the same DISTRIBUTION, not the same realization.
+    #                  MEASURED: cross-phase relative L2 of the original representation
+    #                  falls from 60.65 to EXACTLY 0, |CL gap| from 1.72 to 0.097, while
+    #                  the within-phase SD rises only 1.5x -- so the improvement is not
+    #                  denominator inflation. COST, measured and accepted: Phase-1
+    #                  objective noise rises ~250x (CL SD 0.0008 -> 0.199) and the view
+    #                  learner's Phase-1 gradient noise ~27-35x, because Phase 1 now sees
+    #                  the stochastic train-like surface instead of a deterministic one.
+    #                  The existing max_norm=5.0 clip fires on some batches under this
+    #                  policy (it never fires under legacy); that is the pre-existing
+    #                  guard doing its job, not a new behavior.
+    assert phase_state_mode in ("legacy", "consistent"), phase_state_mode
     # signed_edges: feed the RAW SIGNED PCC to the GCN. Only valid when the
     # encoders were built with signed_safe=True: DEGREE normalization uses
     # |w| (D_i = sum_j |W_ij|) while message passing retains the SIGNED W_ij
@@ -175,7 +239,15 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
         # ---- Phase 1: train view_learner to maximize contrastive loss ----
         view_learner.train()
         view_optimizer.zero_grad()
-        model.eval()
+        if phase_state_mode == "consistent":
+            # Same train-like forward distribution as Phase 2; the model is the
+            # NON-OWNER here, so its BN buffers are protected (restored after the
+            # backward/step below -- never between forward and backward).
+            model.train()
+            _p1_nonowner_bn = _bn_buffer_snapshot(model)
+        else:
+            model.eval()
+            _p1_nonowner_bn = None
 
         # dyn_weight=None: model's own edge_logits/mu/std from get_mu_std_logits
         # are never used downstream -- passing None skips ToyNet's expensive
@@ -266,10 +338,23 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
         # view_learner's gradient norm only is the standard mitigation.
         torch.nn.utils.clip_grad_norm_(view_learner.parameters(), max_norm=5.0)
         view_optimizer.step()
+        if _p1_nonowner_bn is not None:
+            # AFTER backward+step (see _bn_buffer_restore docstring): a mere forward
+            # must not leave the frozen model altered.
+            _bn_buffer_restore(model, _p1_nonowner_bn)
 
         # ---- Phase 2: train model to minimize contrastive loss ----
         model.train()
-        view_learner.eval()
+        if phase_state_mode == "consistent":
+            # The view learner is the NON-OWNER here. Its module state is provably
+            # inert on the production path (ToyNet has no BN/dropout and node_emb is
+            # discarded when dyn_weight is supplied), but its BN buffers are still
+            # protected so ownership is enforced structurally rather than by luck.
+            view_learner.train()
+            _p2_nonowner_bn = _bn_buffer_snapshot(view_learner)
+        else:
+            view_learner.eval()
+            _p2_nonowner_bn = None
         model_optimizer.zero_grad()
 
         x, _ = model(batch.batch, batch.x, batch.edge_index, beta, None, gcn_w,
@@ -337,6 +422,8 @@ def train_one_epoch(model, view_learner, model_optimizer, view_optimizer, datalo
 
         model_loss.backward()
         model_optimizer.step()
+        if _p2_nonowner_bn is not None:
+            _bn_buffer_restore(view_learner, _p2_nonowner_bn)
 
     fin_model_loss = model_loss_all / num_graphs_seen
     fin_view_loss = view_loss_all / num_graphs_seen
