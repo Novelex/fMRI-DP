@@ -1,0 +1,930 @@
+{
+  "Caltech_0051456": {
+    "tr_csv": 2.0,
+    "tr_header": 2.0,
+    "affine_max_diff": 0.0,
+    "T": 146,
+    "min_coverage_pct": 12.101910828025478,
+    "zero_coverage_rois": 0,
+    "commute_max_abs_diff": 1.0658141036401503e-13,
+    "method_a_finite": true,
+    "method_b_finite": true,
+    "a_vs_b_corr_qc_only": 0.7903568436877765,
+    "roi_voxel_counts": {
+      "1": {
+        "atlas_voxels": 1028,
+        "valid_voxels": 851,
+        "coverage_pct": 82.78210116731518
+      },
+      "2": {
+        "atlas_voxels": 1002,
+        "valid_voxels": 816,
+        "coverage_pct": 81.437125748503
+      },
+      "3": {
+        "atlas_voxels": 1076,
+        "valid_voxels": 929,
+        "coverage_pct": 86.33828996282529
+      },
+      "4": {
+        "atlas_voxels": 1159,
+        "valid_voxels": 1048,
+        "coverage_pct": 90.42277825711821
+      },
+      "5": {
+        "atlas_voxels": 292,
+        "valid_voxels": 133,
+        "coverage_pct": 45.54794520547945
+      },
+      "6": {
+        "atlas_voxels": 311,
+        "valid_voxels": 190,
+        "coverage_pct": 61.09324758842444
+      },
+      "7": {
+        "atlas_voxels": 1448,
+        "valid_voxels": 1379,
+        "coverage_pct": 95.23480662983425
+      },
+      "8": {
+        "atlas_voxels": 1510,
+        "valid_voxels": 1493,
+        "coverage_pct": 98.87417218543047
+      },
+      "9": {
+        "atlas_voxels": 270,
+        "valid_voxels": 219,
+        "coverage_pct": 81.11111111111111
+      },
+      "10": {
+        "atlas_voxels": 294,
+        "valid_voxels": 251,
+        "coverage_pct": 85.37414965986395
+      },
+      "11": {
+        "atlas_voxels": 326,
+        "valid_voxels": 325,
+        "coverage_pct": 99.69325153374233
+      },
+      "12": {
+        "atlas_voxels": 421,
+        "valid_voxels": 420,
+        "coverage_pct": 99.7624703087886
+      },
+      "13": {
+        "atlas_voxels": 726,
+        "valid_voxels": 726,
+        "coverage_pct": 100.0
+      },
+      "14": {
+        "atlas_voxels": 629,
+        "valid_voxels": 620,
+        "coverage_pct": 98.5691573926868
+      },
+      "15": {
+        "atlas_voxels": 503,
+        "valid_voxels": 361,
+        "coverage_pct": 71.76938369781313
+      },
+      "16": {
+        "atlas_voxels": 505,
+        "valid_voxels": 395,
+        "coverage_pct": 78.21782178217822
+      },
+      "17": {
+        "atlas_voxels": 302,
+        "valid_voxels": 302,
+        "coverage_pct": 100.0
+      },
+      "18": {
+        "atlas_voxels": 399,
+        "valid_voxels": 392,
+        "coverage_pct": 98.24561403508773
+      },
+      "19": {
+        "atlas_voxels": 656,
+        "valid_voxels": 567,
+        "coverage_pct": 86.4329268292683
+      },
+      "20": {
+        "atlas_voxels": 666,
+        "valid_voxels": 548,
+        "coverage_pct": 82.28228228228228
+      },
+      "21": {
+        "atlas_voxels": 87,
+        "valid_voxels": 43,
+        "coverage_pct": 49.42528735632184
+      },
+      "22": {
+        "atlas_voxels": 81,
+        "valid_voxels": 42,
+        "coverage_pct": 51.851851851851855
+      },
+      "23": {
+        "atlas_voxels": 846,
+        "valid_voxels": 795,
+        "coverage_pct": 93.97163120567376
+      },
+      "24": {
+        "atlas_voxels": 641,
+        "valid_voxels": 630,
+        "coverage_pct": 98.28393135725429
+      },
+      "25": {
+        "atlas_voxels": 225,
+        "valid_voxels": 128,
+        "coverage_pct": 56.888888888888886
+      },
+      "26": {
+        "atlas_voxels": 262,
+        "valid_voxels": 227,
+        "coverage_pct": 86.6412213740458
+      },
+      "27": {
+        "atlas_voxels": 261,
+        "valid_voxels": 194,
+        "coverage_pct": 74.32950191570882
+      },
+      "28": {
+        "atlas_voxels": 218,
+        "valid_voxels": 167,
+        "coverage_pct": 76.60550458715596
+      },
+      "29": {
+        "atlas_voxels": 566,
+        "valid_voxels": 563,
+        "coverage_pct": 99.46996466431095
+      },
+      "30": {
+        "atlas_voxels": 539,
+        "valid_voxels": 534,
+        "coverage_pct": 99.07235621521336
+      },
+      "31": {
+        "atlas_voxels": 426,
+        "valid_voxels": 426,
+        "coverage_pct": 100.0
+      },
+      "32": {
+        "atlas_voxels": 397,
+        "valid_voxels": 397,
+        "coverage_pct": 100.0
+      },
+      "33": {
+        "atlas_voxels": 619,
+        "valid_voxels": 619,
+        "coverage_pct": 100.0
+      },
+      "34": {
+        "atlas_voxels": 605,
+        "valid_voxels": 605,
+        "coverage_pct": 100.0
+      },
+      "35": {
+        "atlas_voxels": 137,
+        "valid_voxels": 137,
+        "coverage_pct": 100.0
+      },
+      "36": {
+        "atlas_voxels": 87,
+        "valid_voxels": 87,
+        "coverage_pct": 100.0
+      },
+      "37": {
+        "atlas_voxels": 273,
+        "valid_voxels": 253,
+        "coverage_pct": 92.67399267399267
+      },
+      "38": {
+        "atlas_voxels": 288,
+        "valid_voxels": 246,
+        "coverage_pct": 85.41666666666667
+      },
+      "39": {
+        "atlas_voxels": 286,
+        "valid_voxels": 197,
+        "coverage_pct": 68.88111888111888
+      },
+      "40": {
+        "atlas_voxels": 316,
+        "valid_voxels": 200,
+        "coverage_pct": 63.29113924050633
+      },
+      "41": {
+        "atlas_voxels": 62,
+        "valid_voxels": 36,
+        "coverage_pct": 58.064516129032256
+      },
+      "42": {
+        "atlas_voxels": 70,
+        "valid_voxels": 53,
+        "coverage_pct": 75.71428571428571
+      },
+      "43": {
+        "atlas_voxels": 648,
+        "valid_voxels": 392,
+        "coverage_pct": 60.49382716049383
+      },
+      "44": {
+        "atlas_voxels": 542,
+        "valid_voxels": 434,
+        "coverage_pct": 80.07380073800738
+      },
+      "45": {
+        "atlas_voxels": 449,
+        "valid_voxels": 343,
+        "coverage_pct": 76.39198218262806
+      },
+      "46": {
+        "atlas_voxels": 434,
+        "valid_voxels": 351,
+        "coverage_pct": 80.87557603686636
+      },
+      "47": {
+        "atlas_voxels": 660,
+        "valid_voxels": 532,
+        "coverage_pct": 80.60606060606061
+      },
+      "48": {
+        "atlas_voxels": 678,
+        "valid_voxels": 539,
+        "coverage_pct": 79.49852507374631
+      },
+      "49": {
+        "atlas_voxels": 396,
+        "valid_voxels": 224,
+        "coverage_pct": 56.56565656565657
+      },
+      "50": {
+        "atlas_voxels": 428,
+        "valid_voxels": 290,
+        "coverage_pct": 67.75700934579439
+      },
+      "51": {
+        "atlas_voxels": 959,
+        "valid_voxels": 500,
+        "coverage_pct": 52.13764337851929
+      },
+      "52": {
+        "atlas_voxels": 595,
+        "valid_voxels": 296,
+        "coverage_pct": 49.747899159663866
+      },
+      "53": {
+        "atlas_voxels": 268,
+        "valid_voxels": 83,
+        "coverage_pct": 30.970149253731343
+      },
+      "54": {
+        "atlas_voxels": 314,
+        "valid_voxels": 38,
+        "coverage_pct": 12.101910828025478
+      },
+      "55": {
+        "atlas_voxels": 687,
+        "valid_voxels": 526,
+        "coverage_pct": 76.56477438136827
+      },
+      "56": {
+        "atlas_voxels": 760,
+        "valid_voxels": 530,
+        "coverage_pct": 69.73684210526316
+      },
+      "57": {
+        "atlas_voxels": 1159,
+        "valid_voxels": 905,
+        "coverage_pct": 78.08455565142364
+      },
+      "58": {
+        "atlas_voxels": 1138,
+        "valid_voxels": 843,
+        "coverage_pct": 74.07732864674868
+      },
+      "59": {
+        "atlas_voxels": 631,
+        "valid_voxels": 384,
+        "coverage_pct": 60.85578446909667
+      },
+      "60": {
+        "atlas_voxels": 647,
+        "valid_voxels": 358,
+        "coverage_pct": 55.332302936630605
+      },
+      "61": {
+        "atlas_voxels": 696,
+        "valid_voxels": 686,
+        "coverage_pct": 98.5632183908046
+      },
+      "62": {
+        "atlas_voxels": 419,
+        "valid_voxels": 406,
+        "coverage_pct": 96.89737470167064
+      },
+      "63": {
+        "atlas_voxels": 354,
+        "valid_voxels": 354,
+        "coverage_pct": 100.0
+      },
+      "64": {
+        "atlas_voxels": 550,
+        "valid_voxels": 548,
+        "coverage_pct": 99.63636363636364
+      },
+      "65": {
+        "atlas_voxels": 342,
+        "valid_voxels": 328,
+        "coverage_pct": 95.90643274853801
+      },
+      "66": {
+        "atlas_voxels": 496,
+        "valid_voxels": 463,
+        "coverage_pct": 93.34677419354838
+      },
+      "67": {
+        "atlas_voxels": 1079,
+        "valid_voxels": 803,
+        "coverage_pct": 74.42075996292864
+      },
+      "68": {
+        "atlas_voxels": 935,
+        "valid_voxels": 773,
+        "coverage_pct": 82.67379679144385
+      },
+      "69": {
+        "atlas_voxels": 422,
+        "valid_voxels": 154,
+        "coverage_pct": 36.492890995260666
+      },
+      "70": {
+        "atlas_voxels": 227,
+        "valid_voxels": 74,
+        "coverage_pct": 32.59911894273128
+      },
+      "71": {
+        "atlas_voxels": 278,
+        "valid_voxels": 264,
+        "coverage_pct": 94.96402877697842
+      },
+      "72": {
+        "atlas_voxels": 284,
+        "valid_voxels": 271,
+        "coverage_pct": 95.4225352112676
+      },
+      "73": {
+        "atlas_voxels": 306,
+        "valid_voxels": 295,
+        "coverage_pct": 96.40522875816994
+      },
+      "74": {
+        "atlas_voxels": 322,
+        "valid_voxels": 317,
+        "coverage_pct": 98.4472049689441
+      },
+      "75": {
+        "atlas_voxels": 81,
+        "valid_voxels": 79,
+        "coverage_pct": 97.53086419753086
+      },
+      "76": {
+        "atlas_voxels": 76,
+        "valid_voxels": 76,
+        "coverage_pct": 100.0
+      },
+      "77": {
+        "atlas_voxels": 313,
+        "valid_voxels": 313,
+        "coverage_pct": 100.0
+      },
+      "78": {
+        "atlas_voxels": 307,
+        "valid_voxels": 307,
+        "coverage_pct": 100.0
+      },
+      "79": {
+        "atlas_voxels": 72,
+        "valid_voxels": 72,
+        "coverage_pct": 100.0
+      },
+      "80": {
+        "atlas_voxels": 73,
+        "valid_voxels": 73,
+        "coverage_pct": 100.0
+      },
+      "81": {
+        "atlas_voxels": 672,
+        "valid_voxels": 670,
+        "coverage_pct": 99.70238095238095
+      },
+      "82": {
+        "atlas_voxels": 963,
+        "valid_voxels": 938,
+        "coverage_pct": 97.40394600207685
+      },
+      "83": {
+        "atlas_voxels": 382,
+        "valid_voxels": 238,
+        "coverage_pct": 62.303664921465966
+      },
+      "84": {
+        "atlas_voxels": 400,
+        "valid_voxels": 273,
+        "coverage_pct": 68.25
+      },
+      "85": {
+        "atlas_voxels": 1439,
+        "valid_voxels": 1315,
+        "coverage_pct": 91.38290479499652
+      },
+      "86": {
+        "atlas_voxels": 1356,
+        "valid_voxels": 1122,
+        "coverage_pct": 82.7433628318584
+      },
+      "87": {
+        "atlas_voxels": 222,
+        "valid_voxels": 47,
+        "coverage_pct": 21.17117117117117
+      },
+      "88": {
+        "atlas_voxels": 349,
+        "valid_voxels": 47,
+        "coverage_pct": 13.46704871060172
+      },
+      "89": {
+        "atlas_voxels": 941,
+        "valid_voxels": 599,
+        "coverage_pct": 63.65568544102019
+      },
+      "90": {
+        "atlas_voxels": 1072,
+        "valid_voxels": 431,
+        "coverage_pct": 40.20522388059702
+      }
+    }
+  },
+  "Yale_0050612": {
+    "tr_csv": 2.0,
+    "tr_header": 2.0,
+    "affine_max_diff": 0.0,
+    "T": 196,
+    "min_coverage_pct": 69.81981981981981,
+    "zero_coverage_rois": 0,
+    "commute_max_abs_diff": 2.5579538487363607e-13,
+    "method_a_finite": true,
+    "method_b_finite": true,
+    "a_vs_b_corr_qc_only": 0.8968210482673771,
+    "roi_voxel_counts": {
+      "1": {
+        "atlas_voxels": 1028,
+        "valid_voxels": 1028,
+        "coverage_pct": 100.0
+      },
+      "2": {
+        "atlas_voxels": 1002,
+        "valid_voxels": 1001,
+        "coverage_pct": 99.9001996007984
+      },
+      "3": {
+        "atlas_voxels": 1076,
+        "valid_voxels": 1076,
+        "coverage_pct": 100.0
+      },
+      "4": {
+        "atlas_voxels": 1159,
+        "valid_voxels": 1159,
+        "coverage_pct": 100.0
+      },
+      "5": {
+        "atlas_voxels": 292,
+        "valid_voxels": 248,
+        "coverage_pct": 84.93150684931507
+      },
+      "6": {
+        "atlas_voxels": 311,
+        "valid_voxels": 266,
+        "coverage_pct": 85.53054662379421
+      },
+      "7": {
+        "atlas_voxels": 1448,
+        "valid_voxels": 1448,
+        "coverage_pct": 100.0
+      },
+      "8": {
+        "atlas_voxels": 1510,
+        "valid_voxels": 1510,
+        "coverage_pct": 100.0
+      },
+      "9": {
+        "atlas_voxels": 270,
+        "valid_voxels": 268,
+        "coverage_pct": 99.25925925925925
+      },
+      "10": {
+        "atlas_voxels": 294,
+        "valid_voxels": 289,
+        "coverage_pct": 98.29931972789116
+      },
+      "11": {
+        "atlas_voxels": 326,
+        "valid_voxels": 326,
+        "coverage_pct": 100.0
+      },
+      "12": {
+        "atlas_voxels": 421,
+        "valid_voxels": 417,
+        "coverage_pct": 99.04988123515439
+      },
+      "13": {
+        "atlas_voxels": 726,
+        "valid_voxels": 723,
+        "coverage_pct": 99.58677685950413
+      },
+      "14": {
+        "atlas_voxels": 629,
+        "valid_voxels": 620,
+        "coverage_pct": 98.5691573926868
+      },
+      "15": {
+        "atlas_voxels": 503,
+        "valid_voxels": 490,
+        "coverage_pct": 97.4155069582505
+      },
+      "16": {
+        "atlas_voxels": 505,
+        "valid_voxels": 492,
+        "coverage_pct": 97.42574257425743
+      },
+      "17": {
+        "atlas_voxels": 302,
+        "valid_voxels": 302,
+        "coverage_pct": 100.0
+      },
+      "18": {
+        "atlas_voxels": 399,
+        "valid_voxels": 396,
+        "coverage_pct": 99.24812030075188
+      },
+      "19": {
+        "atlas_voxels": 656,
+        "valid_voxels": 656,
+        "coverage_pct": 100.0
+      },
+      "20": {
+        "atlas_voxels": 666,
+        "valid_voxels": 666,
+        "coverage_pct": 100.0
+      },
+      "21": {
+        "atlas_voxels": 87,
+        "valid_voxels": 80,
+        "coverage_pct": 91.95402298850574
+      },
+      "22": {
+        "atlas_voxels": 81,
+        "valid_voxels": 81,
+        "coverage_pct": 100.0
+      },
+      "23": {
+        "atlas_voxels": 846,
+        "valid_voxels": 846,
+        "coverage_pct": 100.0
+      },
+      "24": {
+        "atlas_voxels": 641,
+        "valid_voxels": 641,
+        "coverage_pct": 100.0
+      },
+      "25": {
+        "atlas_voxels": 225,
+        "valid_voxels": 225,
+        "coverage_pct": 100.0
+      },
+      "26": {
+        "atlas_voxels": 262,
+        "valid_voxels": 262,
+        "coverage_pct": 100.0
+      },
+      "27": {
+        "atlas_voxels": 261,
+        "valid_voxels": 246,
+        "coverage_pct": 94.25287356321839
+      },
+      "28": {
+        "atlas_voxels": 218,
+        "valid_voxels": 207,
+        "coverage_pct": 94.95412844036697
+      },
+      "29": {
+        "atlas_voxels": 566,
+        "valid_voxels": 566,
+        "coverage_pct": 100.0
+      },
+      "30": {
+        "atlas_voxels": 539,
+        "valid_voxels": 539,
+        "coverage_pct": 100.0
+      },
+      "31": {
+        "atlas_voxels": 426,
+        "valid_voxels": 426,
+        "coverage_pct": 100.0
+      },
+      "32": {
+        "atlas_voxels": 397,
+        "valid_voxels": 397,
+        "coverage_pct": 100.0
+      },
+      "33": {
+        "atlas_voxels": 619,
+        "valid_voxels": 619,
+        "coverage_pct": 100.0
+      },
+      "34": {
+        "atlas_voxels": 605,
+        "valid_voxels": 605,
+        "coverage_pct": 100.0
+      },
+      "35": {
+        "atlas_voxels": 137,
+        "valid_voxels": 137,
+        "coverage_pct": 100.0
+      },
+      "36": {
+        "atlas_voxels": 87,
+        "valid_voxels": 87,
+        "coverage_pct": 100.0
+      },
+      "37": {
+        "atlas_voxels": 273,
+        "valid_voxels": 273,
+        "coverage_pct": 100.0
+      },
+      "38": {
+        "atlas_voxels": 288,
+        "valid_voxels": 288,
+        "coverage_pct": 100.0
+      },
+      "39": {
+        "atlas_voxels": 286,
+        "valid_voxels": 283,
+        "coverage_pct": 98.95104895104895
+      },
+      "40": {
+        "atlas_voxels": 316,
+        "valid_voxels": 312,
+        "coverage_pct": 98.73417721518987
+      },
+      "41": {
+        "atlas_voxels": 62,
+        "valid_voxels": 62,
+        "coverage_pct": 100.0
+      },
+      "42": {
+        "atlas_voxels": 70,
+        "valid_voxels": 70,
+        "coverage_pct": 100.0
+      },
+      "43": {
+        "atlas_voxels": 648,
+        "valid_voxels": 648,
+        "coverage_pct": 100.0
+      },
+      "44": {
+        "atlas_voxels": 542,
+        "valid_voxels": 542,
+        "coverage_pct": 100.0
+      },
+      "45": {
+        "atlas_voxels": 449,
+        "valid_voxels": 449,
+        "coverage_pct": 100.0
+      },
+      "46": {
+        "atlas_voxels": 434,
+        "valid_voxels": 434,
+        "coverage_pct": 100.0
+      },
+      "47": {
+        "atlas_voxels": 660,
+        "valid_voxels": 660,
+        "coverage_pct": 100.0
+      },
+      "48": {
+        "atlas_voxels": 678,
+        "valid_voxels": 677,
+        "coverage_pct": 99.85250737463127
+      },
+      "49": {
+        "atlas_voxels": 396,
+        "valid_voxels": 396,
+        "coverage_pct": 100.0
+      },
+      "50": {
+        "atlas_voxels": 428,
+        "valid_voxels": 428,
+        "coverage_pct": 100.0
+      },
+      "51": {
+        "atlas_voxels": 959,
+        "valid_voxels": 959,
+        "coverage_pct": 100.0
+      },
+      "52": {
+        "atlas_voxels": 595,
+        "valid_voxels": 595,
+        "coverage_pct": 100.0
+      },
+      "53": {
+        "atlas_voxels": 268,
+        "valid_voxels": 268,
+        "coverage_pct": 100.0
+      },
+      "54": {
+        "atlas_voxels": 314,
+        "valid_voxels": 314,
+        "coverage_pct": 100.0
+      },
+      "55": {
+        "atlas_voxels": 687,
+        "valid_voxels": 603,
+        "coverage_pct": 87.77292576419214
+      },
+      "56": {
+        "atlas_voxels": 760,
+        "valid_voxels": 677,
+        "coverage_pct": 89.07894736842105
+      },
+      "57": {
+        "atlas_voxels": 1159,
+        "valid_voxels": 1159,
+        "coverage_pct": 100.0
+      },
+      "58": {
+        "atlas_voxels": 1138,
+        "valid_voxels": 1138,
+        "coverage_pct": 100.0
+      },
+      "59": {
+        "atlas_voxels": 631,
+        "valid_voxels": 631,
+        "coverage_pct": 100.0
+      },
+      "60": {
+        "atlas_voxels": 647,
+        "valid_voxels": 647,
+        "coverage_pct": 100.0
+      },
+      "61": {
+        "atlas_voxels": 696,
+        "valid_voxels": 696,
+        "coverage_pct": 100.0
+      },
+      "62": {
+        "atlas_voxels": 419,
+        "valid_voxels": 419,
+        "coverage_pct": 100.0
+      },
+      "63": {
+        "atlas_voxels": 354,
+        "valid_voxels": 354,
+        "coverage_pct": 100.0
+      },
+      "64": {
+        "atlas_voxels": 550,
+        "valid_voxels": 550,
+        "coverage_pct": 100.0
+      },
+      "65": {
+        "atlas_voxels": 342,
+        "valid_voxels": 342,
+        "coverage_pct": 100.0
+      },
+      "66": {
+        "atlas_voxels": 496,
+        "valid_voxels": 496,
+        "coverage_pct": 100.0
+      },
+      "67": {
+        "atlas_voxels": 1079,
+        "valid_voxels": 1077,
+        "coverage_pct": 99.81464318813717
+      },
+      "68": {
+        "atlas_voxels": 935,
+        "valid_voxels": 934,
+        "coverage_pct": 99.89304812834224
+      },
+      "69": {
+        "atlas_voxels": 422,
+        "valid_voxels": 422,
+        "coverage_pct": 100.0
+      },
+      "70": {
+        "atlas_voxels": 227,
+        "valid_voxels": 227,
+        "coverage_pct": 100.0
+      },
+      "71": {
+        "atlas_voxels": 278,
+        "valid_voxels": 278,
+        "coverage_pct": 100.0
+      },
+      "72": {
+        "atlas_voxels": 284,
+        "valid_voxels": 284,
+        "coverage_pct": 100.0
+      },
+      "73": {
+        "atlas_voxels": 306,
+        "valid_voxels": 306,
+        "coverage_pct": 100.0
+      },
+      "74": {
+        "atlas_voxels": 322,
+        "valid_voxels": 322,
+        "coverage_pct": 100.0
+      },
+      "75": {
+        "atlas_voxels": 81,
+        "valid_voxels": 81,
+        "coverage_pct": 100.0
+      },
+      "76": {
+        "atlas_voxels": 76,
+        "valid_voxels": 76,
+        "coverage_pct": 100.0
+      },
+      "77": {
+        "atlas_voxels": 313,
+        "valid_voxels": 313,
+        "coverage_pct": 100.0
+      },
+      "78": {
+        "atlas_voxels": 307,
+        "valid_voxels": 307,
+        "coverage_pct": 100.0
+      },
+      "79": {
+        "atlas_voxels": 72,
+        "valid_voxels": 72,
+        "coverage_pct": 100.0
+      },
+      "80": {
+        "atlas_voxels": 73,
+        "valid_voxels": 73,
+        "coverage_pct": 100.0
+      },
+      "81": {
+        "atlas_voxels": 672,
+        "valid_voxels": 670,
+        "coverage_pct": 99.70238095238095
+      },
+      "82": {
+        "atlas_voxels": 963,
+        "valid_voxels": 956,
+        "coverage_pct": 99.27310488058151
+      },
+      "83": {
+        "atlas_voxels": 382,
+        "valid_voxels": 336,
+        "coverage_pct": 87.95811518324608
+      },
+      "84": {
+        "atlas_voxels": 400,
+        "valid_voxels": 379,
+        "coverage_pct": 94.75
+      },
+      "85": {
+        "atlas_voxels": 1439,
+        "valid_voxels": 1399,
+        "coverage_pct": 97.22029186935372
+      },
+      "86": {
+        "atlas_voxels": 1356,
+        "valid_voxels": 1325,
+        "coverage_pct": 97.71386430678466
+      },
+      "87": {
+        "atlas_voxels": 222,
+        "valid_voxels": 155,
+        "coverage_pct": 69.81981981981981
+      },
+      "88": {
+        "atlas_voxels": 349,
+        "valid_voxels": 331,
+        "coverage_pct": 94.84240687679083
+      },
+      "89": {
+        "atlas_voxels": 941,
+        "valid_voxels": 804,
+        "coverage_pct": 85.44102019128587
+      },
+      "90": {
+        "atlas_voxels": 1072,
+        "valid_voxels": 878,
+        "coverage_pct": 81.90298507462687
+      }
+    }
+  }
+}

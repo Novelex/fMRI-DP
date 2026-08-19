@@ -1,0 +1,299 @@
+Loading TR table: /mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/phenotypic_filtered_v2.csv
+  956 subjects
+Loading atlas: /mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/software/DPABI/Templates/AAL_61x73x61_YCG.nii
+  atlas unique labels (incl. background 0): [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116]
+  90 ROI masks loaded, all validated non-empty
+Processing 24 subject(s): ['CMU_a_0050665', 'KKI_0050773', 'KKI_0050820', 'Leuven_2_0050728', 'MaxMun_a_0051607']...
+
+=== CMU_a_0050665 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/CMU_a_0050665_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=2.000000s, NIfTI header=2.000000s
+  T=236
+  min ROI coverage: 72.73%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 2.27e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=2.4270 max=13.7544 mean=5.3615
+  Method B raw ALFF: min=7.0408 max=18.5621 mean=10.7001
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.8779
+
+=== KKI_0050773 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/KKI_0050773_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=2.500000s, NIfTI header=2.500000s
+  T=152
+  min ROI coverage: 61.93%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 1.92e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=1.6687 max=9.7391 mean=5.0825
+  Method B raw ALFF: min=7.1384 max=19.5118 mean=12.7402
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.8726
+
+=== KKI_0050820 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/KKI_0050820_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=2.500000s, NIfTI header=2.500000s
+  T=152
+  min ROI coverage: 68.20%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 1.85e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=1.4936 max=14.4536 mean=5.1165
+  Method B raw ALFF: min=8.1393 max=22.3864 mean=14.4111
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.7665
+
+=== Leuven_2_0050728 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/Leuven_2_0050728_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=1.650760s, NIfTI header=1.650760s
+  T=246
+  min ROI coverage: 21.56%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 2.42e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=1.9353 max=11.9010 mean=5.7269
+  Method B raw ALFF: min=3.4758 max=16.1046 mean=10.1024
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.8794
+
+=== MaxMun_a_0051607 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/MaxMun_a_0051607_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=3.000000s, NIfTI header=3.000000s
+  T=116
+  min ROI coverage: 54.32%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 1.71e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=1.9621 max=11.2870 mean=4.5997
+  Method B raw ALFF: min=7.6430 max=16.8727 mean=11.6322
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.7856
+
+=== NYU_0050956 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/NYU_0050956_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=2.000000s, NIfTI header=2.000000s
+  T=176
+  min ROI coverage: 60.15%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 2.13e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=1.8738 max=9.9650 mean=4.6453
+  Method B raw ALFF: min=9.8603 max=19.9465 mean=13.7989
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.7613
+
+=== NYU_0051000 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/NYU_0051000_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=2.000000s, NIfTI header=2.000000s
+  T=176
+  min ROI coverage: 66.04%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 2.84e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=1.7162 max=20.3206 mean=6.4068
+  Method B raw ALFF: min=10.5253 max=32.5788 mean=17.7685
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.8040
+
+=== NYU_0051047 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/NYU_0051047_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=2.000000s, NIfTI header=2.000000s
+  T=176
+  min ROI coverage: 50.57%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 1.71e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=2.0717 max=14.1432 mean=5.1377
+  Method B raw ALFF: min=10.4703 max=20.7817 mean=14.7031
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.8024
+
+=== NYU_0051087 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/NYU_0051087_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=2.000000s, NIfTI header=2.000000s
+  T=176
+  min ROI coverage: 64.18%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 1.78e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=2.4165 max=14.9936 mean=5.5978
+  Method B raw ALFF: min=11.3131 max=25.3017 mean=16.0649
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.7598
+
+=== NYU_0051148 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/NYU_0051148_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=2.000000s, NIfTI header=2.000000s
+  T=176
+  min ROI coverage: 55.94%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 2.27e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=2.6754 max=15.0733 mean=6.2033
+  Method B raw ALFF: min=10.0533 max=22.9323 mean=16.4798
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.7700
+
+=== Olin_0050134 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/Olin_0050134_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=1.500000s, NIfTI header=1.500000s
+  T=206
+  min ROI coverage: 73.97%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 1.99e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=2.2868 max=11.2348 mean=5.8426
+  Method B raw ALFF: min=8.9723 max=19.1051 mean=12.6537
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.9083
+
+=== Pitt_0050043 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/Pitt_0050043_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=1.500000s, NIfTI header=1.500000s
+  T=196
+  min ROI coverage: 71.92%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 1.42e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=1.1683 max=14.6850 mean=4.0516
+  Method B raw ALFF: min=7.1353 max=17.8277 mean=10.7747
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.7901
+
+=== SBL_0051579 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/SBL_0051579_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=2.200000s, NIfTI header=2.200000s
+  T=196
+  min ROI coverage: 42.66%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 1.85e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=1.6655 max=13.6760 mean=4.8894
+  Method B raw ALFF: min=6.6854 max=20.9198 mean=12.0099
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.6922
+
+=== Stanford_0051162 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/Stanford_0051162_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=2.000000s, NIfTI header=2.000000s
+  T=176
+  min ROI coverage: 85.59%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 1.42e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=1.8302 max=17.5577 mean=5.1997
+  Method B raw ALFF: min=6.6825 max=27.8317 mean=11.8357
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.8332
+
+=== Trinity_0050235 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/Trinity_0050235_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=2.000000s, NIfTI header=2.000000s
+  T=146
+  min ROI coverage: 46.40%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 2.70e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=3.7272 max=15.8343 mean=7.3933
+  Method B raw ALFF: min=8.0850 max=21.1556 mean=13.7139
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.7285
+
+=== Trinity_0051141 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/Trinity_0051141_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=2.000000s, NIfTI header=2.000000s
+  T=146
+  min ROI coverage: 59.04%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 2.70e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=2.2101 max=20.3330 mean=8.0048
+  Method B raw ALFF: min=7.2789 max=28.7874 mean=14.2756
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.8337
+
+=== UCLA_1_0051251 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/UCLA_1_0051251_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=3.000000s, NIfTI header=3.000000s
+  T=116
+  min ROI coverage: 81.41%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 3.27e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=4.0115 max=19.1165 mean=7.9188
+  Method B raw ALFF: min=8.6485 max=23.6811 mean=13.7760
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.8883
+
+=== UCLA_2_0051306 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/UCLA_2_0051306_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=3.000000s, NIfTI header=3.000000s
+  T=116
+  min ROI coverage: 59.46%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 1.85e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=1.0550 max=11.4553 mean=4.5317
+  Method B raw ALFF: min=6.7425 max=16.9338 mean=10.9609
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.7208
+
+=== UM_1_0050306 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/UM_1_0050306_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=2.000000s, NIfTI header=2.000000s
+  T=296
+  min ROI coverage: 73.87%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 8.53e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=5.0617 max=25.3061 mean=11.1833
+  Method B raw ALFF: min=14.4318 max=68.4161 mean=26.6922
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.5773
+
+=== UM_1_0050352 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/UM_1_0050352_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=2.000000s, NIfTI header=2.000000s
+  T=296
+  min ROI coverage: 61.89%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 3.41e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=3.7556 max=14.1194 mean=7.0794
+  Method B raw ALFF: min=11.1839 max=23.7384 mean=15.5289
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.6288
+
+=== UM_2_0050404 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/UM_2_0050404_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=2.000000s, NIfTI header=2.000000s
+  T=296
+  min ROI coverage: 96.45%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 2.98e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=1.6384 max=13.1054 mean=5.1372
+  Method B raw ALFF: min=8.9712 max=21.7685 mean=12.1640
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.8928
+
+=== USM_0050455 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/USM_0050455_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=2.000000s, NIfTI header=2.000000s
+  T=236
+  min ROI coverage: 76.96%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 2.27e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=2.7214 max=13.4417 mean=5.6685
+  Method B raw ALFF: min=10.2197 max=19.5655 mean=14.3887
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.6831
+
+=== USM_0050520 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/USM_0050520_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=2.000000s, NIfTI header=2.000000s
+  T=236
+  min ROI coverage: 73.29%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 3.13e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=1.9619 max=13.5440 mean=5.8521
+  Method B raw ALFF: min=10.1610 max=23.5448 mean=14.7953
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.8284
+
+=== Yale_0050602 ===
+  func shape=/mnt/scratch/users/3171356m/muhammad-GraSTIACL/data/raw/func_preproc/Yale_0050602_func_preproc.nii.gz spatial dims match atlas: True (asserted)
+  affine max abs diff: 0.00e+00
+  TR: CSV=2.000000s, NIfTI header=2.000000s
+  T=196
+  min ROI coverage: 81.53%  |  zero-coverage ROIs: 0
+  commute check (detrend/mean order) max abs diff: 4.26e-13
+  Method A finite: True  |  Method B finite: True
+  Method A raw ALFF: min=1.9074 max=16.0962 mean=5.4476
+  Method B raw ALFF: min=5.8862 max=22.1683 mean=11.2455
+  Method A vs B flattened correlation (QC signal only, NOT the Step 5 result): 0.7898
+
+24/24 succeeded, 0 failed.
+
+Saved raw arrays: /users/3171356m/muhammad/GraSTIACL/layer_testing/layer0_dual_alff_step1_raw_chunk010.npz
+Saved QC summary: /users/3171356m/muhammad/GraSTIACL/layer_testing/layer0_dual_alff_step1_qc_raw_chunk010.json
