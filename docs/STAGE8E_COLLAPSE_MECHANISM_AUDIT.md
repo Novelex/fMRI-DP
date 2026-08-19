@@ -428,10 +428,193 @@ If no arm rescues, run no further modifications.
 
 ## 15. Results
 
-<!-- RESULTS_PLACEHOLDER -->
+All eight arms reached epoch 30 and reported `COMPLETED`. No arm went non-finite.
+Provenance: every arm records its git commit (`29f51a72`), the sha256 of
+`unsupervised/training.py`, `datasets/Dataset.py` and `PREREGISTERED_CRITERIA.md`,
+its exact command line and its host.
+
+### 15a. Verdicts on the six governing criteria
+
+Late = epochs ≥ 20 (11 checkpoints per arm). Surface = `eval_own` (the arm's own
+pairing, eval state).
+
+| arm | C1 CL_excess | C2 pos−hardest-neg | C3 pos rank | C4 uniformity | C5 subject rank | C6 not transient | **verdict** |
+|---|---|---|---|---|---|---|---|
+| E1 matched λ | ✅ 11/11 | ✅ +0.0824 | ✅ 1.90 vs 16.37 | ✅ −0.374 | ✅ 4.34 vs 1.79 | ✅ 11/11 | **RESCUE (6/6)** |
+| E3 fixed half λ | ✅ 11/11 | ✅ +0.0722 | ✅ 3.10 vs 16.37 | ✅ −0.383 | ✅ 4.39 vs 1.79 | ✅ 11/11 | **RESCUE (6/6)** |
+| E2 topology only | ❌ 0/11 | ✅ +0.0514 | ✅ 14.28 vs 16.37 | ❌ −0.0001 | ❌ 2.06 vs 1.79 | ✅ 11/11 | PARTIAL (3/6) |
+| E4 KLD 0.001 | ❌ 0/11 | ❌ +0.0138 | ❌ 16.43 vs 16.37 | ❌ −0.0008 | ❌ 2.04 | ❌ 0/11 | **NO_RESCUE (0/6)** |
+| E5 batch 128 | ❌ 0/11 | ✅ +0.0400 | ❌ 55.84 vs null 64.5 | ❌ −0.0163 | ✅ 7.65 | ❌ 0/11 | **NO_RESCUE (2/6)** |
+| R1 seed 7, matched | ✅ 11/11 | ✅ +0.0435 | ✅ 7.43 vs 16.37 | ✅ −0.261 | ✅ 5.33 | ✅ 11/11 | **RESCUE (6/6)** |
+| R2 seed 2024, matched | ✅ 11/11 | ✅ +0.0755 | ✅ 1.86 vs 16.37 | ✅ −0.424 | ✅ 4.35 | ✅ 11/11 | **RESCUE (6/6)** |
+
+### 15b. Trajectories (eval, own pairing). Null: CL 3.4657, top-1 0.0312, posRank 16.5
+
+| arm | metric | ep 0 | 5 | 10 | 15 | 20 | 25 | 30 |
+|---|---|---|---|---|---|---|---|---|
+| **E0 baseline** | CL | 3.440 | 3.432 | 3.441 | 3.534 | 3.463 | 3.489 | 3.458 |
+| | top-1 | 0.073 | 0.031 | 0.042 | 0.031 | 0.031 | 0.031 | 0.031 |
+| | posRank | 13.28 | 14.91 | 15.92 | 16.50 | 16.27 | 16.48 | 16.48 |
+| | uniformity | −0.530 | −0.018 | −0.014 | −0.000 | −0.001 | −0.002 | −0.000 |
+| | subj rank | 8.18 | 5.81 | 4.53 | 1.65 | 2.62 | 1.64 | 2.46 |
+| **E1 matched λ** | CL | 3.417 | 3.423 | 3.398 | 3.224 | 3.097 | 3.055 | **2.840** |
+| | top-1 | 1.000 | 0.375 | 0.500 | 0.969 | 0.875 | 0.979 | **0.969** |
+| | posRank | 1.00 | 12.67 | 8.74 | 1.62 | 2.79 | 1.14 | **1.32** |
+| | uniformity | −0.014 | −0.028 | −0.035 | −0.175 | −0.299 | −0.300 | **−0.504** |
+| | subj rank | 9.97 | 12.09 | 10.10 | 6.22 | 4.80 | 4.54 | 4.01 |
+| **E3 fixed half λ** | CL | 3.417 | 3.421 | 3.397 | 3.245 | 3.199 | 3.115 | **2.834** |
+| | top-1 | 1.000 | 0.302 | 0.469 | 0.562 | 0.656 | 0.750 | **0.896** |
+| | posRank | 1.00 | 13.16 | 10.89 | 7.59 | 6.03 | 5.00 | **1.77** |
+| **R2 seed 2024** | CL | 3.414 | 3.457 | 3.420 | 3.393 | 3.249 | 2.919 | **2.698** |
+| | top-1 | 1.000 | 0.292 | 0.229 | 0.615 | 0.844 | 0.958 | **1.000** |
+| | posRank | 1.00 | 13.48 | 13.75 | 7.58 | 3.53 | 1.32 | **1.00** |
+| **R1 seed 7** | CL | 3.387 | 3.453 | 3.431 | 3.438 | 3.297 | 3.138 | 3.177 |
+| | top-1 | 0.990 | 0.521 | 0.229 | 0.354 | 0.542 | 0.448 | 0.271 |
+| | posRank | 1.01 | 9.84 | 13.66 | 11.85 | 8.49 | 7.99 | 10.59 |
+
+Two things must be said plainly about these trajectories:
+
+* **The epoch-0 value is not evidence of learning.** Under matched λ, top-1 is already
+  1.000 at random initialisation — the untrained encoder trivially maps the same
+  subject to nearby points when both views use the same branch mixture. Training then
+  *destroys* it (0.29–0.52 by epoch 5–10) and rebuilds it.
+* **The late-epoch state is nevertheless genuinely better than epoch 0**, and that is
+  what C1 and C4 measure: E1's CL excess goes from −0.049 (ep 0) to **−0.626** (ep 30)
+  and its uniformity from −0.014 to **−0.504**. Under production pairing the same
+  training produces CL excess −0.008 and uniformity −0.000. So training adds real
+  structure under matched λ and adds essentially nothing under mismatched λ.
+* R1 (seed 7) is the weakest rescue and is not monotone (top-1 peaks 0.542 at ep 20,
+  falls to 0.271 at ep 30). It still satisfies all six criteria, but the seed-to-seed
+  spread is large and is reported rather than averaged away.
+
+### 15c. Non-rescuing arms
+
+| arm | CL excess (late) | top-1 (null) | posRank (null) | uniformity | subj rank |
+|---|---|---|---|---|---|
+| E2 topology only | +0.0231 | 0.1259 (0.0312) | 14.28 (16.5) | −0.0001 | 2.06 |
+| E4 KLD 0.001 | −0.0058 | 0.0341 (0.0312) | 16.43 (16.5) | −0.0008 | 2.04 |
+| E5 batch 128 | −0.0249 | 0.0111 (0.0078) | 55.84 (64.5) | −0.0163 | 7.65 |
+
+**E4 is the direct test of the KLD-dominance hypothesis and it fails 0/6.** Reducing
+`kld_lambda` by 3× leaves every identity measure at the null. **E5 is the direct test
+of the batch-size hypothesis and it fails 2/6** — a larger batch raises subject rank
+(7.65) but leaves posRank at 55.84 against its own null of 64.5.
+
+**E2 is the crucial control.** Removing attention from both views (γ=1 ⇒ λ=1e−4)
+improves the hardest-negative margin and positive rank a little but leaves CL excess
+*positive* (+0.023, i.e. worse than the null) and uniformity at −0.0001. So the rescue
+is **not** "switch attention off"; it is "encode both views with the same λ". E3
+confirms this from the other side: γ = 0.5, a value belonging to neither view, rescues
+just as well as matching the augmented view's own γ.
+
+### 15d. The common-yardstick check (`eval_prod`)
+
+Every arm was also probed under the fixed `production` pairing, so that arms which
+change the encoding cannot appear to improve merely by changing the ruler:
+
+| arm | eval_own verdict | eval_prod verdict | classification |
+|---|---|---|---|
+| E1 matched λ | RESCUE (6/6) | **NO_RESCUE (0/6)** | `RESCUED_ENCODING_PAIRING` |
+| E3 fixed half λ | RESCUE (6/6) | **NO_RESCUE (0/6)** | `RESCUED_ENCODING_PAIRING` |
+| R1 / R2 | RESCUE (6/6) | NO_RESCUE (1/6) | `RESCUED_ENCODING_PAIRING` |
+
+**This is a material limitation and it is not softened here.** Training with matched λ
+does not produce an encoder that survives being *read out* with mismatched λ. The
+rescue lies in encoding the two views consistently — which is how the model would be
+used — not in a fundamentally more robust encoder. The pre-declared label for this
+outcome is `RESCUED_ENCODING_PAIRING`, not `RESCUED_REPRESENTATION`.
+
+### 15e. Secondary evidence — locked LinearSVC probe
+
+Balanced accuracy, `LinearSVC(dual=False, fit_intercept=True, max_iter=10000)`,
+`StratifiedKFold(5, shuffle=True, random_state=42)` with identical fold objects
+across every arm and epoch. Never used to select anything.
+
+| arm | epoch 0 | epoch 10 | epoch 30 |
+|---|---|---|---|
+| E0 baseline | 0.4760 | 0.4967 | 0.5014 |
+| E1 matched λ | 0.4760 | 0.4839 | **0.5398** |
+| E2 topology only | 0.4760 | 0.4954 | 0.5104 |
+| E3 fixed half λ | 0.4760 | 0.5007 | 0.5275 |
+| E4 KLD 0.001 | 0.4760 | 0.5174 | 0.5187 |
+| E5 batch 128 | 0.4760 | 0.4993 | 0.5171 |
+| R1 seed 7 | 0.4922 | 0.4943 | 0.5103 |
+| R2 seed 2024 | 0.4965 | 0.5345 | 0.5095 |
+
+Reference baselines: **FC ≈ 0.663, ALFF ≈ 0.591, FC+ALFF ≈ 0.657** (fold sd ≈ 0.02–0.04).
+
+**The secondary evidence does not support a classification benefit.** E1's 0.5398 is
+the best value but sits about one fold-sd above E0's 0.5014, and **neither replication
+seed reproduces it** (0.5103, 0.5095). Every arm remains far below the raw FC baseline.
+**Same-subject identity is rescued; diagnostic class information is not.**
 
 ---
 
 ## 16. Final interpretation
 
-<!-- INTERPRETATION_PLACEHOLDER -->
+**The primary mechanism is λ asymmetry between the two contrastive views, and it is
+confirmed causally, not just correlationally.**
+
+Three independent lines of evidence agree:
+
+1. **Frozen-weight intervention (§8).** Changing only which γ each view is encoded
+   with — no training, no weight change, no data change — moves eval-time identity
+   from the *exact analytic null* (top-1 0.0312 vs 1/32 = 0.03125; posRank 16.53 vs
+   (B+1)/2 = 16.5) to 0.33–1.00, in **6 / 6** independently trained Stage-8D arms. In
+   arm04 it reaches perfect identity (top-1 1.0000, posRank 1.00).
+2. **Trained causal arms (§15).** E1 (matched λ) and E3 (fixed λ = 0.5) satisfy all
+   six governing criteria; the two competing hypotheses fail their own direct tests —
+   **E4 (KLD ÷3) scores 0/6** and **E5 (batch ×4) scores 2/6**.
+3. **Replication (§15a).** Both pre-registered seeds, 7 and 2024, also score 6/6.
+   **RESCUE_REPLICATES_MULTI_SEED = YES**, with an honest caveat that seed 7 is the
+   weakest and non-monotone.
+
+**Why it happens.** This reproduction executes Eq. 19's fusion, which the authors'
+released code disables by discarding the attention branch. Under `paper_intent`,
+γ_orig = 1 gives λ_orig = 1e−4 while γ_aug ≈ 0.51 gives λ_aug ≈ 0.49. The positive
+pair is therefore encoded through branch mixtures whose attention-to-topology ratios
+are 0.000279 and 1.2851 — a factor of ≈4 600 — landing at effective ranks 2.51 and
+12.81. The InfoNCE positive is not a view of the same object in the same space, so it
+cannot beat the hardest negative, and the loss sits at log B by construction. The
+paper never states that the two views must share λ; it also never states that they
+must not. **Fusing is paper-faithful; fusing the two views with different λ is a
+reproduction choice, and it is the one that fails.**
+
+**What the other candidates actually are.**
+
+* **KLD/CE dominance of Φ is real but is not the primary cause.** At epoch 30 the
+  contrastive term supplies 3.2 % of Φ's gradient and is anti-aligned with CE
+  (cos −0.690) and KLD (cos −0.707). That explains why the augmenter is not steered by
+  the contrastive objective — but E4 tested it directly and scored 0/6.
+* **Gate noise is a contributor, not the cause.** STOCH_FRAC stays at 0.71–0.96; the
+  learned logit never dominates η. No arm isolated it, so it is not ruled in or out as
+  a *sufficient* cause; it is ruled out as the *primary* one by E1/E3 rescuing without
+  touching it.
+* **GCN2 oversmoothing is a consequence, not a cause.** It replicates in only 3 / 6
+  arms — all `consistent` — while two `legacy` arms *increase* rank to 9.34 and 7.88.
+  Where it occurs, propagation dominates (−1.32) over the feature transform (−0.40)
+  and BatchNorm (+0.11), and the operator's spectral gap (0.7684) gives it genuine
+  oversmoothing capacity. But a mechanism absent in a third of the arms cannot be the
+  cause of a failure present in all of them.
+* **A second, independent defect exists: the BatchNorm train/eval transfer gap.**
+  arm04 has train top-1 0.948 and eval top-1 0.031. Removing that gap alone rescues
+  only the two arms that already had a train-mode solution and does nothing for the
+  three `consistent` arms. It is real, conditional, and **not** addressed by Stage 8E.
+
+**What was NOT achieved, stated plainly.**
+
+* The rescue is `RESCUED_ENCODING_PAIRING`, not `RESCUED_REPRESENTATION`: matched-λ
+  training does not yield an encoder robust to mismatched read-out (0/6 on `eval_prod`).
+* **Classification does not improve.** The best arm reaches balanced accuracy 0.5398
+  against raw baselines of FC 0.663 / ALFF 0.591 / FC+ALFF 0.657, and neither
+  replication seed reproduces even that. Rescuing same-subject identity did **not**
+  rescue diagnostic signal. Any expectation that fixing λ will by itself raise accuracy
+  is not supported by this evidence.
+* The three `consistent` arms' failure to optimise even in *train* mode (§4) is
+  measured but not explained. Stage 8E does not revise the Stage-8C policy.
+
+**Production is unchanged.** `lambda_pairing_mode` defaults to `production` and is
+proven bit-for-bit identical to the pre-8E code in both `phase_state_mode`s. Stage 8E
+was authorised to diagnose, not to fix, and it has not fixed anything. The evidence
+supports a specific, narrow change — encode both contrastive views with the same γ —
+but making that change is a separate decision that requires its own authorisation.

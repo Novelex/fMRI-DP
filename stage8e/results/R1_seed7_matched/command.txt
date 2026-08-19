@@ -1,0 +1,1 @@
+/users/3171356m/miniconda3/envs/grastiacl/bin/python3 stage8e/train_arm.py --arm R1_seed7_matched --outdir stage8e/R1_seed7_matched --phase_state_mode consistent --lambda_pairing_mode matched --seed 7 --epochs 30 --reg_lambda 0.2 --kld_lambda 0.003 --batch_size 32 --node_feature_mode alff_new_z
