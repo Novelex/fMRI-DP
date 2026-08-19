@@ -101,3 +101,64 @@ NO_STAGE8E_AUTOMATICALLY = TRUE  (none opened; nothing modified)
 ```
 
 Nothing was fixed, tuned or redesigned. Stage 8D collected trained evidence only.
+
+---
+
+# Amendment after Stage 8E verification
+
+Nothing above has been deleted. Stage 8E re-derived the Stage-8D numbers from the raw
+`metrics.json` files and found two errors in this document's *interpretation*. Both
+are corrected here; the original text is left in place so the history is auditable.
+
+## Amendment 1 — the "all arms pinned at log(32)" claim is withdrawn
+
+This document stated that all eight arms sat at CL = 3.43–3.46, i.e. pinned at the
+InfoNCE null log(32) = 3.4657.
+
+**That is false.** Re-reading *every* recorded epoch rather than only the checkpoint
+epochs {0, 1, 3, 5, 10, 20, 30}:
+
+* only **38.3 %** of recorded checkpoints fall inside 3.43–3.46;
+* the observed range across all arms and all epochs is **2.089 – 3.980**.
+
+The claim was a sampling error on my part — I generalised from the checkpointed
+epochs to the whole trajectory. The corrected statement is: CL *returns to* the
+neighbourhood of log(32) at the checkpointed epochs, with excursions of roughly
+±1.4 nats in between.
+
+## Amendment 2 — the measurement surface was eval-mode only
+
+Every representation metric in this document (CL, uniformity, alignment, effective
+rank, margin, top-1) was produced by an **eval-mode** probe. The Phase-2 objective is
+optimised in **train** mode, and Stage 8E measured that the two differ radically:
+
+| arm | epoch | TRAIN CL | EVAL CL |
+|---|---|---|---|
+| arm04 legacy seed42 | 30 | **0.133** | 3.436 |
+| arm05 legacy seed7 | 30 | **−0.103** | ≈3.44 |
+
+The train-mode values were cross-checked against the Phase-2 `model_loss` recorded
+during training, so they are the objective actually descended.
+
+**Consequence for this document's conclusions.** Stage 8D's metrics correctly
+diagnose the *downstream geometry* — the representation a linear probe or classifier
+would see. They do **not** establish that the training objective failed, and no
+sentence in this document may be read as showing the optimiser was stuck at the
+null. The optimiser descends its objective to ≈0 and below; what fails is the
+**transfer from the train-mode forward surface (batch statistics) to the eval-mode
+surface (running statistics)**.
+
+Stage 8E therefore reports every metric in both forward states, and identifies
+**λ asymmetry between the two contrastive views** as the primary supported mechanism
+(see `docs/STAGE8E_COLLAPSE_MECHANISM_AUDIT.md` §7, an intervention at frozen weights
+that moves posRank from the exact null 16.53/32 to 4.38/32 and top-1 from 0.031 to
+0.531 without changing a single weight).
+
+## What is NOT amended
+
+* The Stage-8D arm matrix, seeds, commit provenance, checkpoints and raw
+  `metrics.json` files are unchanged and remain the evidence base.
+* The finding that the degeneration **persists to epoch 30 in every arm** stands —
+  it is measured on the eval surface, which is the surface that matters downstream.
+* The finding that the failure is **not specific to `--phase_state_mode consistent`**
+  stands.

@@ -89,3 +89,34 @@ criteria are therefore evaluated against a **B=128 probe** with the null values
 recomputed, and it is judged on `top1 ≥ 8× chance`, `posRank ≤ B/4`,
 `CL ≤ log(B) − 0.2657`, `subj_eRank ≥ 4.0` — the same four criteria expressed
 relative to its own null.
+
+---
+
+## Addendum (written before any arm was launched — see git history)
+
+Arms E1–E3 change **how the positive pair is encoded**, which changes the ruler as
+well as the representation. Stage 8E Section 7 already showed that re-pairing λ at
+*frozen* weights lifts top-1 from 0.031 to 0.53–0.59. An arm measured only under its
+own pairing could therefore look "rescued" without having learned anything new.
+
+Every arm is therefore probed on **four surfaces** each epoch:
+
+| surface | meaning |
+|---|---|
+| `eval_own`  | eval state, the arm's own training pairing — the **PRIMARY** criterion surface |
+| `eval_prod` | eval state, fixed `production` pairing — the **common yardstick** across arms |
+| `train_own` | train state, own pairing — the surface the Phase-2 objective is actually optimised on |
+| `train_prod`| train state, production pairing |
+
+Pre-declared interpretation rule:
+
+* An arm that passes on `eval_own` **and** improves on `eval_prod` versus E0's
+  `eval_prod` has changed the representation → `RESCUED_REPRESENTATION`.
+* An arm that passes on `eval_own` but does **not** beat E0 on `eval_prod` has
+  mostly changed the measurement → `RESCUED_MEASUREMENT_ONLY`. This is reported
+  as a rescue of the *pairing defect*, not of the encoder.
+* `posRank` is the scale-free identity measure (null `(B+1)/2`), and is what makes
+  E5 (B=128) comparable to the B=32 arms.
+
+The train-state probe snapshots and restores BatchNorm buffers, so probing can never
+perturb the run it measures.
