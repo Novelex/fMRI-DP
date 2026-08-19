@@ -1,1 +1,0 @@
-/users/3171356m/miniconda3/envs/grastiacl/bin/python3 stage8d/train_arm.py --arm smoke_consistent_seed42 --outdir stage8d/smoke_consistent_seed42 --phase_state_mode consistent --seed 42 --epochs 2 --reg_lambda 0.2 --node_feature_mode alff_new_z --stall_threshold 3600

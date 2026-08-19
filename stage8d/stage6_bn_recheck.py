@@ -27,8 +27,9 @@ COH=[(k*9)%len(ds) for k in range(96)]
 iu=torch.triu_indices(90,90,offset=1)
 OUT={}
 for bnmode in ('eval','train'):
-    for mod in enc.bns: mod.train(bnmode=='train')
-    enc.trans_conv.train(False); enc.train(False)
+    enc.train(False); enc.trans_conv.train(False)      # set the module tree FIRST ...
+    for mod in enc.bns: mod.train(bnmode=='train')      # ... THEN override the BN flags
+    assert enc.bns[0].training == (bnmode=='train'), 'BN flag did not take effect'
     R0,R2,R3,R6,R7,R8=[],[],[],[],[],[]
     cos0,cos2,cos3=[],[],[]
     with torch.no_grad():
