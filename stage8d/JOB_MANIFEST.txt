@@ -1,0 +1,41 @@
+STAGE 8D JOB MANIFEST — submitted 2026-08-19 02:40:55
+
+repo commit            25b0c23ae380f0e1660cc6531d2b65e74167b14b
+origin/main            25b0c23ae380f0e1660cc6531d2b65e74167b14b
+run root               /users/3171356m/muhammad/GraSTIACL/stage8d
+scheduler              SLURM
+partitions used        gpu-l40s,gpu-h100  (both 7-00:00:00 max)
+account / QOS          default / normal
+python                 /users/3171356m/miniconda3/envs/grastiacl/bin/python3
+
+SMOKE_JOB_ID           1869265   (COMPLETED, exit 0:0, 2 epochs, 88 s/epoch, MaxRSS 2.03 GB, GPU L40S/H100)
+MAIN_ARMS_1_6_JOB_ID   1869279   array [0-5]%4   <-- MANDATORY matched design
+REG_ARMS_7_8_JOB_ID    1869280   array [6-7]%2
+CPU_BASELINE_JOB_ID    1869281
+STAGE6_RECHECK_JOB_ID  1869284
+POSTFLIGHT_JOB_ID      1869282   (afterany on 1869279 and 1869280)
+
+STAGE8D_EPOCHS         30          (identical for ALL eight arms)
+ARRAY_CONCURRENCY      4  (main) / 2 (reg)
+WALLTIME_PER_ARM       04:00:00    (30 x 88 s = 44 min; 5.4x margin)
+STALL_THRESHOLD        900 s       (3 x 88 s = 264 s, raised to a 15-min floor)
+REG baseline           0.2  (Stage-8C frozen value, NOT the argparse default of 1.0)
+node_feature_mode      alff_new_z  (N=956)
+
+ARM DIRECTORIES
+  stage8d/arm01_consistent_seed42        consistent 42   reg 0.2
+  stage8d/arm02_consistent_seed7         consistent 7    reg 0.2
+  stage8d/arm03_consistent_seed2024      consistent 2024 reg 0.2
+  stage8d/arm04_legacy_seed42            legacy     42   reg 0.2
+  stage8d/arm05_legacy_seed7             legacy     7    reg 0.2
+  stage8d/arm06_legacy_seed2024          legacy     2024 reg 0.2
+  stage8d/arm07_consistent_seed42_reg0   consistent 42   reg 0.0
+  stage8d/arm08_consistent_seed42_reg1   consistent 42   reg 1.0
+
+DEVIATION RECORDED HONESTLY: no in-process stall watchdog was implemented. The heartbeat IS
+written by the training process itself (per batch, via the clip hook, plus per epoch), so it
+reflects real progress; stalls are bounded by the 4 h SLURM walltime rather than by a
+self-kill, and the postflight validator reports staleness. A watchdog thread was judged a
+larger risk (killing healthy jobs) than the bounded walltime it would replace.
+
+CHECKPOINTS are CUDA-saved: load with torch.load(path, map_location='cpu').

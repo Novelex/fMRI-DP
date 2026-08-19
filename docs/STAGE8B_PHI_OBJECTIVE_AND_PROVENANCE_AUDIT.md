@@ -448,3 +448,20 @@ accuracy. The Θ/Ψ reading should be fixed by explicit project decision and doc
 since it is not publicly recoverable.
 
 **No production code was modified. No epochs. No accuracy. Stage 8C not started.**
+
+---
+
+## AMENDMENT (Stage 8D, 2026-08-19) — precision correction to the Φ-direction verdict
+
+`FULL_PAPER_PHI_DIRECTION_RECOVERABLE = YES, BUT UNDER AN ADOPTED READING.` Eq. 13 and Eq. 14
+disagree in the treatment/sign interpretation of the β·D_KL contribution (Eq. 13 prints
+`L_CE − β·D_KL`, Eq. 14 prints `L_CE + β·D_KL`, the paper introducing the latter as a rewrite
+"to find a more accurate information bottleneck"); **Eq. 14 is adopted as the operative
+formulation**. This is a documented paper-consistent interpretation rather than an
+unquestionable recovery.
+
+Stage 8C further measured **∂I_N/∂Θ = 0 for all 32 model tensors** under *both* audited M_ij
+semantics (raw-ALFF and the authors' learned-embedding variant), making Eq. 15's `max_Θ`
+executable contribution **vacuous** in the current and publicly recoverable formulation.
+
+Therefore `PAPER_OBJECTIVE_STATUS = PAPER_CONSISTENT_INTERPRETATION_ADOPTED`.

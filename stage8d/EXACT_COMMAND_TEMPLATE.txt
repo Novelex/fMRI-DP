@@ -1,0 +1,34 @@
+Stage 8D exact command template (verified against the production parser).
+
+REG flag is --reg_lambda.  phase_state_mode accepts exactly {legacy, consistent};
+its production default is 'legacy' (verified by parser introspection).
+
+NOTE ON REG BASELINE: GraSTIACL.py's argparse default for --reg_lambda is 1.0, but the
+Stage-8C five-epoch run whose trajectory Stage 8D is extending used reg_lambda=0.2.
+Arms 1-6 therefore use 0.2 so the trajectory is continuous with the observation under
+investigation. This is self-consistent with the design: arm 8 probes REG=1.0 separately,
+which would be redundant if 1.0 were the baseline.
+
+FROZEN CONFIG (identical in all 8 arms, matching Stage 8C exactly):
+  node_feature_mode alff_new_z | tae_profile paper_intent | signed_edges True
+  mij_source alff | emb_dim 32 | num_gc_layers 2 | vib_hidden_dim 64 | drop_ratio 0.0
+  pooling standard | gamma_mode baseline | batch_size 32 | model_lr 5e-4 | view_lr 5e-4
+  ce_lambda 2.0 | kld_lambda 0.003 | num_dyn_windows 3 | template 90
+
+PER-ARM COMMAND:
+  /users/3171356m/miniconda3/envs/grastiacl/bin/python3 -u stage8d/train_arm.py \
+      --arm <ARMNAME> --outdir stage8d/<ARMDIR> \
+      --phase_state_mode <legacy|consistent> --seed <SEED> \
+      --epochs <STAGE8D_EPOCHS> --reg_lambda <REG> \
+      --node_feature_mode alff_new_z --stall_threshold <SECONDS>
+
+ARM MATRIX:
+  arm01_consistent_seed42       consistent 42   reg 0.2
+  arm02_consistent_seed7        consistent 7    reg 0.2
+  arm03_consistent_seed2024     consistent 2024 reg 0.2
+  arm04_legacy_seed42           legacy     42   reg 0.2
+  arm05_legacy_seed7            legacy     7    reg 0.2
+  arm06_legacy_seed2024         legacy     2024 reg 0.2
+  arm07_consistent_seed42_reg0  consistent 42   reg 0.0
+  arm08_consistent_seed42_reg1  consistent 42   reg 1.0
+NOTE: checkpoints are CUDA-saved -> load with torch.load(..., map_location='cpu')

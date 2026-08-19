@@ -1,0 +1,25 @@
+host=node12.cognition.gla.alces.network job=1869283 task=0 arm=arm01_consistent_seed42 mode=consistent seed=42 reg=0.2
+NVIDIA H100 NVL, 95830 MiB
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+[arm01_consistent_seed42] device=cuda commit=25b0c23a mode=consistent seed=42 reg=0.2 epochs=30
+  epoch0 CL=3.4396 rank_z=8.18 rank_z_aug=9.85 pos=0.6276 margin=+0.00583 align=0.7449 unif=-0.5304
